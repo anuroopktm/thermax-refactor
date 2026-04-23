@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export function MicrosoftSignInButton() {
   return (
-    <Button className="group relative h-16 w-full text-lg cursor-pointer">
+    <Button className="h-16 w-full cursor-pointer text-lg">
       <svg
         viewBox="0 0 23 23"
         className="h-full w-full"
