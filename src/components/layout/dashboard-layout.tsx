@@ -1,0 +1,26 @@
+import { Outlet, useLocation } from "react-router-dom";
+import { MainHeader } from "./main-header";
+
+export function DashboardLayout() {
+  const location = useLocation();
+
+  // Simple breadcrumb logic based on path
+  const getBreadcrumbs = () => {
+    if (location.pathname === "/sales-enablement") {
+      return [
+        { label: "AI Studio", href: "/dashboard" },
+        { label: "Sales Enablement Tool" },
+      ];
+    }
+    return [];
+  };
+
+  return (
+    <div className="dashboard-layout flex h-screen w-full flex-col overflow-hidden">
+      <MainHeader breadcrumbs={getBreadcrumbs()} />
+      <main className="flex-1 overflow-hidden">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
