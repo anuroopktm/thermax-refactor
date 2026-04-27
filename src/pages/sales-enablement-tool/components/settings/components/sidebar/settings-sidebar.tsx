@@ -1,4 +1,4 @@
-import { Users, BarChart } from "lucide-react";
+import { Users, BarChart, Package } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -11,6 +11,12 @@ import {
 } from "@/components/ui/sidebar";
 
 const MENU_ITEMS = [
+  {
+    id: "products",
+    label: "Products",
+    icon: Package,
+    path: "/sales-enablement/settings/products",
+  },
   {
     id: "members",
     label: "Members",

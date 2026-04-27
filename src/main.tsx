@@ -8,6 +8,7 @@ import SalesEnablementPage from "@/pages/sales-enablement-tool/page.tsx";
 import SalesEnablementSettingsPage from "@/pages/sales-enablement-tool/settings/page.tsx";
 import { UsageView } from "@/pages/sales-enablement-tool/components/settings/sections/usage-view.tsx";
 import { MembersView } from "@/pages/sales-enablement-tool/components/settings/sections/members-view.tsx";
+import { ProductsView } from "@/pages/sales-enablement-tool/components/settings/sections/products-view.tsx";
 import { DashboardLayout } from "@/components/layout/dashboard-layout.tsx";
 import { Navigate } from "react-router-dom";
 
@@ -30,7 +31,8 @@ createRoot(document.getElementById("root")!).render(
               path="/sales-enablement/settings"
               element={<SalesEnablementSettingsPage />}
             >
-              <Route index element={<Navigate to="members" replace />} />
+              <Route index element={<Navigate to="products" replace />} />
+              <Route path="products" element={<ProductsView />} />
               <Route path="usage" element={<UsageView />} />
               <Route path="members" element={<MembersView />} />
             </Route>
