@@ -1,5 +1,6 @@
-import { Plus, MessageSquare, Trash2, Settings } from "lucide-react";
+import { Plus, Trash2, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +21,8 @@ const chatHistory = [
 ];
 
 export function ChatSidebar() {
+  const navigate = useNavigate();
+
   return (
     <Sidebar className="top-16 h-[calc(100vh-4rem)] border-r border-border bg-background">
       {/* Header */}
@@ -41,18 +44,12 @@ export function ChatSidebar() {
                 <SidebarMenuButton
                   isActive={chat.active}
                   className={cn(
-                    "group h-9 cursor-pointer transition",
+                    "group h-9 w-full cursor-pointer transition truncate",
                     "hover:bg-muted",
                     chat.active && "bg-muted text-foreground",
                   )}
                 >
-                  <MessageSquare
-                    className={cn(
-                      "text-muted-foreground group-hover/menu-button:text-primary transition",
-                      chat.active && "text-primary",
-                    )}
-                  />
-                  <span className="truncate">{chat.title}</span>
+                  {chat.title}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -72,7 +69,10 @@ export function ChatSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton className="h-10 cursor-pointer">
+            <SidebarMenuButton
+              className="h-10 cursor-pointer"
+              onClick={() => navigate("/sales-enablement/settings")}
+            >
               <Settings />
               Settings
             </SidebarMenuButton>

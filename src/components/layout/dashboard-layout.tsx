@@ -12,6 +12,13 @@ export function DashboardLayout() {
         { label: "Sales Enablement Tool" },
       ];
     }
+    if (location.pathname.startsWith("/sales-enablement/settings")) {
+      return [
+        { label: "AI Studio", href: "/dashboard" },
+        { label: "Sales Enablement Tool", href: "/sales-enablement" },
+        { label: "Settings" },
+      ];
+    }
     return [];
   };
 
