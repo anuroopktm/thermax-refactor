@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteMember } from "@/services/query/member/member.service";
+import { useDeleteMember } from "@/services/query/members/members.service";
 import { Loader2 } from "lucide-react";
 
 interface Member {

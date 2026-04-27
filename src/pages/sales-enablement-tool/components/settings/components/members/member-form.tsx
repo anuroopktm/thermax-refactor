@@ -14,7 +14,7 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import {
   memberSchema,
   type MemberForm as MemberFormType,
-} from "@/validations/member";
+} from "@/validations/members";
 
 interface MemberFormProps {
   defaultValues?: Partial<MemberFormType>;

@@ -30,9 +30,9 @@ createRoot(document.getElementById("root")!).render(
               path="/sales-enablement/settings"
               element={<SalesEnablementSettingsPage />}
             >
-              <Route index element={<Navigate to="usage" replace />} />
+              <Route index element={<Navigate to="members" replace />} />
               <Route path="usage" element={<UsageView />} />
-              <Route path="owners" element={<MembersView />} />
+              <Route path="members" element={<MembersView />} />
             </Route>
           </Route>
         </Routes>

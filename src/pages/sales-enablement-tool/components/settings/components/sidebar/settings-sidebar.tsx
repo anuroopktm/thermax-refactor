@@ -12,10 +12,10 @@ import {
 
 const MENU_ITEMS = [
   {
-    id: "owners",
-    label: "Owners",
+    id: "members",
+    label: "Members",
     icon: Users,
-    path: "/sales-enablement/settings/owners",
+    path: "/sales-enablement/settings/members",
   },
   {
     id: "usage",

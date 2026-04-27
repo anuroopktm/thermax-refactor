@@ -15,7 +15,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { MemberActions } from "../components/members/member-actions";
-import { type MemberForm as MemberFormType } from "@/validations/member";
+import { type MemberForm as MemberFormType } from "@/validations/members";
 import { useState } from "react";
 import {
   Dialog,
@@ -28,7 +28,7 @@ import { MemberForm } from "../components/members/member-form";
 import {
   useMembers,
   useCreateMember,
-} from "@/services/query/member/member.service";
+} from "@/services/query/members/members.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function MembersView() {

@@ -2,13 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { MemberForm } from "@/validations/member";
+import type { MemberForm } from "@/validations/members";
 import type {
   Member,
   CreateMemberResponse,
   UpdateMemberResponse,
   DeleteMemberResponse,
-} from "./member.types";
+} from "./members.types";
 
 export const useMembers = () => {
   return useQuery<Member[], AxiosError<ApiError>>({

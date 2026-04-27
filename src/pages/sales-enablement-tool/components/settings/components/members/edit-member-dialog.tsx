@@ -6,8 +6,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
-import { type MemberForm as MemberFormType } from "@/validations/member";
-import { useUpdateMember } from "@/services/query/member/member.service";
+import { type MemberForm as MemberFormType } from "@/validations/members";
+import { useUpdateMember } from "@/services/query/members/members.service";
 
 interface Member {
   id: string;
