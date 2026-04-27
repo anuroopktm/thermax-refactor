@@ -1,6 +1,5 @@
 import { Users, BarChart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -11,37 +10,39 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-const menuItems = [
-  { id: "owners", label: "Owners", icon: Users, path: "owners" },
-  { id: "usage", label: "Usage", icon: BarChart, path: "usage" },
+const MENU_ITEMS = [
+  {
+    id: "owners",
+    label: "Owners",
+    icon: Users,
+    path: "/sales-enablement/settings/owners",
+  },
+  {
+    id: "usage",
+    label: "Usage",
+    icon: BarChart,
+    path: "/sales-enablement/settings/usage",
+  },
 ];
 
 export function SettingsSidebar() {
+  const { pathname } = useLocation();
+
   return (
     <Sidebar className="top-16 h-[calc(100vh-4rem)] border-r border-border bg-background">
       <SidebarContent className="p-2">
         <SidebarGroup>
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarMenu className="gap-2">
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.id}>
+            {MENU_ITEMS.map((menuItem) => (
+              <SidebarMenuItem key={menuItem.id}>
                 <SidebarMenuButton
-                  render={
-                    <NavLink
-                      to={`/sales-enablement/settings/${item.path}`}
-                      className={({ isActive }) =>
-                        cn(
-                          "group h-9 w-full cursor-pointer transition truncate flex items-center gap-2",
-                          "hover:bg-muted",
-                          isActive && "bg-muted text-foreground",
-                        )
-                      }
-                    >
-                      <item.icon />
-                      {item.label}
-                    </NavLink>
-                  }
-                />
+                  isActive={pathname === menuItem.path}
+                  render={<NavLink to={menuItem.path} />}
+                >
+                  <menuItem.icon />
+                  <span>{menuItem.label}</span>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
