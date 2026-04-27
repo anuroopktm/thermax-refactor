@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,8 +7,10 @@ import {
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
 import { type MemberForm as MemberFormType } from "@/validations/member";
+import { useUpdateMember } from "@/services/query/member/member.service";
 
 interface Member {
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -19,27 +20,23 @@ interface EditMemberDialogProps {
   member: Member;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onUpdate?: (data: MemberFormType) => void;
 }
 
 export function EditMemberDialog({
   member,
   open,
   onOpenChange,
-  onUpdate,
 }: EditMemberDialogProps) {
-  const [isSaving, setIsSaving] = useState(false);
+  const { mutate: updateMember, isPending: isSaving } = useUpdateMember(
+    member.id,
+  );
 
   const handleSubmit = async (data: MemberFormType) => {
-    try {
-      setIsSaving(true);
-      // simulate API
-      await new Promise((res) => setTimeout(res, 800));
-      onUpdate?.(data);
-      onOpenChange(false);
-    } finally {
-      setIsSaving(false);
-    }
+    updateMember(data, {
+      onSuccess: () => {
+        onOpenChange(false);
+      },
+    });
   };
 
   return (

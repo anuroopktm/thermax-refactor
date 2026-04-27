@@ -7,8 +7,8 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { CostTab } from "../components/usage/cost-tab";
-import { ActivityTab } from "../components/usage/activity-tab";
+import { CostTab } from "../components/usage/cost/cost-tab";
+import { ActivityTab } from "../components/usage/activity/activity-tab";
 import { UsageDateFilter } from "../components/usage/usage-date-filter";
 
 const USAGE_TABS = [
@@ -27,11 +27,13 @@ export function UsageView() {
   const activeTab = searchParams.get("tab") || "cost";
   const model = searchParams.get("model") || "all";
 
-  const onModelChange = (value: string) => {
-    setSearchParams((prev) => {
-      prev.set("model", value);
-      return prev;
-    });
+  const onModelChange = (value: string | null) => {
+    if (value) {
+      setSearchParams((prev) => {
+        prev.set("model", value);
+        return prev;
+      });
+    }
   };
 
   const onTabChange = (value: string) => {

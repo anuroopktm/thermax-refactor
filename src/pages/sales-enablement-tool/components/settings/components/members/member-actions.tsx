@@ -7,28 +7,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type MemberForm } from "@/validations/member";
 import { EditMemberDialog } from "./edit-member-dialog";
 import { DeleteMemberDialog } from "./delete-member-dialog";
 
 interface Member {
+  id: string;
   name: string;
   email: string;
   role: string;
-  initial: string;
+  initial?: string;
 }
 
 interface MemberActionsProps {
   member: Member;
-  onUpdate?: (data: MemberForm) => void;
-  onDelete?: (member: Member) => void;
 }
 
-export function MemberActions({
-  member,
-  onUpdate,
-  onDelete,
-}: MemberActionsProps) {
+export function MemberActions({ member }: MemberActionsProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
@@ -66,14 +60,12 @@ export function MemberActions({
         member={member}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onUpdate={onUpdate}
       />
 
       <DeleteMemberDialog
         member={member}
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        onDelete={() => onDelete?.(member)}
       />
     </>
   );

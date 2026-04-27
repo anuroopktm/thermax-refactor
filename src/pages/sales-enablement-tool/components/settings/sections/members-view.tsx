@@ -25,73 +25,24 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MemberForm } from "../components/members/member-form";
-
-const members = [
-  {
-    name: "Anwar Ahamad",
-    email: "AISL.AAhamad@thermaxglobal.com",
-    role: "Member",
-    initial: "AA",
-  },
-  {
-    name: "Shivam Paswan",
-    email: "AISL.SPaswan@thermaxglobal.com",
-    role: "Member",
-    initial: "SP",
-  },
-  {
-    name: "Abhishek",
-    email: "abhishek.kurian@thoughtminds.io",
-    role: "Owner",
-    initial: "AB",
-  },
-  {
-    name: "Mohit Singh",
-    email: "AISL.MSingh@thermaxglobal.com",
-    role: "Member",
-    initial: "MS",
-  },
-  {
-    name: "Nagendra Adidam",
-    email: "AISL.NAdidam@thermaxglobal.com",
-    role: "Member",
-    initial: "NA",
-  },
-  {
-    name: "Misbahul Haque",
-    email: "AISL.MHaque@thermaxglobal.com",
-    role: "Member",
-    initial: "MH",
-  },
-  {
-    name: "AISL Alok Mishra",
-    email: "AISL.AMishra@thermaxglobal.com",
-    role: "Member",
-    initial: "AM",
-  },
-  {
-    name: "Rahul Arya",
-    email: "AISL.RArya@thermaxglobal.com",
-    role: "Member",
-    initial: "RA",
-  },
-];
+import {
+  useMembers,
+  useCreateMember,
+} from "@/services/query/member/member.service";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+
+  const { data: members, isLoading } = useMembers();
+  const { mutate: createMember, isPending: isSaving } = useCreateMember();
 
   const handleSubmit = async (data: MemberFormType) => {
-    try {
-      setIsSaving(true);
-      // simulate API
-      await new Promise((res) => setTimeout(res, 800));
-
-      console.log("Adding member:", data);
-      setIsAddDialogOpen(false);
-    } finally {
-      setIsSaving(false);
-    }
+    createMember(data, {
+      onSuccess: () => {
+        setIsAddDialogOpen(false);
+      },
+    });
   };
 
   return (
@@ -101,7 +52,9 @@ export function MembersView() {
         <div className="space-y-1">
           <h1 className="text-3xl font-semibold tracking-tight">Members</h1>
           <p className="text-sm text-muted-foreground">
-            Showing 30 of 118 members
+            {isLoading
+              ? "Loading members..."
+              : `Showing ${members?.length} members`}
           </p>
         </div>
 
@@ -146,37 +99,61 @@ export function MembersView() {
           </TableHeader>
 
           <TableBody>
-            {members.map((member, index) => (
-              <TableRow
-                key={index}
-                className="hover:bg-muted/30 transition-colors"
-              >
-                <TableCell className="px-6 py-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="size-9">
-                      <AvatarFallback className="text-xs font-medium">
-                        {member.initial}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium">{member.name}</span>
-                  </div>
-                </TableCell>
+            {isLoading
+              ? Array.from({ length: 5 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="size-9 rounded-full" />
+                        <Skeleton className="h-4 w-24" />
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-48" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                ))
+              : members?.map((member, index) => (
+                  <TableRow
+                    key={index}
+                    className="hover:bg-muted/30 transition-colors"
+                  >
+                    <TableCell className="px-6 py-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="size-9">
+                          <AvatarFallback className="text-xs font-medium">
+                            {member.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm font-medium">
+                          {member.name}
+                        </span>
+                      </div>
+                    </TableCell>
 
-                <TableCell className="text-sm text-muted-foreground">
-                  {member.email}
-                </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {member.email}
+                    </TableCell>
 
-                <TableCell>
-                  <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
-                    {member.role}
-                  </span>
-                </TableCell>
+                    <TableCell>
+                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md capitalize">
+                        {member.role}
+                      </span>
+                    </TableCell>
 
-                <TableCell className="text-right pr-4">
-                  <MemberActions member={member} />
-                </TableCell>
-              </TableRow>
-            ))}
+                    <TableCell className="text-right pr-4">
+                      <MemberActions member={member} />
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </div>

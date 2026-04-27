@@ -1,4 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMe } from "@/services/query/auth/auth.service";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,23 +10,33 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
 
-const user = {
-  name: "Thermax Admin",
-  email: "admin@thermax.com",
-  avatar: "/avatars/user.png",
-};
-
 export function UserNav() {
+  const { data: user, isLoading } = useMe();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
+  if (isLoading) {
+    return <Skeleton className="h-10 w-10 rounded-full" />;
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer outline-none">
         <div className="relative">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="" alt="User" />
+            <AvatarImage src="" alt={user?.name} />
             <AvatarFallback className="bg-slate-700 text-white">
-              TA
+              {user?.name
+                .split(" ")
+                .map((word) => word.charAt(0))
+                .join("")
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-background bg-green-500" />
@@ -35,24 +47,24 @@ export function UserNav() {
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name
+                  {user?.name
                     .split(" ")
                     .map((word) => word.charAt(0))
-                    .join("")}
+                    .join("")
+                    .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium">{user?.name}</span>
+                <span className="truncate text-xs">{user?.email}</span>
               </div>
             </div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <LogOut className="mr-2 h-4 w-4" />
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+          <LogOut />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

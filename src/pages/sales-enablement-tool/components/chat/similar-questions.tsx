@@ -9,14 +9,11 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 
-export function SimilarQuestions() {
-  const questions = [
-    "What are the key benefits of Thermax chillers?",
-    "How to install the latest cooling system?",
-    "Service maintenance schedule for solar panels",
-  ];
+import { useSimilarQuestions } from "@/services/query/chat/chat.service";
+import { Skeleton } from "@/components/ui/skeleton";
 
-  // const questions = []
+export function SimilarQuestions() {
+  const { data: questions, isLoading } = useSimilarQuestions();
 
   return (
     <aside className="hidden w-80 flex-col border-l border-border bg-background lg:flex">
@@ -28,12 +25,22 @@ export function SimilarQuestions() {
 
       {/* Content */}
       <SidebarContent>
-        {questions.length > 0 ? (
+        {isLoading ? (
           <SidebarGroup>
-            <SidebarMenu className="gap-2">
+            <SidebarMenu className="gap-2 px-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <SidebarMenuItem key={i}>
+                  <Skeleton className="h-12 w-full rounded-md" />
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        ) : questions && questions.length > 0 ? (
+          <SidebarGroup>
+            <SidebarMenu className="gap-2 px-2">
               {questions.map((q, i) => (
                 <SidebarMenuItem key={i}>
-                  <SidebarMenuButton className="h-auto min-h-9 cursor-pointer transition hover:bg-muted text-foreground">
+                  <SidebarMenuButton className="h-auto min-h-9 cursor-pointer transition hover:bg-muted text-foreground p-3">
                     {q}
                   </SidebarMenuButton>
                 </SidebarMenuItem>

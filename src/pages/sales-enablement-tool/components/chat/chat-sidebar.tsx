@@ -14,14 +14,12 @@ import {
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 
-const chatHistory = [
-  { id: "1", title: "Product comparison 2024", active: true },
-  { id: "2", title: "Market analysis report", active: false },
-  { id: "3", title: "Technical specs for Project X", active: false },
-];
+import { useChatHistory } from "@/services/query/chat/chat.service";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ChatSidebar() {
   const navigate = useNavigate();
+  const { data: chatHistory, isLoading } = useChatHistory();
 
   return (
     <Sidebar className="top-16 h-[calc(100vh-4rem)] border-r border-border bg-background">
@@ -39,20 +37,26 @@ export function ChatSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Recent</SidebarGroupLabel>
           <SidebarMenu className="gap-2">
-            {chatHistory.map((chat) => (
-              <SidebarMenuItem key={chat.id}>
-                <SidebarMenuButton
-                  isActive={chat.active}
-                  className={cn(
-                    "group h-9 w-full cursor-pointer transition truncate",
-                    "hover:bg-muted",
-                    chat.active && "bg-muted text-foreground",
-                  )}
-                >
-                  {chat.title}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <SidebarMenuItem key={i}>
+                    <Skeleton className="h-9 w-full rounded-md" />
+                  </SidebarMenuItem>
+                ))
+              : chatHistory?.map((chat) => (
+                  <SidebarMenuItem key={chat.id}>
+                    <SidebarMenuButton
+                      isActive={chat.active}
+                      className={cn(
+                        "group h-9 w-full cursor-pointer transition truncate",
+                        "hover:bg-muted",
+                        chat.active && "bg-muted text-foreground",
+                      )}
+                    >
+                      {chat.title}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
