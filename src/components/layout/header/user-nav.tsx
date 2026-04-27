@@ -29,9 +29,9 @@ export function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer outline-none">
         <div className="relative">
-          <Avatar className="h-10 w-10">
+          <Avatar className="size-10">
             <AvatarImage src="" alt={user?.name} />
-            <AvatarFallback className="bg-slate-700 text-white">
+            <AvatarFallback>
               {user?.name
                 .split(" ")
                 .map((word) => word.charAt(0))
@@ -46,8 +46,8 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarFallback className="rounded-lg">
+              <Avatar className="size-8">
+                <AvatarFallback>
                   {user?.name
                     .split(" ")
                     .map((word) => word.charAt(0))

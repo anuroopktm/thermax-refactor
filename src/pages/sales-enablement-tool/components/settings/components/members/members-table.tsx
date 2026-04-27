@@ -61,7 +61,7 @@ export function MembersTable({ members, isLoading }: MembersTableProps) {
                 >
                   <TableCell className="px-6 py-3">
                     <div className="flex items-center gap-3">
-                      <Avatar className="size-9">
+                      <Avatar className="size-8">
                         <AvatarFallback className="text-xs font-medium">
                           {member.name
                             .split(" ")

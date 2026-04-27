@@ -1,4 +1,4 @@
-import { Users, BarChart, Package } from "lucide-react";
+import { Users, Gauge, Package, MessageSquare } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -18,6 +18,12 @@ const MENU_ITEMS = [
     path: "/sales-enablement/settings/products",
   },
   {
+    id: "feedback",
+    label: "Feedback",
+    icon: MessageSquare,
+    path: "/sales-enablement/settings/feedback",
+  },
+  {
     id: "members",
     label: "Members",
     icon: Users,
@@ -26,7 +32,7 @@ const MENU_ITEMS = [
   {
     id: "usage",
     label: "Usage",
-    icon: BarChart,
+    icon: Gauge,
     path: "/sales-enablement/settings/usage",
   },
 ];

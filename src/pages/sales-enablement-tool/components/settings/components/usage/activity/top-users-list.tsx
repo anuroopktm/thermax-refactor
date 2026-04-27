@@ -32,7 +32,7 @@ export function TopUsersList() {
             ))
           : topUsers?.map((user, idx) => (
               <div key={idx} className="flex items-center gap-3">
-                <Avatar className="size-9">
+                <Avatar className="size-8">
                   <AvatarFallback className="text-xs">
                     {user.initial}
                   </AvatarFallback>
