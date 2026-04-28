@@ -19,6 +19,12 @@ export function DashboardLayout() {
         { label: "Settings" },
       ];
     }
+    if (location.pathname.startsWith("/transmitter-ocr")) {
+      return [
+        { label: "AI Studio", href: "/dashboard" },
+        { label: "Transmitter OCR" },
+      ];
+    }
     return [];
   };
 

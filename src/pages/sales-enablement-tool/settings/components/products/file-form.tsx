@@ -11,19 +11,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Badge } from "@/components/ui/badge";
 import { DialogFooter } from "@/components/ui/dialog";
 import {
   attachFileSchema,
   type AttachFileForm as AttachFileFormType,
 } from "@/validations/products";
+import { Input } from "@/components/ui/input";
 
 interface FileFormProps {
   onSubmit: (data: AttachFileFormType) => Promise<void>;
@@ -62,33 +62,8 @@ export function FileForm({
           <FieldGroup className="flex-row">
             {/* Upload File */}
             <Field className="flex-2">
-              <Label>Upload File*</Label>
-              <InputGroup>
-                <InputGroupInput
-                  placeholder="Upload File"
-                  readOnly
-                  value={(form.watch("file") as File)?.name || ""}
-                  className="bg-transparent"
-                />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton
-                    onClick={() =>
-                      document.getElementById("file-upload")?.click()
-                    }
-                  >
-                    Choose File
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
-              <input
-                id="file-upload"
-                type="file"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) form.setValue("file", file);
-                }}
-              />
+              <FieldLabel htmlFor="picture">File Upload*</FieldLabel>
+              <Input id="picture" type="file" {...form.register("file")} />
               <FieldError errors={[form.formState.errors.file]} />
             </Field>
 

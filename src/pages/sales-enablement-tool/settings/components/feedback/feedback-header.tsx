@@ -17,14 +17,14 @@ export function FeedbackHeader({
   count = 0,
 }: FeedbackHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex justify-between gap-4">
       <div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
           Feedback
         </h1>
         <p className="text-sm text-muted-foreground mt-1">({count} Results)</p>
       </div>
-      <InputGroup className="w-64 h-9 bg-muted/40 border rounded-lg">
+      <InputGroup className="w-64 h-9">
         <InputGroupInput
           placeholder="Search feedback..."
           value={searchQuery}

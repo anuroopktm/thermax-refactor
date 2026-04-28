@@ -6,37 +6,27 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 
-interface ProductsHeaderProps {
+interface MembersHeaderProps {
   onAdd: () => void;
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
-  resultsCount?: number;
-  totalCount?: number;
+  count?: number;
+  isLoading?: boolean;
 }
 
-export function ProductsHeader({
-  onAdd,
-  searchQuery,
-  onSearchChange,
-  resultsCount = 10,
-  totalCount = 38,
-}: ProductsHeaderProps) {
+export function MembersHeader({ onAdd, count, isLoading }: MembersHeaderProps) {
   return (
     <div className="flex items-start justify-between">
       <div className="space-y-1">
-        <h1 className="text-3xl font-semibold tracking-tight">Products</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Members</h1>
         <p className="text-sm text-muted-foreground">
-          ({resultsCount} Results of {totalCount})
+          {isLoading ? "Loading members..." : `Showing ${count ?? 0} members`}
         </p>
       </div>
 
       <div className="flex items-center gap-3">
-        <InputGroup className="w-64 h-9 bg-muted/40 border rounded-lg">
+        <InputGroup className="w-64 h-9">
           <InputGroupInput
-            placeholder="Search products..."
+            placeholder="Search members..."
             className="bg-transparent focus-visible:ring-0"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
           />
           <InputGroupAddon className="text-muted-foreground">
             <Search className="size-4" />

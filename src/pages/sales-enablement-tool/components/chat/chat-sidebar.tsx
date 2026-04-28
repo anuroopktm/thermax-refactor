@@ -33,7 +33,7 @@ export function ChatSidebar() {
       <SidebarSeparator />
 
       {/* Content */}
-      <SidebarContent className="px-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Recent</SidebarGroupLabel>
           <SidebarMenu className="gap-2">

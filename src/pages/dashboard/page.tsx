@@ -1,11 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import { AppCard } from "./components/app-card";
 import { SearchBar } from "./components/search-bar";
 import { useApps } from "@/services/query/dashboard/dashboard.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
   const { data: apps, isLoading } = useApps();
 
   return (
@@ -33,7 +31,7 @@ export default function DashboardPage() {
                 title={app.title}
                 description={app.description}
                 imageUrl={app.imageUrl}
-                onClick={() => navigate(app.path)}
+                path={app.path}
               />
             ))}
       </div>

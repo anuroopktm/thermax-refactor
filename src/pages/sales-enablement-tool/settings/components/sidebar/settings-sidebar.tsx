@@ -42,7 +42,7 @@ export function SettingsSidebar() {
 
   return (
     <Sidebar className="top-16 h-[calc(100vh-4rem)] border-r border-border bg-background">
-      <SidebarContent className="p-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Settings</SidebarGroupLabel>
           <SidebarMenu className="gap-2">

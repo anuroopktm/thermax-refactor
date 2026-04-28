@@ -102,7 +102,7 @@ const mockData: Record<string, any> = {
       description:
         "Automate the reading of field transmitter displays and nameplates.",
       imageUrl: "/assets/dashboard/transmitter-ocr.png",
-      path: "#",
+      path: "/transmitter-ocr",
     },
     {
       title: "Sales Enablement Tool",
