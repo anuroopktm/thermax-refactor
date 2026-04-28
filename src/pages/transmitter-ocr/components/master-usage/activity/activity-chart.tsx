@@ -31,7 +31,7 @@ export function ActivityChart() {
   );
 
   return (
-    <Card className="lg:col-span-2 flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader>
         <CardTitle>Monthly Activity</CardTitle>
         <CardDescription>

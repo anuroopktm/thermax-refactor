@@ -71,8 +71,9 @@ export function TokenUsage() {
                 data={pieData}
                 dataKey="value"
                 nameKey="key"
-                innerRadius={55}
-                outerRadius={80}
+                innerRadius={80}
+                outerRadius={110}
+                strokeWidth={5}
                 startAngle={90}
                 endAngle={-270}
               >
