@@ -1,6 +1,6 @@
-import { ChildActivityDetailHeader } from "../components/child-activity/detail/child-activity-detail-header";
-import { ChildActivityItemList } from "../components/child-activity/detail/child-activity-item-list";
-import { type ChildActivitySubItem } from "../components/child-activity/detail/child-activity-item-card";
+import { ChildActivityDetailHeader } from "../components/child-activity-detail/child-activity-detail-header";
+import { ChildActivityItemList } from "../components/child-activity-detail/child-activity-item-list";
+import { type ChildActivitySubItem } from "../components/child-activity-detail/child-activity-item-card";
 
 const MOCK_SUB_ITEMS: ChildActivitySubItem[] = [
   {

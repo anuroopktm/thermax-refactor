@@ -2,8 +2,8 @@ import { useState } from "react";
 import { pdfjs } from "react-pdf";
 import workerSrc from "pdfjs-dist/build/pdf.worker?url";
 
-import { PdfToolbar } from "./pdf-toolbar";
-import { PdfDocumentViewer } from "./pdf-document-viewer";
+import { PdfToolbar } from "./components/pdf-toolbar";
+import { PdfDocumentViewer } from "./components/pdf-document-viewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
