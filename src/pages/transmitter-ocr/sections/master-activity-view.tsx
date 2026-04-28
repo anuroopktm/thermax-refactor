@@ -1,8 +1,6 @@
 import { MasterActivityHeader } from "../components/master-activity/master-activity-header";
-import {
-  MasterActivityCard,
-  type MasterActivityItem,
-} from "../components/master-activity/master-activity-card";
+import { MasterActivityList } from "../components/master-activity/master-activity-list";
+import { type MasterActivityItem } from "../components/master-activity/master-activity-card";
 
 const MOCK_DATA: MasterActivityItem[] = [
   {
@@ -32,11 +30,7 @@ export function MasterActivityView() {
   return (
     <div className="space-y-6">
       <MasterActivityHeader totalResults={MOCK_DATA.length} />
-      <div className="flex flex-col gap-3">
-        {MOCK_DATA.map((activity) => (
-          <MasterActivityCard key={activity.id} activity={activity} />
-        ))}
-      </div>
+      <MasterActivityList activities={MOCK_DATA} />
     </div>
   );
 }

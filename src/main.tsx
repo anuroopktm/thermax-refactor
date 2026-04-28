@@ -15,6 +15,8 @@ import TransmitterOcrPage from "@/pages/transmitter-ocr/page.tsx";
 import { MasterActivityView } from "@/pages/transmitter-ocr/sections/master-activity-view.tsx";
 import { MasterUsageView } from "@/pages/transmitter-ocr/sections/master-usage-view.tsx";
 import { ChildUsageView } from "@/pages/transmitter-ocr/sections/child-usage-view.tsx";
+import { ChildActivityView } from "@/pages/transmitter-ocr/sections/child-activity-view.tsx";
+import { ChildActivityDetailView } from "@/pages/transmitter-ocr/sections/child-activity-detail-view.tsx";
 import { Navigate } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -50,9 +52,10 @@ createRoot(document.getElementById("root")!).render(
               <Route path="master-activity" element={<MasterActivityView />} />
               {/* Placeholders for other routes */}
               <Route path="master-usage" element={<MasterUsageView />} />
+              <Route path="child-activity" element={<ChildActivityView />} />
               <Route
-                path="child-activity"
-                element={<div className="p-4">Child Activity</div>}
+                path="child-activity/:id"
+                element={<ChildActivityDetailView />}
               />
               <Route path="child-usage" element={<ChildUsageView />} />
               <Route

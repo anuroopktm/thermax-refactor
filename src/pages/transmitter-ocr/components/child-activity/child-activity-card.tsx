@@ -9,8 +9,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
-export interface MasterActivityItem {
+export interface ChildActivityItem {
   id: string;
   title: string;
   createdAt: string;
@@ -18,13 +19,16 @@ export interface MasterActivityItem {
   userInitials: string;
 }
 
-interface MasterActivityCardProps {
-  activity: MasterActivityItem;
+interface ChildActivityCardProps {
+  activity: ChildActivityItem;
 }
 
-export function MasterActivityCard({ activity }: MasterActivityCardProps) {
+export function ChildActivityCard({ activity }: ChildActivityCardProps) {
   return (
-    <div className="group">
+    <Link
+      className="group"
+      to={`/transmitter-ocr/child-activity/${activity.id}`}
+    >
       <Card className="group-hover:shadow-md transition">
         <CardContent className="flex items-center gap-4">
           <Avatar className="size-10">
@@ -63,6 +67,6 @@ export function MasterActivityCard({ activity }: MasterActivityCardProps) {
           </DropdownMenu>
         </CardContent>
       </Card>
-    </div>
+    </Link>
   );
 }

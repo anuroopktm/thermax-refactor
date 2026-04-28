@@ -43,7 +43,7 @@ export const SIDEBAR_SECTIONS = [
         id: "dashboard",
         label: "Activity Summary",
         icon: LayoutDashboard,
-        path: "/transmitter-ocr/dashboard",
+        path: "/transmitter-ocr/activity-summary",
       },
       {
         id: "members",

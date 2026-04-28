@@ -20,10 +20,16 @@ export function DashboardLayout() {
       ];
     }
     if (location.pathname.startsWith("/transmitter-ocr")) {
-      return [
+      const breadcrumbs: { label: string; href?: string }[] = [
         { label: "AI Studio", href: "/dashboard" },
-        { label: "Transmitter OCR" },
+        { label: "Transmitter OCR", href: "/transmitter-ocr" },
       ];
+
+      if (location.pathname.includes("/child-activity/")) {
+        breadcrumbs.push({ label: "GAUGES Child 1 Test ..." });
+      }
+
+      return breadcrumbs;
     }
     return [];
   };
