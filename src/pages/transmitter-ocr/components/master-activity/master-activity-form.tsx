@@ -20,7 +20,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import {
   masterActivitySchema,
   type MasterActivityForm,
-} from "@/validations/master-activity";
+} from "@/validations/master-activity.schema";
 import { useId } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 

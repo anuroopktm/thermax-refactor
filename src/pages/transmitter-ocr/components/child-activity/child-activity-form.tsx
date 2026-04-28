@@ -20,7 +20,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import {
   childActivitySchema,
   type ChildActivityForm as ChildActivityFormType,
-} from "@/validations/child-activity";
+} from "@/validations/child-activity.schema";
 import { useId } from "react";
 
 const MASTER_SHEETS = [

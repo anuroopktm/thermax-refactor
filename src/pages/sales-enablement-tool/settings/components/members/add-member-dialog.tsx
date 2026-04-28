@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
 import { useCreateMember } from "@/services/query/members/members.service";
-import { type MemberForm as MemberFormType } from "@/validations/members";
+import { type MemberForm as MemberFormType } from "@/validations/members.schema";
 
 interface AddMemberDialogProps {
   open: boolean;

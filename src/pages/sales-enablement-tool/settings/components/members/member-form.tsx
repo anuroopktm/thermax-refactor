@@ -15,7 +15,7 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import {
   memberSchema,
   type MemberForm as MemberFormType,
-} from "@/validations/members";
+} from "@/validations/members.schema";
 import { DialogFooter } from "@/components/ui/dialog";
 
 const ROLE_OPTIONS = [

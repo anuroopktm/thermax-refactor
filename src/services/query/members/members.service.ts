@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { MemberForm } from "@/validations/members";
+import type { MemberForm } from "@/validations/members.schema";
 import type {
   Member,
   CreateMemberResponse,

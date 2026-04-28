@@ -3,7 +3,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
-import type { FeedbackForm } from "@/validations/feedback";
+import type { FeedbackForm } from "@/validations/feedback.schema";
 
 interface Feedback {
   id: number;

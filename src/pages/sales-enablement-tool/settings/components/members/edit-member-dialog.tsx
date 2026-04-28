@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
-import { type MemberForm as MemberFormType } from "@/validations/members";
+import { type MemberForm as MemberFormType } from "@/validations/members.schema";
 import { useUpdateMember } from "@/services/query/members/members.service";
 
 interface Member {

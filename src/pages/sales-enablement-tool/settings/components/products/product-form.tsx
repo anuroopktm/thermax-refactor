@@ -8,7 +8,7 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import {
   productSchema,
   type ProductForm as ProductFormType,
-} from "@/validations/products";
+} from "@/validations/products.schema";
 import { DialogFooter } from "@/components/ui/dialog";
 
 interface ProductFormProps {

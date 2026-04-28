@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MasterActivityForm } from "./master-activity-form";
-import { type MasterActivityForm as MasterActivityFormType } from "@/validations/master-activity";
+import { type MasterActivityForm as MasterActivityFormType } from "@/validations/master-activity.schema";
 
 interface AddMasterActivityDialogProps {
   open: boolean;

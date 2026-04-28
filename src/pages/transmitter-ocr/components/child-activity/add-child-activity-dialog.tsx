@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ChildActivityForm } from "./child-activity-form";
-import { type ChildActivityForm as ChildActivityFormType } from "@/validations/child-activity";
+import { type ChildActivityForm as ChildActivityFormType } from "@/validations/child-activity.schema";
 
 interface AddChildActivityDialogProps {
   open: boolean;

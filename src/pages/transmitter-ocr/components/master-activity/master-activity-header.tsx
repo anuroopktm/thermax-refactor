@@ -27,7 +27,7 @@ export function MasterActivityHeader({
   return (
     <div className="flex justify-between gap-6">
       <div className="flex-1">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           Master Activity
         </h1>
         <p className="text-sm text-muted-foreground mt-1">

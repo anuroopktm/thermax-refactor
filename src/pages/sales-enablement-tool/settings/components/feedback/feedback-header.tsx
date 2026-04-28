@@ -19,7 +19,7 @@ export function FeedbackHeader({
   return (
     <div className="flex justify-between gap-4">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           Feedback
         </h1>
         <p className="text-sm text-muted-foreground mt-1">({count} Results)</p>
