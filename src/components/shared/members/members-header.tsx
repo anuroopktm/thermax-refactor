@@ -34,8 +34,8 @@ export function MembersHeader({ onAdd, count, isLoading }: MembersHeaderProps) {
         </InputGroup>
 
         <Button className="h-9 cursor-pointer" onClick={onAdd}>
-          <PlusCircle className="size-4" />
-          Add
+          <PlusCircle />
+          Add Member
         </Button>
       </div>
     </div>
