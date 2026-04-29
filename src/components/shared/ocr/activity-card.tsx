@@ -22,11 +22,15 @@ interface ActivityItem {
 interface SharedActivityCardProps {
   activity: ActivityItem;
   href?: string;
+  hideActions?: boolean;
+  hideStatus?: boolean;
 }
 
 export function SharedActivityCard({
   activity,
   href,
+  hideActions,
+  hideStatus,
 }: SharedActivityCardProps) {
   const content = (
     <Card className="group-hover:shadow-md transition cursor-pointer">
@@ -46,31 +50,44 @@ export function SharedActivityCard({
           </p>
         </div>
 
-        <Badge
-          variant={activity.status === "In Progress" ? "warning" : "outline"}
-        >
-          {activity.status}
-        </Badge>
+        {!hideStatus && (
+          <Badge
+            variant={activity.status === "In Progress" ? "warning" : "outline"}
+          >
+            {activity.status}
+          </Badge>
+        )}
 
-        <div onClick={(e) => e.stopPropagation()}>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="ghost" size="icon" className="cursor-pointer">
-                  <MoreHorizontal />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-24">
-              <DropdownMenuItem className="cursor-pointer">
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive cursor-pointer">
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {!hideActions && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="cursor-pointer"
+                  >
+                    <MoreHorizontal />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-24">
+                <DropdownMenuItem className="cursor-pointer">
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive cursor-pointer">
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

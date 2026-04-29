@@ -43,7 +43,7 @@ export function ActivitySummaryTable({
               <TableHead
                 key={header.label}
                 className={cn(
-                  "px-6 py-3 text-xs font-bold text-muted-foreground uppercase tracking-wide",
+                  "px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wide",
                   header.className,
                 )}
               >
@@ -72,10 +72,10 @@ function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
   return (
     <TableRow className="hover:bg-muted/20 transition-colors border-b last:border-0">
       {/* Serial No */}
-      <TableCell className="px-6 py-5">{item.serialNo}</TableCell>
+      <TableCell className="px-6 py-4">{item.serialNo}</TableCell>
 
       {/* Tag Number */}
-      <TableCell className="px-6 py-5">
+      <TableCell className="px-6 py-4">
         <div className="flex items-center gap-3">
           <Avatar className="size-8 shrink-0">
             <AvatarFallback className="text-xs font-medium">TA</AvatarFallback>
@@ -93,26 +93,26 @@ function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
       </TableCell>
 
       {/* Model */}
-      <TableCell className="px-6 py-5">{item.modelNumber}</TableCell>
+      <TableCell className="px-6 py-4">{item.modelNumber}</TableCell>
 
       {/* Unit */}
-      <TableCell className="px-6 py-5">{item.unit}</TableCell>
+      <TableCell className="px-6 py-4">{item.unit}</TableCell>
 
       {/* Lower Range */}
-      <TableCell className="px-6 py-5">{item.lowerRange}</TableCell>
+      <TableCell className="px-6 py-4">{item.lowerRange}</TableCell>
 
       {/* Upper Range */}
-      <TableCell className="px-6 py-5">{item.upperRange}</TableCell>
+      <TableCell className="px-6 py-4">{item.upperRange}</TableCell>
 
       {/* Status */}
-      <TableCell className="px-6 py-5 text-center">
+      <TableCell className="px-6 py-4 text-center">
         <Badge variant={item.status === "PASSED" ? "success" : "error"}>
           {item.status}
         </Badge>
       </TableCell>
 
       {/* Remarks */}
-      <TableCell className="px-6 py-5">
+      <TableCell className="px-6 py-4">
         <div className="space-y-1">
           {item.remarks.map((remark, idx) => {
             const isError =
@@ -148,10 +148,10 @@ function ActivitySummarySkeleton() {
     <>
       {Array.from({ length: 5 }).map((_, i) => (
         <TableRow key={i} className="border-b last:border-0">
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <Skeleton className="h-4 w-8" />
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <div className="flex items-center gap-3">
               <Skeleton className="size-8 rounded-full shrink-0" />
               <div className="space-y-1">
@@ -160,24 +160,24 @@ function ActivitySummarySkeleton() {
               </div>
             </div>
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <Skeleton className="h-4 w-20" />
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <Skeleton className="h-4 w-24" />
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <Skeleton className="h-4 w-12" />
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <Skeleton className="h-4 w-12" />
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <div className="flex justify-center">
               <Skeleton className="h-6 w-16 rounded-full" />
             </div>
           </TableCell>
-          <TableCell className="px-6 py-5">
+          <TableCell className="px-6 py-4">
             <div className="space-y-2">
               <Skeleton className="h-3 w-full" />
               <Skeleton className="h-3 w-3/4" />

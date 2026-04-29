@@ -6,21 +6,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Info } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 
 interface MasterActivityItemHeaderProps {
   itemName: string;
+  onGlobalUnitChange: (unit: string) => void;
+  onSave: () => void;
 }
 
 export function MasterActivityItemHeader({
   itemName,
+  onGlobalUnitChange,
+  onSave,
 }: MasterActivityItemHeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between gap-6">
+    <div className="flex justify-between gap-6 px-4 py-4 md:px-8 border-b bg-background sticky top-0 z-20">
       <div className="flex-1 flex items-center gap-4">
         <Button
           variant="ghost"
@@ -31,38 +34,36 @@ export function MasterActivityItemHeader({
           <ArrowLeft className="size-5" />
         </Button>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Master Activity / {itemName}
+          {itemName}
         </h1>
       </div>
 
       <div className="flex items-center gap-2 h-fit">
         <span className="text-sm font-bold text-muted-foreground">
-          Annotation:
+          Global Unit:
         </span>
-        <Select defaultValue="all">
-          <SelectTrigger className="w-30 h-9! cursor-pointer">
-            <SelectValue placeholder="Select User" />
+        <Select onValueChange={onGlobalUnitChange}>
+          <SelectTrigger className="w-40 h-9! cursor-pointer">
+            <SelectValue placeholder="Select Unit" />
           </SelectTrigger>
-          <SelectContent className="min-w-30">
-            <SelectItem value="enable" className="cursor-pointer">
-              Enable
+          <SelectContent className="min-w-40">
+            <SelectItem value="Kg/cm2" className="cursor-pointer">
+              Kg/cm2
             </SelectItem>
-            <SelectItem value="disable" className="cursor-pointer">
-              Disable
+            <SelectItem value="Bar" className="cursor-pointer">
+              Bar
+            </SelectItem>
+            <SelectItem value="PSI" className="cursor-pointer">
+              PSI
+            </SelectItem>
+            <SelectItem value="Kg/cm2(g)" className="cursor-pointer">
+              Kg/cm2(g)
             </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex items-center gap-2 h-fit">
-        <span className="text-sm font-bold text-muted-foreground">Status:</span>
-        <Badge variant="outline" className="h-9 rounded-md ">
-          <Info />
-          In Progress
-        </Badge>
-      </div>
-
-      <Button size="lg" className="cursor-pointer">
+      <Button size="lg" className="cursor-pointer" onClick={onSave}>
         Save Changes
       </Button>
     </div>

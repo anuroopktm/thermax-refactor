@@ -11,11 +11,15 @@ interface ActivityItem {
 interface SharedActivityListProps {
   activities: ActivityItem[];
   getHref?: (id: string) => string;
+  hideActions?: boolean;
+  hideStatus?: boolean;
 }
 
 export function SharedActivityList({
   activities,
   getHref,
+  hideActions,
+  hideStatus,
 }: SharedActivityListProps) {
   return (
     <div className="flex flex-col gap-3">
@@ -24,6 +28,8 @@ export function SharedActivityList({
           key={activity.id}
           activity={activity}
           href={getHref?.(activity.id) || activity.id}
+          hideActions={hideActions}
+          hideStatus={hideStatus}
         />
       ))}
     </div>

@@ -28,6 +28,9 @@ export const PATHS = {
     CHILD_ACTIVITY_ITEM: "child-activity/:id/:itemId",
     CHILD_USAGE: "child-usage",
     SUMMARY: "activity-summary",
+    SUMMARY_MASTER: "activity-summary",
+    SUMMARY_CHILD: "activity-summary/:masterId",
+    SUMMARY_DETAIL: "activity-summary/:masterId/:childId",
     MEMBERS: "members",
   },
 } as const;

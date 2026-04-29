@@ -333,6 +333,18 @@ const mockData: Record<string, any> = {
       },
     ],
   },
+  "/transmitter-ocr/master-activity-records/1": Array.from(
+    { length: 36 },
+    (_, i) => ({
+      id: `${i + 1}`,
+      serialNo: i + 1,
+      tagNumber: `12-PG-${201 + i}`,
+      modelNumber: "BSPGV150",
+      lowerRange: "0",
+      upperRange: "160",
+      unit: "Kg/cm2",
+    }),
+  ),
 };
 
 api.post = (async (url: string, data?: any, config?: any) => {

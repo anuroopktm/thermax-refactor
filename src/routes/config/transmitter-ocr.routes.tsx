@@ -82,10 +82,35 @@ export const transmitterOcrRoutes = [
       },
       {
         path: PATHS.TRANSMITTER_OCR.SUMMARY,
-        element: <Pages.ActivitySummaryView />,
         handle: {
-          crumb: "Summary",
+          crumb: "Activity Summary",
         },
+        children: [
+          {
+            index: true,
+            element: <Pages.ActivitySummaryMasterView />,
+          },
+          {
+            path: ":masterId",
+            handle: {
+              crumb: (params: Params) => `Master Activity #${params.masterId}`,
+            },
+            children: [
+              {
+                index: true,
+                element: <Pages.ActivitySummaryChildView />,
+              },
+              {
+                path: ":childId",
+                element: <Pages.ActivitySummaryView />,
+                handle: {
+                  crumb: (params: Params) =>
+                    `Child Activity #${params.childId}`,
+                },
+              },
+            ],
+          },
+        ],
       },
       {
         path: PATHS.TRANSMITTER_OCR.MEMBERS,

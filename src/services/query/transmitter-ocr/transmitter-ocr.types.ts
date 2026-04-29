@@ -44,3 +44,13 @@ export interface ActivityItemDetail {
   name: string;
   fields: DynamicField[];
 }
+
+export interface MasterDataRecord {
+  id: string;
+  serialNo: number;
+  tagNumber: string;
+  modelNumber: string;
+  lowerRange: string;
+  upperRange: string;
+  unit: string;
+}

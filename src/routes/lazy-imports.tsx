@@ -80,3 +80,13 @@ export const ActivitySummaryView = lazy(() =>
     default: m.ActivitySummaryView,
   })),
 );
+export const ActivitySummaryMasterView = lazy(() =>
+  import("@/pages/transmitter-ocr/views/activity-summary-master-view").then(
+    (m) => ({ default: m.ActivitySummaryMasterView }),
+  ),
+);
+export const ActivitySummaryChildView = lazy(() =>
+  import("@/pages/transmitter-ocr/views/activity-summary-child-view").then(
+    (m) => ({ default: m.ActivitySummaryChildView }),
+  ),
+);
