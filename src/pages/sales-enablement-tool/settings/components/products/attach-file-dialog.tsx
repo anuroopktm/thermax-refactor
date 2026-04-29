@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { FileForm } from "./file-form";
-import { type AttachFileForm } from "@/validations/products.schema";
+import { type AttachFileForm } from "@/pages/sales-enablement-tool/settings/validations/products.schema";
 
 interface AttachFileDialogProps {
   open: boolean;

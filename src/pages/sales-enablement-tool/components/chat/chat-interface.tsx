@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChatMessages } from "./chat-messages";
 import { ChatInput } from "./chat-input";
 import { type Message } from "./chat-message";
-import { streamMockResponse } from "../../lib/chat-service";
+import { streamMockResponse } from "@/services/query/chat/mock-chat.service";
 
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);

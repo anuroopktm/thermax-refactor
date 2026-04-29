@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, type Params } from "react-router-dom";
 import { PATHS } from "../constants/routes";
 import * as Pages from "../lazy-imports";
 
@@ -30,7 +30,7 @@ export const transmitterOcrRoutes = [
             path: ":id",
             element: <Pages.MasterActivityItemView />,
             handle: {
-              crumb: (params) => `Activity #${params.id}`,
+              crumb: (params: Params) => `Activity #${params.id}`,
             },
           },
         ],
@@ -55,7 +55,7 @@ export const transmitterOcrRoutes = [
           {
             path: ":id",
             handle: {
-              crumb: (params) => `Child Detail #${params.id}`,
+              crumb: (params: Params) => `Child Detail #${params.id}`,
             },
             children: [
               {
@@ -66,7 +66,7 @@ export const transmitterOcrRoutes = [
                 path: ":itemId",
                 element: <Pages.ChildActivityItemView />,
                 handle: {
-                  crumb: (params) => `Item #${params.itemId}`,
+                  crumb: (params: Params) => `Item #${params.itemId}`,
                 },
               },
             ],
@@ -82,14 +82,14 @@ export const transmitterOcrRoutes = [
       },
       {
         path: PATHS.TRANSMITTER_OCR.SUMMARY,
-        element: <div className="p-4">Activity Summary</div>,
+        element: <Pages.ActivitySummaryView />,
         handle: {
           crumb: "Summary",
         },
       },
       {
         path: PATHS.TRANSMITTER_OCR.MEMBERS,
-        element: <div className="p-4">Members</div>,
+        element: <Pages.TransmitterMembersView />,
         handle: {
           crumb: "Members",
         },

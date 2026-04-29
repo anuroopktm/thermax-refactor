@@ -1,6 +1,6 @@
 import { useTopUsers } from "@/services/query/usage/usage.service";
 import { ActivityChart } from "./activity-chart";
-import { UsageStatusCard } from "../../usage-status-card";
+import { UsageStatusCard } from "@/components/shared/usage/usage-status-card";
 
 export function ActivityTab() {
   const { data: topUsers, isLoading: isTopUsersLoading } = useTopUsers();

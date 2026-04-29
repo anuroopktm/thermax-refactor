@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import api from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { SignInFormValues } from "@/validations/sign-in.schema";
+import type { SignInFormValues } from "@/pages/sign-in/validations/sign-in.schema";
 import type { SignInResponse, UserMeResponse } from "./auth.types";
 
 export const useSignIn = () => {

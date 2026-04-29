@@ -30,7 +30,7 @@ export function MasterActivityItemHeader({
         >
           <ArrowLeft className="size-5" />
         </Button>
-        <h1 className="text-xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           Master Activity / {itemName}
         </h1>
       </div>

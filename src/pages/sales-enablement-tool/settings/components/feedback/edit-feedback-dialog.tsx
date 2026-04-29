@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   feedbackSchema,
   type FeedbackForm,
-} from "@/validations/feedback.schema";
+} from "@/pages/sales-enablement-tool/settings/validations/feedback.schema";
 import { FeedbackTab } from "./components/feedback-tab";
 import { ReviewTab } from "./components/review-tab";
 import { EditFeedbackFooter } from "./components/edit-feedback-footer";

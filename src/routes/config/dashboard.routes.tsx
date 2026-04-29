@@ -5,8 +5,5 @@ export const dashboardRoutes = [
   {
     path: PATHS.DASHBOARD,
     element: <Pages.DashboardPage />,
-    handle: {
-      crumb: "AI Studio",
-    },
   },
 ];

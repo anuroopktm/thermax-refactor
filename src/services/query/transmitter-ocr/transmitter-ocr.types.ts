@@ -10,7 +10,36 @@ export interface DynamicField {
   type?: "text" | "number";
 }
 
-export interface ChildActivityItemDetail {
+export interface ActivitySummaryItem {
+  id: string;
+  serialNo: number;
+  tagNumber: string;
+  date: string;
+  modelNumber: string;
+  unit: string;
+  lowerRange: string;
+  upperRange: string;
+  status: "PASSED" | "FAILED";
+  remarks: string[];
+}
+
+export interface MasterActivityItem {
+  id: string;
+  title: string;
+  createdAt: string;
+  status: string;
+  userInitials: string;
+}
+
+export interface ChildActivityItem {
+  id: string;
+  title: string;
+  createdAt: string;
+  status: string;
+  userInitials: string;
+}
+
+export interface ActivityItemDetail {
   id: string;
   name: string;
   fields: DynamicField[];

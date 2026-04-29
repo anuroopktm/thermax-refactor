@@ -1,17 +1,27 @@
-import { Outlet, useMatches } from "react-router-dom";
+import {
+  Outlet,
+  useMatches,
+  type Params,
+  type UIMatch,
+} from "react-router-dom";
 import { MainHeader } from "./main-header";
 
+interface RouteHandle {
+  crumb?: string | ((params: Params) => React.ReactNode);
+  href?: string;
+}
+
 export function DashboardLayout() {
-  const matches = useMatches();
+  const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
 
   // Extract breadcrumbs from route handles
   const breadcrumbs = matches
-    .filter((match: any) => match.handle && match.handle.crumb)
-    .map((match: any) => {
-      const crumb = match.handle.crumb;
+    .filter((match) => match.handle && match.handle.crumb)
+    .map((match) => {
+      const { crumb, href } = match.handle;
       return {
         label: typeof crumb === "function" ? crumb(match.params) : crumb,
-        href: match.pathname,
+        href: href || match.pathname,
       };
     });
 

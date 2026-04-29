@@ -31,12 +31,21 @@ export function ErrorPage() {
       <p className="mt-2 max-w-md text-sm text-muted-foreground">{message}</p>
 
       <div className="mt-6 flex gap-4">
-        <Button onClick={() => window.location.reload()}>
+        <Button
+          size="lg"
+          className="cursor-pointer"
+          onClick={() => window.location.reload()}
+        >
           <RefreshCcw />
           Retry
         </Button>
 
-        <Button variant="outline" onClick={() => navigate("/")}>
+        <Button
+          size="lg"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <Home />
           Go home
         </Button>

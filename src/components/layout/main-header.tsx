@@ -3,7 +3,7 @@ import { HeaderBreadcrumbs } from "./header/header-breadcrumbs";
 import { UserNav } from "./header/user-nav";
 
 interface MainHeaderProps {
-  breadcrumbs?: { label: string; href?: string }[];
+  breadcrumbs?: { label: React.ReactNode; href?: string }[];
 }
 
 export function MainHeader({ breadcrumbs }: MainHeaderProps) {

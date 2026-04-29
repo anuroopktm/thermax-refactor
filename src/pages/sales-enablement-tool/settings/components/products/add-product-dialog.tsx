@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./product-form";
-import { type ProductForm as ProductFormType } from "@/validations/products.schema";
+import { type ProductForm as ProductFormType } from "@/pages/sales-enablement-tool/settings/validations/products.schema";
 
 interface AddProductDialogProps {
   open: boolean;

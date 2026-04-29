@@ -3,6 +3,7 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { ErrorPage } from "@/components/common/error-page";
 import { LoadingScreen } from "@/components/common/loading-screen";
 import { Suspense } from "react";
+import { PATHS } from "./constants/routes";
 
 // Guards
 import { PrivateRoute } from "./guards/private-route";
@@ -33,8 +34,13 @@ export const router = createBrowserRouter([
             element: <DashboardLayout />,
             children: [
               ...dashboardRoutes,
-              ...salesEnablementRoutes,
-              ...transmitterOcrRoutes,
+              {
+                handle: {
+                  crumb: "AI Studio",
+                  href: PATHS.DASHBOARD,
+                },
+                children: [...salesEnablementRoutes, ...transmitterOcrRoutes],
+              },
             ],
           },
         ],

@@ -30,7 +30,7 @@ export function ChildActivityItemHeader({
         >
           <ArrowLeft className="size-5" />
         </Button>
-        <h1 className="text-xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           Tag Name / {itemName}
         </h1>
       </div>

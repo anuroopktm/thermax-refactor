@@ -22,7 +22,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import {
   attachFileSchema,
   type AttachFileForm as AttachFileFormType,
-} from "@/validations/products.schema";
+} from "@/pages/sales-enablement-tool/settings/validations/products.schema";
 import { Input } from "@/components/ui/input";
 
 interface FileFormProps {
