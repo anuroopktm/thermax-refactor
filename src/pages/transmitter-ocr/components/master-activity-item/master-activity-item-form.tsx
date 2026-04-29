@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  childActivityItemSchema,
-  type ChildActivityItemFormValues,
-} from "@/validations/child-activity-item.schema";
+  masterActivityItemSchema,
+  type MasterActivityItemFormValues,
+} from "@/validations/master-activity-item.schema";
 import { Input } from "@/components/ui/input";
 import {
   Field,
@@ -16,7 +16,7 @@ import { type DynamicField } from "@/services/query/transmitter-ocr/transmitter-
 import { useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
-interface ChildActivityItemFormProps {
+interface MasterActivityItemFormProps {
   fields?: DynamicField[];
 }
 
@@ -44,9 +44,9 @@ const DEFAULT_FIELDS: DynamicField[] = [
   },
 ];
 
-export function ChildActivityItemForm({
+export function MasterActivityItemForm({
   fields = DEFAULT_FIELDS,
-}: ChildActivityItemFormProps) {
+}: MasterActivityItemFormProps) {
   // ✅ derive default values
   const defaultValues = useMemo(() => {
     return fields.reduce(
@@ -58,14 +58,14 @@ export function ChildActivityItemForm({
     );
   }, [fields]);
 
-  const form = useForm<ChildActivityItemFormValues>({
-    resolver: zodResolver(childActivityItemSchema),
-    defaultValues: defaultValues as ChildActivityItemFormValues,
+  const form = useForm<MasterActivityItemFormValues>({
+    resolver: zodResolver(masterActivityItemSchema),
+    defaultValues: defaultValues as MasterActivityItemFormValues,
   });
 
   // ✅ reset form when fields change
   useEffect(() => {
-    form.reset(defaultValues as ChildActivityItemFormValues);
+    form.reset(defaultValues as MasterActivityItemFormValues);
   }, [defaultValues, form]);
 
   // ✅ derive error from confidence + push to RHF

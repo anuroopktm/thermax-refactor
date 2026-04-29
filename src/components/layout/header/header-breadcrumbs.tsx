@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 interface HeaderBreadcrumbsProps {
-  breadcrumbs?: { label: string; href?: string }[];
+  breadcrumbs?: { label: React.ReactNode; href?: string }[];
 }
 
 export function HeaderBreadcrumbs({ breadcrumbs }: HeaderBreadcrumbsProps) {

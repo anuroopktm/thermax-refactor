@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 export interface MasterActivityItem {
   id: string;
@@ -24,8 +25,8 @@ interface MasterActivityCardProps {
 
 export function MasterActivityCard({ activity }: MasterActivityCardProps) {
   return (
-    <div className="group">
-      <Card className="group-hover:shadow-md transition">
+    <Link to={activity.id} className="group">
+      <Card className="group-hover:shadow-md transition cursor-pointer">
         <CardContent className="flex items-center gap-4">
           <Avatar className="size-10">
             <AvatarFallback className="font-medium">
@@ -42,27 +43,37 @@ export function MasterActivityCard({ activity }: MasterActivityCardProps) {
             </p>
           </div>
 
-          <Badge variant="outline">{activity.status}</Badge>
+          <Badge
+            variant={activity.status === "In Progress" ? "warning" : "outline"}
+          >
+            {activity.status}
+          </Badge>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="ghost" size="icon" className="cursor-pointer">
-                  <MoreHorizontal />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-24">
-              <DropdownMenuItem className="cursor-pointer">
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive cursor-pointer">
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="cursor-pointer"
+                  >
+                    <MoreHorizontal />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-24">
+                <DropdownMenuItem className="cursor-pointer">
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive cursor-pointer">
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </CardContent>
       </Card>
-    </div>
+    </Link>
   );
 }

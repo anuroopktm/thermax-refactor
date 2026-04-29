@@ -7,7 +7,7 @@ export default function TransmitterOcrPage() {
     <SidebarProvider>
       <div className="flex h-[calc(100vh-4rem)] w-full">
         <TransmitterSidebar />
-        <main className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 flex flex-col overflow-auto">
           <Outlet />
         </main>
       </div>

@@ -35,9 +35,7 @@ export function ChildActivityItemCard({ item }: ChildActivityItemCardProps) {
             </p>
           </div>
 
-          <Badge variant={isPassed ? "default" : "secondary"}>
-            {item.status}
-          </Badge>
+          <Badge variant={isPassed ? "success" : "error"}>{item.status}</Badge>
         </CardContent>
       </Card>
     </Link>

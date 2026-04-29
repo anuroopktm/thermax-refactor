@@ -21,7 +21,7 @@ const MOCK_DATA: ChildActivityItem[] = [
 
 export function ChildActivityView() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 py-8 md:px-8">
       <ChildActivityHeader totalResults={MOCK_DATA.length} />
       <ChildActivityList activities={MOCK_DATA} />
     </div>

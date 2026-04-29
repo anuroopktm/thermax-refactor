@@ -37,7 +37,7 @@ export function ChildActivityDetailView() {
   const activityTitle = "GAUGES Child 1 Test 27-04";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-4 py-8 md:px-8">
       <ChildActivityDetailHeader
         title={activityTitle}
         totalResults={MOCK_SUB_ITEMS.length}

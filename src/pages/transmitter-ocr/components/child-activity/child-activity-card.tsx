@@ -46,7 +46,11 @@ export function ChildActivityCard({ activity }: ChildActivityCardProps) {
             </p>
           </div>
 
-          <Badge variant="outline">{activity.status}</Badge>
+          <Badge
+            variant={activity.status === "In Progress" ? "warning" : "outline"}
+          >
+            {activity.status}
+          </Badge>
 
           <DropdownMenu>
             <DropdownMenuTrigger

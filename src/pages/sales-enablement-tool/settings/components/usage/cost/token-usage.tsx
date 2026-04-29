@@ -56,7 +56,7 @@ export function TokenUsage() {
       </CardHeader>
       <CardContent className="flex-1 flex flex-col justify-center min-h-[250px]">
         {isTokenLoading ? (
-          <Skeleton className="mx-auto aspect-square w-full max-w-[200px] rounded-full" />
+          <Skeleton className="mx-auto aspect-square w-full max-w-[250px] rounded-full" />
         ) : (
           <ChartContainer
             config={pieChartConfig}
