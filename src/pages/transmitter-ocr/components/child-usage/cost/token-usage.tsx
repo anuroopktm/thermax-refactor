@@ -113,9 +113,9 @@ export function TokenUsage() {
       </CardContent>
       <CardFooter className="flex-col gap-4 text-center">
         {isTokenLoading ? (
-          <div className="space-y-2 w-full flex flex-col items-center">
-            <Skeleton className="h-8 w-24" />
-            <Skeleton className="h-3 w-32" />
+          <div className="space-y-1">
+            <Skeleton className="h-9 w-32" />
+            <Skeleton className="h-4 w-32" />
           </div>
         ) : (
           <div className="space-y-1">
