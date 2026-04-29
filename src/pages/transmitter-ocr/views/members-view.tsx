@@ -23,7 +23,7 @@ export function MembersView() {
           className="h-9 cursor-pointer"
           onClick={() => setIsAddDialogOpen(true)}
         >
-          <PlusCircle className="size-4 mr-2" />
+          <PlusCircle />
           Add Member
         </Button>
       }

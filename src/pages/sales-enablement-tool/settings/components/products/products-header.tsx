@@ -44,8 +44,8 @@ export function ProductsHeader({
         </InputGroup>
 
         <Button className="h-9 cursor-pointer" onClick={onAdd}>
-          <PlusCircle className="size-4" />
-          Add
+          <PlusCircle />
+          Add Product
         </Button>
       </div>
     </div>

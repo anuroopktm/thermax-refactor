@@ -14,7 +14,7 @@ export function MasterActivityView() {
       description={`Monitor and manage ${activities.length} master activity records`}
       actions={
         <Button className="h-9 cursor-pointer">
-          <PlusCircle className="size-4 mr-2" />
+          <PlusCircle />
           Add Activity
         </Button>
       }

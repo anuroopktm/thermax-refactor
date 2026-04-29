@@ -14,7 +14,7 @@ export function ChildActivityView() {
       description={`Review and process ${activities.length} child activity records`}
       actions={
         <Button className="h-9 cursor-pointer">
-          <PlusCircle className="size-4 mr-2" />
+          <PlusCircle />
           Add Child Activity
         </Button>
       }

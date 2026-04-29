@@ -80,7 +80,7 @@ export function ProductCard({ product }: { product: Product }) {
           onClick={() => setIsAttachDialogOpen(true)}
         >
           <Plus />
-          Attach file
+          Attach File
         </Button>
       </CardFooter>
 
