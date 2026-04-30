@@ -1,7 +1,22 @@
 import { useSignIn } from "@/services/query/auth/auth.service";
-import { Button } from "@base-ui/react";
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { LoaderPinwheel } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+function MicrosoftLogo() {
+  return (
+    <svg
+      viewBox="0 0 23 23"
+      xmlns="http://www.w3.org/2000/svg"
+      className="size-5 shrink-0"
+    >
+      <path fill="currentColor" d="M1 1h10v10H1z" />
+      <path fill="currentColor" d="M12 1h10v10H12z" />
+      <path fill="currentColor" d="M1 12h10v10H1z" />
+      <path fill="currentColor" d="M12 12h10v10H12z" />
+    </svg>
+  );
+}
 
 export function MicrosoftSignInButton() {
   const navigate = useNavigate();
@@ -20,23 +35,14 @@ export function MicrosoftSignInButton() {
 
   return (
     <Button
-      className="h-16 w-full cursor-pointer text-lg"
+      className="h-16 w-full cursor-pointer text-lg font-bold"
       onClick={handleLogin}
       disabled={isPending}
     >
       {isPending ? (
-        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        <LoaderPinwheel className="size-6 animate-spin" />
       ) : (
-        <svg
-          viewBox="0 0 23 23"
-          xmlns="http://www.w3.org/2000/svg"
-          className="mr-2 h-5 w-5"
-        >
-          <path fill="currentColor" d="M1 1h10v10H1z" />
-          <path fill="currentColor" d="M12 1h10v10H12z" />
-          <path fill="currentColor" d="M1 12h10v10H1z" />
-          <path fill="currentColor" d="M12 12h10v10H12z" />
-        </svg>
+        <MicrosoftLogo />
       )}
       {isPending ? "Signing in..." : "Sign in with Microsoft"}
     </Button>

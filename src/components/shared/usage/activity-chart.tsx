@@ -21,15 +21,15 @@ const barChartConfig = {
 interface ActivityChartProps {
   data?: any[];
   isLoading?: boolean;
-  month: string;
-  year: string;
+  month?: string;
+  year?: string;
 }
 
-export function SharedActivityChart({
+export function ActivityChart({
   data,
   isLoading,
-  month,
-  year,
+  month = "April",
+  year = "2026",
 }: ActivityChartProps) {
   return (
     <Card className="flex flex-col">

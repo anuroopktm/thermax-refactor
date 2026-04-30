@@ -21,15 +21,15 @@ const barChartConfig = {
 interface CostChartProps {
   data?: any[];
   isLoading?: boolean;
-  month: string;
-  year: string;
+  month?: string;
+  year?: string;
 }
 
-export function SharedCostChart({
+export function CostChart({
   data,
   isLoading,
-  month,
-  year,
+  month = "April",
+  year = "2026",
 }: CostChartProps) {
   return (
     <Card className="lg:col-span-2 flex flex-col">

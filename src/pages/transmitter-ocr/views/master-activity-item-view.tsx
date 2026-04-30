@@ -35,10 +35,12 @@ export function MasterActivityItemView() {
     }
   }, [initialRecords, reset]);
 
-  const handleGlobalUnitChange = (unit: string) => {
+  const handleGlobalUnitChange = (unit: string | null) => {
     const currentRecords = getValues("records");
     currentRecords.forEach((_, index) => {
-      setValue(`records.${index}.unit`, unit);
+      if (unit) {
+        setValue(`records.${index}.unit`, unit);
+      }
     });
   };
 

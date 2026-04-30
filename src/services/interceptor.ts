@@ -77,39 +77,74 @@ const mockData: Record<string, any> = {
   ],
   "/dashboard/apps": [
     {
+      title: "Sales Enablement Tool",
+      description:
+        "A Gen AI based chatbot designed to provide Instant Insights into any Product related queries to empower your sales team.",
+      imageUrl: "/assets/dashboard/sales-enablement.png",
+      path: "/sales-enablement",
+    },
+    {
       title: "TBWES OCR",
       description:
-        "Enable smart data extraction from complex engineering drawings and technical specifications.",
+        "The TBWES OCR is enabled with smart data pull feature that can be used extensively for pulling data from engineering drawings.",
       imageUrl: "/assets/dashboard/tbwes-ocr.png",
+      path: "#",
+    },
+    {
+      title: "Edge Bot",
+      description:
+        "A Gen AI based Chatbot designed to provide Instant Insights into any Product related queries to improve efficiency.",
+      imageUrl: "/assets/dashboard/edge-bot.png",
+      path: "#",
+    },
+    {
+      title: "Document Translator",
+      description:
+        "The Document Translator is a ai-based service that enables automated translation of various document types.",
+      imageUrl: "/assets/dashboard/document-translator.png",
+      path: "#",
+    },
+    {
+      title: "Thermax-GPT",
+      description:
+        "The Thermax-GPT is a powerful AI model capable of generating original and creative text based on context.",
+      imageUrl: "/assets/dashboard/thermax-gpt.png",
       path: "#",
     },
     {
       title: "Dr. ConBot",
       description:
-        "Your intelligent site companion for real-time query resolution through AI.",
+        "An intelligent question-answering bot designed to provide support for FAQs, user manuals, training materials.",
       imageUrl: "/assets/dashboard/dr-conbot.png",
       path: "#",
     },
     {
       title: "Smart Troubleshooting App",
       description:
-        "Minimize equipment downtime with our predictive diagnostic engine.",
+        "Troubleshooting Application for streamlines issue resolution and minimizing equipment downtime.",
       imageUrl: "/assets/dashboard/troubleshooting.png",
       path: "#",
     },
     {
-      title: "Transmitter OCR",
+      title: "CyberBuddy",
       description:
-        "Automate the reading of field transmitter displays and nameplates.",
-      imageUrl: "/assets/dashboard/transmitter-ocr.png",
-      path: "/transmitter-ocr",
+        "A chatbot designed to provide Information and Insights on security-related topics and policy guidelines.",
+      imageUrl: "/assets/dashboard/cyberbuddy.png",
+      path: "#",
     },
     {
-      title: "Sales Enablement Tool",
+      title: "Heating OCR",
       description:
-        "Empower your sales team with real-time access to technical data and AI-driven insights.",
-      imageUrl: "/assets/dashboard/sales-enablement.png",
-      path: "/sales-enablement",
+        "Heating OCR is a smart OCR application that extracts data from Images and PDFs, enabling better analysis.",
+      imageUrl: "/assets/dashboard/heating-ocr.png",
+      path: "/heating-ocr",
+    },
+    {
+      title: "Transmitter OCR",
+      description:
+        "The Transmitter OCR is a smart data pull feature that can be used extensively for pulling required data from displays.",
+      imageUrl: "/assets/dashboard/transmitter-ocr.png",
+      path: "/transmitter-ocr",
     },
   ],
   "/usage/activity": Array.from({ length: 30 }, (_, i) => ({
@@ -270,10 +305,11 @@ const mockData: Record<string, any> = {
   "/transmitter-ocr/master-activities": [
     {
       id: "1",
-      title: "Gauges Test 1 27-04-26",
+      title: "Plate Activity 1 27-04-26",
       createdAt: "4/27/2026",
       status: "In Progress",
       userInitials: "TA",
+      type: "plate",
     },
     {
       id: "2",

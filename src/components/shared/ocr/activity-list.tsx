@@ -6,11 +6,12 @@ interface ActivityItem {
   createdAt: string;
   status: string;
   userInitials: string;
+  type?: string;
 }
 
 interface SharedActivityListProps {
   activities: ActivityItem[];
-  getHref?: (id: string) => string;
+  getHref?: (activity: ActivityItem) => string;
   hideActions?: boolean;
   hideStatus?: boolean;
 }
@@ -27,7 +28,7 @@ export function SharedActivityList({
         <SharedActivityCard
           key={activity.id}
           activity={activity}
-          href={getHref?.(activity.id) || activity.id}
+          href={getHref?.(activity) || activity.id}
           hideActions={hideActions}
           hideStatus={hideStatus}
         />

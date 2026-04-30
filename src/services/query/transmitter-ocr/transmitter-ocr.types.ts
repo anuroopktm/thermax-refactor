@@ -29,6 +29,7 @@ export interface MasterActivityItem {
   createdAt: string;
   status: string;
   userInitials: string;
+  type?: string;
 }
 
 export interface ChildActivityItem {

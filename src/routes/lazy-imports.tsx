@@ -90,3 +90,31 @@ export const ActivitySummaryChildView = lazy(() =>
     (m) => ({ default: m.ActivitySummaryChildView }),
   ),
 );
+
+// Heating OCR Lazy loaded pages
+export const HeatingOcrPage = lazy(() => import("@/pages/heating-ocr/page"));
+export const HeatingActivityView = lazy(() =>
+  import("@/pages/heating-ocr/views/activity-view").then((m) => ({
+    default: m.ActivityView,
+  })),
+);
+export const HeatingActivityItemView = lazy(() =>
+  import("@/pages/heating-ocr/views/activity-item-view").then((m) => ({
+    default: m.ActivityItemView,
+  })),
+);
+export const HeatingPlateGroupsView = lazy(() =>
+  import("@/pages/heating-ocr/views/plate-groups-view").then((m) => ({
+    default: m.PlateGroupsView,
+  })),
+);
+export const HeatingMembersView = lazy(() =>
+  import("@/pages/heating-ocr/views/members-view").then((m) => ({
+    default: m.MembersView,
+  })),
+);
+export const HeatingUsageView = lazy(() =>
+  import("@/pages/heating-ocr/views/usage-view").then((m) => ({
+    default: m.UsageView,
+  })),
+);

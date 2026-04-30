@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { SharedActivityChart } from "@/components/shared/usage/activity-chart";
+import { ActivityChart as SharedActivityChart } from "@/components/shared/usage/activity-chart";
 import { useActivityData } from "@/services/query/usage/usage.service";
 
 export function ActivityChart() {

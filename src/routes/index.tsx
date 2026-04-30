@@ -13,6 +13,7 @@ import { publicRoutes } from "./config/public.routes";
 import { dashboardRoutes } from "./config/dashboard.routes";
 import { salesEnablementRoutes } from "./config/sales-enablement.routes";
 import { transmitterOcrRoutes } from "./config/transmitter-ocr.routes";
+import { heatingOcrRoutes } from "./config/heating-ocr.routes";
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +40,11 @@ export const router = createBrowserRouter([
                   crumb: "AI Studio",
                   href: PATHS.DASHBOARD,
                 },
-                children: [...salesEnablementRoutes, ...transmitterOcrRoutes],
+                children: [
+                  ...salesEnablementRoutes,
+                  ...transmitterOcrRoutes,
+                  ...heatingOcrRoutes,
+                ],
               },
             ],
           },

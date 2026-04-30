@@ -33,4 +33,15 @@ export const PATHS = {
     SUMMARY_DETAIL: "activity-summary/:masterId/:childId",
     MEMBERS: "members",
   },
+
+  // Heating OCR
+  HEATING_OCR: {
+    ROOT: "/heating-ocr",
+    ACTIVITY: "activity",
+    ACTIVITY_ITEM: "activity/:id/item",
+    PLATE_GROUPS: "activity/:id/plate-groups",
+    PLATE_GROUP_ITEM: "activity/:id/plate-groups/:groupId/item",
+    MEMBERS: "members",
+    USAGE: "usage",
+  },
 } as const;

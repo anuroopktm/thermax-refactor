@@ -14,9 +14,7 @@ export function ChildActivityItemView() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-4 py-4 md:px-8 border-b bg-background/50 backdrop-blur-sm sticky top-0 z-10">
-        <ChildActivityItemHeader itemName={itemName} />
-      </div>
+      <ChildActivityItemHeader itemName={itemName} />
 
       <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* PDF Viewer */}
