@@ -1,30 +1,27 @@
 import axios from "axios";
 
-// Create a real axios instance if needed, but for now we'll mock it
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: "",
 });
+
+// Request interceptor to add the bearer token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 // Mock delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Mocking the interceptor or the instance itself to return mock data
-// In a real scenario, you'd use axios-mock-adapter or just conditional logic
-// For this task, we'll override the methods to return mock data after 3s
-
 const mockData: Record<string, any> = {
-  "/auth/sign-in": {
-    access_token: "mock_token_123",
-    token_type: "Bearer",
-  },
-  "/auth/me": {
-    id: "user_123",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "owner",
-    organization_id: "org_123",
-    is_verified: true,
-  },
   "/members": [
     {
       id: "1",
@@ -73,78 +70,6 @@ const mockData: Record<string, any> = {
       name: "Rahul Arya",
       email: "AISL.RArya@thermaxglobal.com",
       role: "member",
-    },
-  ],
-  "/dashboard/apps": [
-    {
-      title: "Sales Enablement Tool",
-      description:
-        "A Gen AI based chatbot designed to provide Instant Insights into any Product related queries to empower your sales team.",
-      imageUrl: "/assets/dashboard/sales-enablement.png",
-      path: "/sales-enablement",
-    },
-    {
-      title: "TBWES OCR",
-      description:
-        "The TBWES OCR is enabled with smart data pull feature that can be used extensively for pulling data from engineering drawings.",
-      imageUrl: "/assets/dashboard/tbwes-ocr.png",
-      path: "#",
-    },
-    {
-      title: "Edge Bot",
-      description:
-        "A Gen AI based Chatbot designed to provide Instant Insights into any Product related queries to improve efficiency.",
-      imageUrl: "/assets/dashboard/edge-bot.png",
-      path: "#",
-    },
-    {
-      title: "Document Translator",
-      description:
-        "The Document Translator is a ai-based service that enables automated translation of various document types.",
-      imageUrl: "/assets/dashboard/document-translator.png",
-      path: "#",
-    },
-    {
-      title: "Thermax-GPT",
-      description:
-        "The Thermax-GPT is a powerful AI model capable of generating original and creative text based on context.",
-      imageUrl: "/assets/dashboard/thermax-gpt.png",
-      path: "#",
-    },
-    {
-      title: "Dr. ConBot",
-      description:
-        "An intelligent question-answering bot designed to provide support for FAQs, user manuals, training materials.",
-      imageUrl: "/assets/dashboard/dr-conbot.png",
-      path: "#",
-    },
-    {
-      title: "Smart Troubleshooting App",
-      description:
-        "Troubleshooting Application for streamlines issue resolution and minimizing equipment downtime.",
-      imageUrl: "/assets/dashboard/troubleshooting.png",
-      path: "#",
-    },
-    {
-      title: "CyberBuddy",
-      description:
-        "A chatbot designed to provide Information and Insights on security-related topics and policy guidelines.",
-      imageUrl: "/assets/dashboard/cyberbuddy.png",
-      path: "#",
-    },
-    {
-      title: "Heating OCR",
-      description:
-        "Heating OCR is a smart OCR application that extracts data from Images and PDFs, enabling better analysis.",
-      imageUrl: "/assets/dashboard/heating-ocr.png",
-      path: "/heating-ocr",
-    },
-    {
-      title: "Transmitter OCR",
-      description:
-        "The Transmitter OCR is a smart data pull feature that can be used extensively for pulling required data from displays.",
-      imageUrl: "/assets/dashboard/transmitter-ocr.png",
-      path: "/transmitter-ocr",
     },
   ],
   "/usage/activity": Array.from({ length: 30 }, (_, i) => ({
@@ -383,42 +308,48 @@ const mockData: Record<string, any> = {
   ),
 };
 
-api.post = (async (url: string, data?: any, config?: any) => {
-  console.log(`Mock POST request to: ${url}`, data);
-  await delay(3000);
+// Simple interceptor to handle mock data for non-migrated endpoints
+api.interceptors.response.use(
+  async (response) => {
+    return response;
+  },
+  async (error) => {
+    const { config } = error;
+    if (!config) return Promise.reject(error);
 
-  // Handle dynamic member URLs
-  if (url.startsWith("/members/")) {
-    if (url.endsWith("/delete"))
-      return { data: { message: "Member deleted" }, status: 200 } as any;
-    return {
-      data: { message: "Member updated", member: data },
-      status: 200,
-    } as any;
-  }
+    let url = config.url || "";
+    // Normalize URL: remove baseURL if present
+    if (config.baseURL && url.startsWith(config.baseURL)) {
+      url = url.replace(config.baseURL, "");
+    }
 
-  const response = mockData[url] || { message: "Mock success" };
-  return {
-    data: response,
-    status: 200,
-    statusText: "OK",
-    headers: {},
-    config: config || {},
-  } as any;
-}) as any;
+    // Ensure it starts with / for mockData matching
+    if (!url.startsWith("/")) {
+      url = "/" + url;
+    }
 
-api.get = (async (url: string, config?: any) => {
-  console.log(`Mock GET request to: ${url}`, config?.params);
-  await delay(3000);
-  const baseUrl = url.split("?")[0];
-  const response = mockData[baseUrl] || { message: "Mock success" };
-  return {
-    data: response,
-    status: 200,
-    statusText: "OK",
-    headers: {},
-    config: config || {},
-  } as any;
-}) as any;
+    let path = url.split("?")[0];
+
+    // Remove /api prefix if present for mockData matching
+    if (path.startsWith("/api")) {
+      path = path.replace("/api", "");
+    }
+
+    // If we have mock data for this path, return it instead of an error
+    if (mockData[path]) {
+      console.log(`Returning mock data for path: ${path}`);
+      await delay(1000);
+      return {
+        data: mockData[path],
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config: config,
+      } as any;
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default api;

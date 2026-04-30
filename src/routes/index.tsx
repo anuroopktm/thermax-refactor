@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { AiStudioLayout } from "@/components/layout/ai-studio-layout";
 import { ErrorPage } from "@/components/common/error-page";
 import { LoadingScreen } from "@/components/common/loading-screen";
 import { Suspense } from "react";
@@ -10,7 +10,7 @@ import { PrivateRoute } from "./guards/private-route";
 
 // Route Configs
 import { publicRoutes } from "./config/public.routes";
-import { dashboardRoutes } from "./config/dashboard.routes";
+import { aiStudioRoutes } from "./config/ai-studio.routes";
 import { salesEnablementRoutes } from "./config/sales-enablement.routes";
 import { transmitterOcrRoutes } from "./config/transmitter-ocr.routes";
 import { heatingOcrRoutes } from "./config/heating-ocr.routes";
@@ -32,13 +32,13 @@ export const router = createBrowserRouter([
         element: <PrivateRoute />,
         children: [
           {
-            element: <DashboardLayout />,
+            element: <AiStudioLayout />,
             children: [
-              ...dashboardRoutes,
+              ...aiStudioRoutes,
               {
                 handle: {
                   crumb: "AI Studio",
-                  href: PATHS.DASHBOARD,
+                  href: PATHS.AI_STUDIO,
                 },
                 children: [
                   ...salesEnablementRoutes,

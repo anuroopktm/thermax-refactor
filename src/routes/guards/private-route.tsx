@@ -8,8 +8,7 @@ import { PATHS } from "../constants/routes";
 export function PrivateRoute() {
   const location = useLocation();
 
-  // TODO: Replace with real auth check logic
-  const isAuthenticated = true; // Placeholder for now
+  const isAuthenticated = !!localStorage.getItem("access_token");
 
   if (!isAuthenticated) {
     return <Navigate to={PATHS.HOME} state={{ from: location }} replace />;

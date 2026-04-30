@@ -18,11 +18,12 @@ export function UserNav() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.clear();
     navigate("/");
   };
 
   if (isLoading) {
-    return <Skeleton className="h-10 w-10 rounded-full" />;
+    return <Skeleton className="size-10 rounded-full" />;
   }
 
   return (
@@ -42,7 +43,7 @@ export function UserNav() {
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-background bg-green-500" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">

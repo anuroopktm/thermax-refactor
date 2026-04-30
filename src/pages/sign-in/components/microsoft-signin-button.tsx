@@ -1,7 +1,8 @@
-import { useSignIn } from "@/services/query/auth/auth.service";
+import { useSignIn, useAuthUrl } from "@/services/query/auth/auth.service";
 import { Button } from "@/components/ui/button";
 import { LoaderPinwheel } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function MicrosoftLogo() {
   return (
@@ -20,17 +21,51 @@ function MicrosoftLogo() {
 
 export function MicrosoftSignInButton() {
   const navigate = useNavigate();
-  const { mutate: signIn, isPending } = useSignIn();
 
-  const handleLogin = () => {
-    signIn(
-      { email: "admin@thermax.com", password: "password123" },
-      {
-        onSuccess: () => {
-          navigate("/dashboard");
+  const ENABLE_SSO = import.meta.env.VITE_ENABLE_SSO === "true";
+  const FIRST_USER_EMAIL = import.meta.env.VITE_FIRST_USER_EMAIL;
+  const DEFAULT_PASSWORD = import.meta.env.VITE_DEFAULT_PASSWORD;
+
+  const { mutateAsync: signIn, isPending: isSigningIn } = useSignIn();
+  const { mutateAsync: getAuthUrl, isPending: isGettingUrl } = useAuthUrl();
+
+  const isPending = isSigningIn || isGettingUrl;
+
+  const handleLogin = async () => {
+    if (isPending) return;
+
+    if (ENABLE_SSO) {
+      toast.promise(getAuthUrl(), {
+        loading: "Redirecting to Microsoft...",
+        success: (url: string) => {
+          window.location.href = url;
+          return "Redirecting...";
         },
-      },
-    );
+        error: () => "Failed to get authentication URL.",
+      });
+    } else {
+      if (!FIRST_USER_EMAIL || !DEFAULT_PASSWORD) {
+        toast.error("Missing fallback credentials");
+        return;
+      }
+
+      toast.promise(
+        signIn({
+          email: FIRST_USER_EMAIL,
+          password: DEFAULT_PASSWORD,
+        }),
+        {
+          loading: "Signing in...",
+          success: () => {
+            navigate("/ai-studio", { replace: true });
+            return "Signed in successfully!";
+          },
+          error: (err) =>
+            err?.response?.data?.message ||
+            "Failed to sign in. Please try again.",
+        },
+      );
+    }
   };
 
   return (
@@ -44,7 +79,12 @@ export function MicrosoftSignInButton() {
       ) : (
         <MicrosoftLogo />
       )}
-      {isPending ? "Signing in..." : "Sign in with Microsoft"}
+
+      {isPending
+        ? "Processing..."
+        : ENABLE_SSO
+          ? "Sign in with Microsoft"
+          : "Sign in with Credentials"}
     </Button>
   );
 }

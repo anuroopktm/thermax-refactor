@@ -2,7 +2,7 @@ import { lazy } from "react";
 
 // Lazy loaded pages (Default exports)
 export const SignInPage = lazy(() => import("@/pages/sign-in/page"));
-export const DashboardPage = lazy(() => import("@/pages/dashboard/page"));
+export const AiStudioPage = lazy(() => import("@/pages/ai-studio/page"));
 export const SalesEnablementPage = lazy(
   () => import("@/pages/sales-enablement-tool/page"),
 );

@@ -3,7 +3,7 @@
  */
 export const PATHS = {
   HOME: "/",
-  DASHBOARD: "/dashboard",
+  AI_STUDIO: "/ai-studio",
 
   // Sales Enablement Tool
   SALES_ENABLEMENT: {

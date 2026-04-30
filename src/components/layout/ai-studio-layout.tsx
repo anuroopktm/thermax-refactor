@@ -11,7 +11,7 @@ interface RouteHandle {
   href?: string;
 }
 
-export function DashboardLayout() {
+export function AiStudioLayout() {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
 
   // Extract breadcrumbs from route handles
@@ -26,7 +26,7 @@ export function DashboardLayout() {
     });
 
   return (
-    <div className="dashboard-layout flex h-screen w-full flex-col overflow-hidden">
+    <div className="ai-studio-layout flex h-screen w-full flex-col overflow-hidden">
       <MainHeader breadcrumbs={breadcrumbs} />
       <main className="flex-1 overflow-hidden">
         <Outlet />

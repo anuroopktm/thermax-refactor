@@ -1,9 +1,9 @@
 import { AppCard } from "./components/app-card";
 import { SearchBar } from "./components/search-bar";
-import { useApps } from "@/services/query/dashboard/dashboard.service";
+import { useApps } from "@/services/query/ai-studio/ai-studio.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function DashboardPage() {
+export default function AiStudioPage() {
   const { data: apps, isLoading } = useApps();
 
   return (

@@ -4,12 +4,11 @@ export interface SignInResponse {
 }
 
 export interface UserMeResponse {
-  id: string;
+  id: number;
   name: string;
   email: string;
-  role: string;
-  organization_id: string;
-  is_verified: boolean;
-  verification_link?: string;
-  invitation_link?: string;
+  is_admin: boolean;
+  is_active: boolean;
+  created_on: string;
+  last_modified_on: string;
 }

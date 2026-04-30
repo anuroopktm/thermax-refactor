@@ -6,11 +6,10 @@ import { PATHS } from "../constants/routes";
  * If the user is already authenticated, it redirects to the dashboard.
  */
 export function PublicRoute() {
-  // TODO: Replace with real auth check logic
-  const isAuthenticated = false; // Placeholder for now
+  const isAuthenticated = !!localStorage.getItem("access_token");
 
   if (isAuthenticated) {
-    return <Navigate to={PATHS.DASHBOARD} replace />;
+    return <Navigate to={PATHS.AI_STUDIO} replace />;
   }
 
   return <Outlet />;
