@@ -5,8 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { MemberForm } from "./member-form";
-import { useCreateMember } from "@/services/query/members/members.service";
+import { MemberForm } from "@/components/shared/members/member-form";
+import { useTbwesCreateMember } from "@/services/query/tbwes-ocr/tbwes-ocr.service";
 import { type MemberForm as MemberFormType } from "@/validations/members.schema";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ interface AddMemberDialogProps {
 }
 
 export function AddMemberDialog({ open, onOpenChange }: AddMemberDialogProps) {
-  const { mutateAsync: createMember, isPending } = useCreateMember();
+  const { mutateAsync: createMember, isPending } = useTbwesCreateMember();
 
   const handleSubmit = async (data: MemberFormType) => {
     toast.promise(createMember(data), {

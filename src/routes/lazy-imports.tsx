@@ -118,3 +118,26 @@ export const HeatingUsageView = lazy(() =>
     default: m.UsageView,
   })),
 );
+
+// TBWES OCR Lazy loaded pages
+export const TbwesOcrPage = lazy(() => import("@/pages/tbwes-ocr/page"));
+export const TbwesActivityView = lazy(() =>
+  import("@/pages/tbwes-ocr/views/activity-view").then((m) => ({
+    default: m.ActivityView,
+  })),
+);
+export const TbwesActivityItemView = lazy(() =>
+  import("@/pages/tbwes-ocr/views/activity-item-view").then((m) => ({
+    default: m.ActivityItemView,
+  })),
+);
+export const TbwesMembersView = lazy(() =>
+  import("@/pages/tbwes-ocr/views/members-view").then((m) => ({
+    default: m.MembersView,
+  })),
+);
+export const TbwesUsageView = lazy(() =>
+  import("@/pages/tbwes-ocr/views/usage-view").then((m) => ({
+    default: m.UsageView,
+  })),
+);

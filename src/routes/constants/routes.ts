@@ -44,4 +44,13 @@ export const PATHS = {
     MEMBERS: "members",
     USAGE: "usage",
   },
+
+  // TBWES OCR
+  TBWES_OCR: {
+    ROOT: "/tbwes-ocr",
+    ACTIVITY: "activity",
+    ACTIVITY_ITEM: "activity/:id/item",
+    MEMBERS: "members",
+    USAGE: "usage",
+  },
 } as const;

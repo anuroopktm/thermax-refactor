@@ -19,9 +19,10 @@ import {
 import { DialogFooter } from "@/components/ui/dialog";
 
 const ROLE_OPTIONS = [
-  { value: "owner", label: "Owner" },
-  { value: "member", label: "Member" },
-  { value: "viewer", label: "Viewer" },
+  { value: "", label: "Select role" },
+  { value: "OWNER", label: "Owner" },
+  { value: "MEMBER", label: "Member" },
+  { value: "VIEWER", label: "Viewer" },
 ];
 
 interface MemberFormProps {
@@ -45,7 +46,7 @@ export function MemberForm({
     defaultValues: {
       name: defaultValues?.name || "",
       email: defaultValues?.email || "",
-      role: defaultValues?.role || "member",
+      role: defaultValues?.role || "",
     },
   });
 
@@ -74,27 +75,31 @@ export function MemberForm({
               name="role"
               control={form.control}
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="cursor-pointer">
-                    <SelectValue placeholder="Select role">
-                      {field.value
-                        ? ROLE_OPTIONS.find((opt) => opt.value === field.value)
-                            ?.label
-                        : undefined}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ROLE_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value}
-                        className="cursor-pointer"
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="cursor-pointer">
+                      <SelectValue placeholder="Select role">
+                        {field.value
+                          ? ROLE_OPTIONS.find(
+                              (opt) => opt.value === field.value,
+                            )?.label
+                          : undefined}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ROLE_OPTIONS.map((option) => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          className="cursor-pointer"
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FieldError errors={[form.formState.errors.role]} />
+                </>
               )}
             />
           </Field>

@@ -14,6 +14,7 @@ import { aiStudioRoutes } from "./config/ai-studio.routes";
 import { salesEnablementRoutes } from "./config/sales-enablement.routes";
 import { transmitterOcrRoutes } from "./config/transmitter-ocr.routes";
 import { heatingOcrRoutes } from "./config/heating-ocr.routes";
+import { tbwesOcrRoutes } from "./config/tbwes-ocr.routes";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
                   ...salesEnablementRoutes,
                   ...transmitterOcrRoutes,
                   ...heatingOcrRoutes,
+                  ...tbwesOcrRoutes,
                 ],
               },
             ],

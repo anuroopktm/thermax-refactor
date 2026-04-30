@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-interface ActivityItem {
+export interface ActivityItem {
   id: string;
   title: string;
   createdAt: string;
@@ -52,7 +52,11 @@ export function SharedActivityCard({
 
         {!hideStatus && (
           <Badge
-            variant={activity.status === "In Progress" ? "warning" : "outline"}
+            variant={
+              activity.status.toLowerCase() === "in progress"
+                ? "warning"
+                : "outline"
+            }
           >
             {activity.status}
           </Badge>

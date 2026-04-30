@@ -4,3 +4,12 @@ export interface AppItem {
   imageUrl: string;
   path: string;
 }
+
+interface ServiceItem {
+  title: string;
+  description: string;
+}
+
+export interface AppListResponse {
+  result: ServiceItem[];
+}

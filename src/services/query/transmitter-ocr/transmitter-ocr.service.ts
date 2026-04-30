@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "@/services/interceptor";
+import { tbwesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
@@ -14,7 +14,7 @@ export const useActivitySummary = (childId?: string) => {
   return useQuery<ActivitySummaryItem[], AxiosError<ApiError>>({
     queryKey: ["transmitter-ocr", "activity-summary", childId],
     queryFn: async () => {
-      const { data } = await api.get<ActivitySummaryItem[]>(
+      const { data } = await tbwesApi.get<ActivitySummaryItem[]>(
         "/transmitter-ocr/activity-summary",
         { params: { childId } },
       );
@@ -27,7 +27,7 @@ export const useMasterActivities = () => {
   return useQuery<MasterActivityItem[], AxiosError<ApiError>>({
     queryKey: ["transmitter-ocr", "master-activities"],
     queryFn: async () => {
-      const { data } = await api.get<MasterActivityItem[]>(
+      const { data } = await tbwesApi.get<MasterActivityItem[]>(
         "/transmitter-ocr/master-activities",
       );
       return data;
@@ -39,7 +39,7 @@ export const useChildActivities = (masterId?: string) => {
   return useQuery<ChildActivityItem[], AxiosError<ApiError>>({
     queryKey: ["transmitter-ocr", "child-activities", masterId],
     queryFn: async () => {
-      const { data } = await api.get<ChildActivityItem[]>(
+      const { data } = await tbwesApi.get<ChildActivityItem[]>(
         "/transmitter-ocr/child-activities",
         { params: { masterId } },
       );
@@ -53,7 +53,7 @@ export const useActivityItemDetail = (id?: string) => {
     queryKey: ["transmitter-ocr", "activity-item", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await api.get<ActivityItemDetail>(
+      const { data } = await tbwesApi.get<ActivityItemDetail>(
         `/transmitter-ocr/activity-item/${id}`,
       );
       return data;
@@ -66,7 +66,7 @@ export const useMasterActivityRecords = (masterId?: string) => {
     queryKey: ["transmitter-ocr", "master-activity-records", masterId],
     enabled: !!masterId,
     queryFn: async () => {
-      const { data } = await api.get<MasterDataRecord[]>(
+      const { data } = await tbwesApi.get<MasterDataRecord[]>(
         `/transmitter-ocr/master-activity-records/${masterId}`,
       );
       return data;

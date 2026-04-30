@@ -1,22 +1,31 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 const api = axios.create({
   baseURL: "",
 });
 
+export const tbwesApi = axios.create({
+  baseURL: "/tbwes-api",
+});
+
 // Request interceptor to add the bearer token
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+const addAuthInterceptor = (instance: AxiosInstance) => {
+  instance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+};
+
+addAuthInterceptor(api);
+addAuthInterceptor(tbwesApi);
 
 // Mock delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -309,47 +318,52 @@ const mockData: Record<string, any> = {
 };
 
 // Simple interceptor to handle mock data for non-migrated endpoints
-api.interceptors.response.use(
-  async (response) => {
-    return response;
-  },
-  async (error) => {
-    const { config } = error;
-    if (!config) return Promise.reject(error);
+const addMockInterceptor = (instance: AxiosInstance) => {
+  instance.interceptors.response.use(
+    async (response) => {
+      return response;
+    },
+    async (error) => {
+      const { config } = error;
+      if (!config) return Promise.reject(error);
 
-    let url = config.url || "";
-    // Normalize URL: remove baseURL if present
-    if (config.baseURL && url.startsWith(config.baseURL)) {
-      url = url.replace(config.baseURL, "");
-    }
+      let url = config.url || "";
+      // Normalize URL: remove baseURL if present
+      if (config.baseURL && url.startsWith(config.baseURL)) {
+        url = url.replace(config.baseURL, "");
+      }
 
-    // Ensure it starts with / for mockData matching
-    if (!url.startsWith("/")) {
-      url = "/" + url;
-    }
+      // Ensure it starts with / for mockData matching
+      if (!url.startsWith("/")) {
+        url = "/" + url;
+      }
 
-    let path = url.split("?")[0];
+      let path = url.split("?")[0];
 
-    // Remove /api prefix if present for mockData matching
-    if (path.startsWith("/api")) {
-      path = path.replace("/api", "");
-    }
+      // Remove /api prefix if present for mockData matching
+      if (path.startsWith("/api")) {
+        path = path.replace("/api", "");
+      }
 
-    // If we have mock data for this path, return it instead of an error
-    if (mockData[path]) {
-      console.log(`Returning mock data for path: ${path}`);
-      await delay(1000);
-      return {
-        data: mockData[path],
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: config,
-      } as any;
-    }
+      // If we have mock data for this path, return it instead of an error
+      if (mockData[path]) {
+        console.log(`Returning mock data for path: ${path}`);
+        await delay(1000);
+        return {
+          data: mockData[path],
+          status: 200,
+          statusText: "OK",
+          headers: {},
+          config: config,
+        } as any;
+      }
 
-    return Promise.reject(error);
-  },
-);
+      return Promise.reject(error);
+    },
+  );
+};
+
+addMockInterceptor(api);
+addMockInterceptor(tbwesApi);
 
 export default api;

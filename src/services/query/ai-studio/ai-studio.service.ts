@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { AppItem } from "./ai-studio.types";
+import type { AppItem, AppListResponse } from "./ai-studio.types";
 
 const appMetadata: Record<string, { imageUrl: string; path: string }> = {
   "Sales Enablement Tool": {
@@ -47,11 +47,15 @@ const appMetadata: Record<string, { imageUrl: string; path: string }> = {
   },
 };
 
-export const useApps = () => {
+export const useApps = (searchTerm?: string) => {
   return useQuery<AppItem[], AxiosError<ApiError>>({
-    queryKey: ["ai-studio", "apps"],
+    queryKey: ["ai-studio", "apps", searchTerm],
     queryFn: async () => {
-      const { data } = await api.get<{ result: any[] }>("/api/service");
+      const { data } = await api.get<AppListResponse>("/api/service", {
+        params: {
+          search_term: searchTerm,
+        },
+      });
       return data.result.map((item) => ({
         title: item.title,
         description: item.description,

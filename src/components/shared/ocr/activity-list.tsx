@@ -1,13 +1,4 @@
-import { SharedActivityCard } from "./activity-card";
-
-interface ActivityItem {
-  id: string;
-  title: string;
-  createdAt: string;
-  status: string;
-  userInitials: string;
-  type?: string;
-}
+import { SharedActivityCard, type ActivityItem } from "./activity-card";
 
 interface SharedActivityListProps {
   activities: ActivityItem[];
