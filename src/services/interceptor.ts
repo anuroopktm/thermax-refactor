@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 
 const api = axios.create({
-  baseURL: "",
+  baseURL: "/api",
 });
 
 export const tbwesApi = axios.create({
@@ -22,6 +22,18 @@ const addAuthInterceptor = (instance: AxiosInstance) => {
       return Promise.reject(error);
     },
   );
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+      return Promise.reject(error);
+    },
+  );
 };
 
 addAuthInterceptor(api);
@@ -31,6 +43,13 @@ addAuthInterceptor(tbwesApi);
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const mockData: Record<string, any> = {
+  "/user/me": {
+    id: 1,
+    email: "test@example.com",
+    is_active: true,
+    is_superuser: true,
+    full_name: "Test User",
+  },
   "/members": [
     {
       id: "1",
@@ -327,28 +346,29 @@ const addMockInterceptor = (instance: AxiosInstance) => {
       const { config } = error;
       if (!config) return Promise.reject(error);
 
+      // Handle 404 and other errors by checking mock data
       let url = config.url || "";
-      // Normalize URL: remove baseURL if present
-      if (config.baseURL && url.startsWith(config.baseURL)) {
-        url = url.replace(config.baseURL, "");
+
+      // If URL is absolute, don't mock (or strip baseURL)
+      if (url.startsWith("http")) {
+        return Promise.reject(error);
       }
 
-      // Ensure it starts with / for mockData matching
-      if (!url.startsWith("/")) {
-        url = "/" + url;
-      }
-
+      // Normalize path for matching
       let path = url.split("?")[0];
+      if (!path.startsWith("/")) {
+        path = "/" + path;
+      }
 
-      // Remove /api prefix if present for mockData matching
-      if (path.startsWith("/api")) {
-        path = path.replace("/api", "");
+      // Remove trailing slash for matching
+      if (path.length > 1 && path.endsWith("/")) {
+        path = path.slice(0, -1);
       }
 
       // If we have mock data for this path, return it instead of an error
       if (mockData[path]) {
         console.log(`Returning mock data for path: ${path}`);
-        await delay(1000);
+        await delay(500);
         return {
           data: mockData[path],
           status: 200,

@@ -1,4 +1,4 @@
-import { useTbwesCreateActivity } from "@/services/query/tbwes-ocr/tbwes-ocr.service";
+import { useTbwesCreateActivity } from "@/services/query/tbwes-ocr";
 import {
   Dialog,
   DialogContent,

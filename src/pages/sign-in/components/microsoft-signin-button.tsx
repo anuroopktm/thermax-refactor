@@ -1,6 +1,5 @@
 import { useSignIn, useAuthUrl } from "@/services/query/auth/auth.service";
 import { Button } from "@/components/ui/button";
-import { LoaderPinwheel } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -74,11 +73,7 @@ export function MicrosoftSignInButton() {
       onClick={handleLogin}
       disabled={isPending}
     >
-      {isPending ? (
-        <LoaderPinwheel className="size-6 animate-spin" />
-      ) : (
-        <MicrosoftLogo />
-      )}
+      <MicrosoftLogo />
 
       {isPending
         ? "Processing..."

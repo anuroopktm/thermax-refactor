@@ -9,6 +9,12 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import { cn } from "@/lib/utils";
 
 import { type ActivitySummaryItem } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
@@ -36,31 +42,19 @@ export function ActivitySummaryTable({
   return (
     <div className="rounded-lg border bg-background overflow-hidden">
       <Table>
-        {/* HEADER */}
         <TableHeader>
-          <TableRow className="bg-muted/40 hover:bg-muted/40">
-            {TABLE_HEADERS.map((header) => (
-              <TableHead
-                key={header.label}
-                className={cn(
-                  "px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wide",
-                  header.className,
-                )}
-              >
-                {header.label}
-              </TableHead>
-            ))}
-          </TableRow>
+          <TableHeaderComponent />
         </TableHeader>
 
-        {/* BODY */}
         <TableBody>
           {isLoading ? (
-            <ActivitySummarySkeleton />
-          ) : (
+            <SkeletonTableRows count={5} />
+          ) : items.length > 0 ? (
             items.map((item) => (
               <ActivitySummaryRow key={item.id} item={item} />
             ))
+          ) : (
+            <EmptyStateRow />
           )}
         </TableBody>
       </Table>
@@ -68,13 +62,101 @@ export function ActivitySummaryTable({
   );
 }
 
-function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
+/* ---------------- Header ---------------- */
+
+const TableHeaderComponent = () => {
+  return (
+    <TableRow className="bg-muted/40 hover:bg-muted/40">
+      {TABLE_HEADERS.map((header, idx) => (
+        <TableHead
+          key={header.label || idx}
+          className={cn(
+            "px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wide",
+            header.className,
+          )}
+        >
+          {header.label}
+        </TableHead>
+      ))}
+    </TableRow>
+  );
+};
+
+/* ---------------- Skeleton ---------------- */
+
+const SkeletonTableRows = ({ count = 5 }: { count?: number }) => {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, i) => (
+        <TableRow key={i} className="border-b last:border-0">
+          {Array.from({ length: TABLE_HEADERS.length }).map((_, j) => (
+            <TableCell key={j} className="px-6 py-4">
+              {j === 1 ? (
+                <div className="flex items-center gap-3">
+                  <Skeleton className="size-8 rounded-full" />
+                  <div className="space-y-1">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                </div>
+              ) : j === 6 ? (
+                <div className="flex justify-center">
+                  <Skeleton className="h-6 w-16 rounded-full" />
+                </div>
+              ) : j === 7 ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className="h-3 w-3/4" />
+                </div>
+              ) : (
+                <Skeleton className="h-4 w-20" />
+              )}
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  );
+};
+
+/* ---------------- Empty ---------------- */
+
+const EmptyStateRow = () => {
+  return (
+    <TableRow>
+      <TableCell colSpan={TABLE_HEADERS.length}>
+        <Empty className="py-20">
+          <EmptyHeader>
+            <EmptyTitle>No records found</EmptyTitle>
+            <EmptyDescription>
+              Add records or adjust your search to see results.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+/* ---------------- Helpers ---------------- */
+
+const parseRemark = (remark: string) => {
+  const isError = remark.includes("No value") || remark.includes("Invalid");
+
+  const [rawKey, ...valueParts] = remark.split(":");
+  const key = rawKey?.trim();
+  const value = valueParts.join(":")?.trim();
+
+  return { key, value, isError };
+};
+
+/* ---------------- Row ---------------- */
+
+const ActivitySummaryRow = ({ item }: { item: ActivitySummaryItem }) => {
   return (
     <TableRow className="hover:bg-muted/20 transition-colors border-b last:border-0">
-      {/* Serial No */}
       <TableCell className="px-6 py-4">{item.serialNo}</TableCell>
 
-      {/* Tag Number */}
       <TableCell className="px-6 py-4">
         <div className="flex items-center gap-3">
           <Avatar className="size-8 shrink-0">
@@ -82,9 +164,7 @@ function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
           </Avatar>
 
           <div className="flex flex-col leading-tight">
-            <span className="text-sm font-bold text-foreground">
-              {item.tagNumber}
-            </span>
+            <span className="text-sm font-bold">{item.tagNumber}</span>
             <span className="text-[10px] text-muted-foreground">
               {item.date}
             </span>
@@ -92,35 +172,21 @@ function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
         </div>
       </TableCell>
 
-      {/* Model */}
       <TableCell className="px-6 py-4">{item.modelNumber}</TableCell>
-
-      {/* Unit */}
       <TableCell className="px-6 py-4">{item.unit}</TableCell>
-
-      {/* Lower Range */}
       <TableCell className="px-6 py-4">{item.lowerRange}</TableCell>
-
-      {/* Upper Range */}
       <TableCell className="px-6 py-4">{item.upperRange}</TableCell>
 
-      {/* Status */}
       <TableCell className="px-6 py-4 text-center">
         <Badge variant={item.status === "PASSED" ? "success" : "error"}>
           {item.status}
         </Badge>
       </TableCell>
 
-      {/* Remarks */}
       <TableCell className="px-6 py-4">
         <div className="space-y-1">
           {item.remarks.map((remark, idx) => {
-            const isError =
-              remark.includes("No value") || remark.includes("Invalid");
-
-            const [rawKey, ...valueParts] = remark.split(":");
-            const key = rawKey?.trim();
-            const value = valueParts.join(":")?.trim();
+            const { key, value, isError } = parseRemark(remark);
 
             return (
               <div
@@ -141,50 +207,4 @@ function ActivitySummaryRow({ item }: { item: ActivitySummaryItem }) {
       </TableCell>
     </TableRow>
   );
-}
-
-function ActivitySummarySkeleton() {
-  return (
-    <>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <TableRow key={i} className="border-b last:border-0">
-          <TableCell className="px-6 py-4">
-            <Skeleton className="h-4 w-8" />
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <div className="flex items-center gap-3">
-              <Skeleton className="size-8 rounded-full shrink-0" />
-              <div className="space-y-1">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-3 w-16" />
-              </div>
-            </div>
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <Skeleton className="h-4 w-20" />
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <Skeleton className="h-4 w-24" />
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <Skeleton className="h-4 w-12" />
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <Skeleton className="h-4 w-12" />
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <div className="flex justify-center">
-              <Skeleton className="h-6 w-16 rounded-full" />
-            </div>
-          </TableCell>
-          <TableCell className="px-6 py-4">
-            <div className="space-y-2">
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-3/4" />
-            </div>
-          </TableCell>
-        </TableRow>
-      ))}
-    </>
-  );
-}
+};

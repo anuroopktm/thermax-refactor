@@ -1,5 +1,4 @@
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,66 +6,46 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EditMemberDialog } from "./edit-member-dialog";
-import { DeleteMemberDialog } from "./delete-member-dialog";
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  initial?: string;
-}
+import { type Member } from "@/services/query/members/members.types";
 
 interface MemberActionsProps {
   member: Member;
+  onEdit: (member: Member) => void;
+  onDelete: (member: Member) => void;
 }
 
-export function MemberActions({ member }: MemberActionsProps) {
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-
+export function MemberActions({
+  member,
+  onEdit,
+  onDelete,
+}: MemberActionsProps) {
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button variant="ghost" size="icon" className="cursor-pointer">
-              <MoreHorizontal />
-            </Button>
-          }
-        />
-        <DropdownMenuContent align="end" className="min-w-32">
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => setIsEditDialogOpen(true)}
-          >
-            <Pencil className="mr-2 h-4 w-4" />
-            Edit
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            variant="destructive"
-            className="cursor-pointer"
-            onClick={() => setIsDeleteDialogOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <EditMemberDialog
-        member={member}
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" size="icon" className="cursor-pointer">
+            <MoreHorizontal />
+          </Button>
+        }
       />
+      <DropdownMenuContent align="end" className="min-w-32">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => onEdit(member)}
+        >
+          <Pencil />
+          Edit
+        </DropdownMenuItem>
 
-      <DeleteMemberDialog
-        member={member}
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      />
-    </>
+        <DropdownMenuItem
+          variant="destructive"
+          className="cursor-pointer"
+          onClick={() => onDelete(member)}
+        >
+          <Trash2 />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

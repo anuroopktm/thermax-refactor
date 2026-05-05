@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -6,8 +9,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
-import { type MemberForm as MemberFormType } from "@/validations/members.schema";
-import { useUpdateMember } from "@/services/query/members/members.service";
+import {
+  memberSchema,
+  type MemberForm as MemberFormType,
+} from "@/validations/members.schema";
 
 interface Member {
   id: string;
@@ -20,23 +25,38 @@ interface EditMemberDialogProps {
   member: Member;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onConfirm: (data: MemberFormType) => Promise<any>;
+  isSaving: boolean;
 }
 
 export function EditMemberDialog({
   member,
   open,
   onOpenChange,
+  onConfirm,
+  isSaving,
 }: EditMemberDialogProps) {
-  const { mutate: updateMember, isPending: isSaving } = useUpdateMember(
-    member.id,
-  );
+  const form = useForm<MemberFormType>({
+    resolver: zodResolver(memberSchema),
+    defaultValues: {
+      name: member.name,
+      email: member.email,
+      role: member.role.toUpperCase() as any,
+    },
+  });
 
-  const handleSubmit = async (data: MemberFormType) => {
-    updateMember(data, {
-      onSuccess: () => {
-        onOpenChange(false);
-      },
-    });
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        name: member.name,
+        email: member.email,
+        role: member.role.toUpperCase() as any,
+      });
+    }
+  }, [member, open, form]);
+
+  const handleSubmit = (data: MemberFormType) => {
+    onConfirm(data);
   };
 
   return (
@@ -48,11 +68,7 @@ export function EditMemberDialog({
         </DialogHeader>
 
         <MemberForm
-          defaultValues={{
-            name: member.name,
-            email: member.email,
-            role: member.role.toLowerCase() as MemberFormType["role"],
-          }}
+          form={form}
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
           isSaving={isSaving}

@@ -13,7 +13,7 @@ export const useSignIn = () => {
       params.append("password", user.password);
 
       const { data } = await api.post<SignInResponse>(
-        "/api/login/access-token",
+        "/login/access-token",
         params,
       );
 
@@ -31,7 +31,7 @@ export const useSignIn = () => {
 export const useAuthUrl = () => {
   return useMutation<string, AxiosError<ApiError>>({
     mutationFn: async () => {
-      const { data } = await api.get<string>("/api/microsoft/login", {
+      const { data } = await api.get<string>("/microsoft/login", {
         params: { redirect: "/ai-studio" },
       });
       return data;
@@ -43,7 +43,7 @@ export const useExchangeCode = () => {
   return useMutation<SignInResponse, AxiosError<ApiError>, string>({
     mutationFn: async (params: string) => {
       const { data } = await api.get<SignInResponse>(
-        `/api/login/access-token?${params}`,
+        `/login/access-token?${params}`,
       );
 
       if (data.access_token) {
@@ -60,7 +60,7 @@ export const useMe = () => {
   return useQuery<UserMeResponse, AxiosError<ApiError>>({
     queryKey: ["auth", "me"],
     queryFn: async () => {
-      const response = await api.get<UserMeResponse>("/api/user/me/");
+      const response = await api.get<UserMeResponse>("/user/me/");
       return response.data;
     },
   });

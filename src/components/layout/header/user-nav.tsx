@@ -10,8 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
+import { getInitials } from "@/lib/utils";
 
 export function UserNav() {
   const { data: user, isLoading } = useMe();
@@ -29,32 +35,18 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer outline-none">
-        <div className="relative">
-          <Avatar className="size-10">
-            <AvatarImage src="" alt={user?.name} />
-            <AvatarFallback>
-              {user?.name
-                .split(" ")
-                .map((word) => word.charAt(0))
-                .join("")
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-background bg-green-500" />
-        </div>
+        <Avatar className="size-10">
+          <AvatarImage src="" alt={user?.name} />
+          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+          <AvatarBadge className="bg-green-500" />
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="size-8">
-                <AvatarFallback>
-                  {user?.name
-                    .split(" ")
-                    .map((word) => word.charAt(0))
-                    .join("")
-                    .toUpperCase()}
-                </AvatarFallback>
+                <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user?.name}</span>

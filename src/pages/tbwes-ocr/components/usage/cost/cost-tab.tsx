@@ -1,34 +1,56 @@
-import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { CostChart } from "@/components/shared/usage/cost-chart";
 import { TokenUsage } from "@/components/shared/usage/token-usage";
-import { useTbwesCostUsage } from "@/services/query/tbwes-ocr/tbwes-ocr.service";
-import { MONTHS } from "@/components/shared/usage/usage-date-filter";
+import {
+  useTbwesCostUsage,
+  useTbwesUsageLimit,
+  useTbwesCurrentMember,
+  useTbwesUpdateUsageLimit,
+} from "@/services/query/tbwes-ocr";
+import { useDateParams } from "../hooks/use-date-params";
+import { mapChartData, getUsageStats } from "../utils/usage.utils";
 
 export function CostTab() {
-  const [searchParams] = useSearchParams();
-  const year = parseInt(searchParams.get("year") || "2026");
-  const monthName = searchParams.get("month") || "April";
-  const monthIndex =
-    MONTHS.indexOf(monthName) !== -1 ? MONTHS.indexOf(monthName) + 1 : 4;
+  const { year, monthName, monthIndex } = useDateParams();
 
-  const { data: costData, isLoading } = useTbwesCostUsage(year, monthIndex);
+  const { data: costData, isLoading: isCostLoading } = useTbwesCostUsage(
+    year,
+    monthIndex,
+  );
+  const { data: limitData, isLoading: isLimitLoading } = useTbwesUsageLimit();
+  const { data: currentMember } = useTbwesCurrentMember();
+  const { mutateAsync, isPending } = useTbwesUpdateUsageLimit();
 
-  // Map API data to chart format
-  const chartData =
-    costData?.day.map((d, i) => ({
-      day: d,
-      cost: costData.cost[i],
-    })) || [];
+  const chartData = mapChartData(costData);
+  const usageData = getUsageStats(costData, limitData);
+
+  const isOwner = currentMember?.role === "OWNER";
+  const isLoading = isCostLoading || isLimitLoading;
+
+  const handleUpdateLimit = async (newLimit: number) => {
+    toast.promise(mutateAsync(newLimit), {
+      loading: "Updating usage limit...",
+      success: "Usage limit updated successfully",
+      error: "Failed to update usage limit",
+    });
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
       <CostChart
         data={chartData}
-        isLoading={isLoading}
+        isLoading={isCostLoading}
         month={monthName}
         year={year.toString()}
       />
-      <TokenUsage />
+
+      <TokenUsage
+        data={usageData}
+        isLoading={isLoading}
+        isUpdating={isPending}
+        showEditButton={isOwner}
+        onUpdateLimit={handleUpdateLimit}
+      />
     </div>
   );
 }

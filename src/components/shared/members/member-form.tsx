@@ -1,6 +1,5 @@
 import { useId } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, type UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,43 +11,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import {
-  memberSchema,
-  type MemberForm as MemberFormType,
-} from "@/validations/members.schema";
+import { type MemberForm as MemberFormType } from "@/validations/members.schema";
 import { DialogFooter } from "@/components/ui/dialog";
 
-const ROLE_OPTIONS = [
-  { value: "", label: "Select role" },
+export const ROLE_OPTIONS = [
   { value: "OWNER", label: "Owner" },
   { value: "MEMBER", label: "Member" },
   { value: "VIEWER", label: "Viewer" },
 ];
 
 interface MemberFormProps {
-  defaultValues?: Partial<MemberFormType>;
-  onSubmit: (data: MemberFormType) => Promise<void>;
+  form: UseFormReturn<MemberFormType>;
+  onSubmit: (data: MemberFormType) => void;
   onCancel: () => void;
   submitLabel?: string;
   isSaving?: boolean;
 }
 
 export function MemberForm({
-  defaultValues,
+  form,
   onSubmit,
   onCancel,
   submitLabel = "Save changes",
   isSaving = false,
 }: MemberFormProps) {
   const formId = useId();
-  const form = useForm<MemberFormType>({
-    resolver: zodResolver(memberSchema),
-    defaultValues: {
-      name: defaultValues?.name || "",
-      email: defaultValues?.email || "",
-      role: defaultValues?.role || "",
-    },
-  });
 
   return (
     <>
@@ -79,11 +66,10 @@ export function MemberForm({
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="cursor-pointer">
                       <SelectValue placeholder="Select role">
-                        {field.value
-                          ? ROLE_OPTIONS.find(
-                              (opt) => opt.value === field.value,
-                            )?.label
-                          : undefined}
+                        {(value) =>
+                          ROLE_OPTIONS.find((opt) => opt.value === value)
+                            ?.label ?? value
+                        }
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>

@@ -1,4 +1,4 @@
-import { Activity, Users, LineChart } from "lucide-react";
+import { Activity, Users, LineChart, Database } from "lucide-react";
 import { PATHS } from "@/routes/constants/routes";
 
 export const SIDEBAR_SECTIONS = [
@@ -22,6 +22,12 @@ export const SIDEBAR_SECTIONS = [
         label: "Usage",
         icon: LineChart,
         path: `${PATHS.TBWES_OCR.ROOT}/${PATHS.TBWES_OCR.USAGE}`,
+      },
+      {
+        id: "baan",
+        label: "BAAN",
+        icon: Database,
+        path: `${PATHS.TBWES_OCR.ROOT}/${PATHS.TBWES_OCR.BAAN}`,
       },
     ],
   },

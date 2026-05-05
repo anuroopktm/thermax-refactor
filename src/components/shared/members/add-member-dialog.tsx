@@ -1,3 +1,5 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -6,32 +8,35 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MemberForm } from "./member-form";
-import { useCreateMember } from "@/services/query/members/members.service";
-import { type MemberForm as MemberFormType } from "@/validations/members.schema";
-import { toast } from "sonner";
+import {
+  memberSchema,
+  type MemberForm as MemberFormType,
+} from "@/validations/members.schema";
 
 interface AddMemberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onConfirm: (data: MemberFormType) => Promise<any>;
+  isSaving: boolean;
 }
 
-export function AddMemberDialog({ open, onOpenChange }: AddMemberDialogProps) {
-  const { mutateAsync: createMember, isPending } = useCreateMember();
+export function AddMemberDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+  isSaving,
+}: AddMemberDialogProps) {
+  const form = useForm<MemberFormType>({
+    resolver: zodResolver(memberSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "",
+    },
+  });
 
-  const handleSubmit = async (data: MemberFormType) => {
-    toast.promise(createMember(data), {
-      loading: "Adding member...",
-      success: () => {
-        onOpenChange(false);
-        return "Member added successfully!";
-      },
-      error: (err) => {
-        return (
-          err.response?.data?.detail ||
-          "Failed to add member. Please try again."
-        );
-      },
-    });
+  const handleSubmit = (data: MemberFormType) => {
+    onConfirm(data);
   };
 
   return (
@@ -45,10 +50,11 @@ export function AddMemberDialog({ open, onOpenChange }: AddMemberDialogProps) {
         </DialogHeader>
 
         <MemberForm
+          form={form}
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}
           submitLabel="Add member"
-          isSaving={isPending}
+          isSaving={isSaving}
         />
       </DialogContent>
     </Dialog>

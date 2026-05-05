@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       allowedHosts: [
-        "bunyc-103-141-54-142.run.pinggy-free.link",
-        "nizvg-103-141-54-142.run.pinggy-free.link",
+        "shgzb-103-141-54-142.run.pinggy-free.link",
+        "gpamp-103-141-54-142.run.pinggy-free.link",
       ],
       proxy: {
         "/api": {

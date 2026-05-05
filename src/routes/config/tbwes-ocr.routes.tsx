@@ -42,6 +42,13 @@ export const tbwesOcrRoutes = [
           crumb: "Usage",
         },
       },
+      {
+        path: PATHS.TBWES_OCR.BAAN,
+        element: <Pages.TbwesBaanView />,
+        handle: {
+          crumb: "BAAN",
+        },
+      },
     ],
   },
 ];

@@ -51,7 +51,7 @@ export const useApps = (searchTerm?: string) => {
   return useQuery<AppItem[], AxiosError<ApiError>>({
     queryKey: ["ai-studio", "apps", searchTerm],
     queryFn: async () => {
-      const { data } = await api.get<AppListResponse>("/api/service", {
+      const { data } = await api.get<AppListResponse>("/service", {
         params: {
           search_term: searchTerm,
         },

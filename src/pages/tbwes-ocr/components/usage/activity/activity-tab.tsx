@@ -1,19 +1,19 @@
-import { useSearchParams } from "react-router-dom";
 import { ActivityChart } from "@/components/shared/usage/activity-chart";
 import { UsageStatusCard } from "@/components/shared/usage/usage-status-card";
 import {
   useTbwesActivityUsage,
   useTbwesTopUsers,
   useTbwesActivityStats,
-} from "@/services/query/tbwes-ocr/tbwes-ocr.service";
-import { MONTHS } from "@/components/shared/usage/usage-date-filter";
+} from "@/services/query/tbwes-ocr";
+import { useDateParams } from "../hooks/use-date-params";
+import {
+  mapActivityChartData,
+  mapTopUsersData,
+  mapActivityStatsData,
+} from "../utils/activity.utils";
 
 export function ActivityTab() {
-  const [searchParams] = useSearchParams();
-  const year = parseInt(searchParams.get("year") || "2026");
-  const monthName = searchParams.get("month") || "April";
-  const monthIndex =
-    MONTHS.indexOf(monthName) !== -1 ? MONTHS.indexOf(monthName) + 1 : 4;
+  const { year, monthName, monthIndex } = useDateParams();
 
   const { data: activityData, isLoading: isActivityLoading } =
     useTbwesActivityUsage(year, monthIndex);
@@ -26,26 +26,9 @@ export function ActivityTab() {
     monthIndex,
   );
 
-  // Map Activity Usage Data
-  const chartData =
-    activityData?.day.map((d, i) => ({
-      day: d,
-      activity: activityData.activity[i],
-    })) || [];
-
-  // Map Top Users
-  const mappedTopUsers =
-    topUsersData?.result.map((user) => ({
-      name: user.name,
-      value: user.activity,
-    })) || [];
-
-  // Map Activity Stats
-  const mappedStats =
-    statsData?.result.map((stat) => ({
-      name: stat.stat,
-      value: stat.activity_count,
-    })) || [];
+  const chartData = mapActivityChartData(activityData);
+  const mappedTopUsers = mapTopUsersData(topUsersData);
+  const mappedStats = mapActivityStatsData(statsData);
 
   return (
     <div className="flex flex-col gap-6">

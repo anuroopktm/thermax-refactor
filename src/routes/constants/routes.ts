@@ -52,5 +52,6 @@ export const PATHS = {
     ACTIVITY_ITEM: "activity/:id/item",
     MEMBERS: "members",
     USAGE: "usage",
+    BAAN: "baan",
   },
 } as const;

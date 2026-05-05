@@ -141,3 +141,8 @@ export const TbwesUsageView = lazy(() =>
     default: m.UsageView,
   })),
 );
+export const TbwesBaanView = lazy(() =>
+  import("@/pages/tbwes-ocr/views/baan-view").then((m) => ({
+    default: m.BaanView,
+  })),
+);

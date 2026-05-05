@@ -5,39 +5,71 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ROLE_OPTIONS } from "./member-form";
+
+const FILTER_OPTIONS = [{ value: "ALL", label: "All Roles" }, ...ROLE_OPTIONS];
 
 interface MembersHeaderProps {
   onAdd: () => void;
-  count?: number;
-  isLoading?: boolean;
+  searchTerm?: string;
+  onSearchChange?: (value: string) => void;
+  roleFilter?: string;
+  onRoleFilterChange?: (value: string) => void;
 }
 
-export function MembersHeader({ onAdd, count, isLoading }: MembersHeaderProps) {
+export function MembersHeader({
+  onAdd,
+  searchTerm,
+  onSearchChange,
+  roleFilter = "ALL",
+  onRoleFilterChange,
+}: MembersHeaderProps) {
   return (
-    <div className="flex items-start justify-between">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-semibold tracking-tight">Members</h1>
-        <p className="text-sm text-muted-foreground">
-          {isLoading ? "Loading members..." : `Showing ${count ?? 0} members`}
-        </p>
-      </div>
+    <div className="flex items-center gap-3">
+      <InputGroup className="w-64 h-8">
+        <InputGroupInput
+          type="search"
+          placeholder="Search members..."
+          value={searchTerm}
+          onChange={(e) => onSearchChange?.(e.target.value)}
+        />
+        <InputGroupAddon className="text-muted-foreground">
+          <Search className="size-4" />
+        </InputGroupAddon>
+      </InputGroup>
 
-      <div className="flex items-center gap-3">
-        <InputGroup className="w-64 h-9">
-          <InputGroupInput
-            placeholder="Search members..."
-            className="bg-transparent focus-visible:ring-0"
-          />
-          <InputGroupAddon className="text-muted-foreground">
-            <Search className="size-4" />
-          </InputGroupAddon>
-        </InputGroup>
+      <Select value={roleFilter} onValueChange={onRoleFilterChange}>
+        <SelectTrigger className="w-36 h-9 cursor-pointer">
+          <SelectValue placeholder="Role">
+            {(value) =>
+              FILTER_OPTIONS.find((opt) => opt.value === value)?.label ?? value
+            }
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {FILTER_OPTIONS.map((opt) => (
+            <SelectItem
+              key={opt.value}
+              value={opt.value}
+              className="cursor-pointer"
+            >
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <Button className="h-9 cursor-pointer" onClick={onAdd}>
-          <PlusCircle />
-          Add Member
-        </Button>
-      </div>
+      <Button className="cursor-pointer" onClick={onAdd}>
+        <PlusCircle />
+        Add Member
+      </Button>
     </div>
   );
 }
