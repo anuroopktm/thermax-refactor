@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { ChildActivityItemHeader } from "../components/child-activity-item/child-activity-item-header";
-import { ChildActivityItemPdfViewer } from "../components/child-activity-item/child-activity-item-pdf-viewer";
-import { ChildActivityItemForm } from "../components/child-activity-item/child-activity-item-form";
+import { ChildActivityItemHeader } from "../components/activity-item/child/child-activity-item-header";
+import { ChildActivityItemPdfViewer } from "../components/activity-item/child/child-activity-item-pdf-viewer";
+import { ChildActivityItemForm } from "../components/activity-item/child/child-activity-item-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useActivityItemDetail } from "@/services/query/transmitter-ocr/transmitter-ocr.service";
+import { useActivityItemDetail } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ChildActivityItemView() {

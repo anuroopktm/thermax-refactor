@@ -1,39 +1,50 @@
-import { useTopUsers } from "@/services/query/usage/usage.service";
 import { ActivityChart } from "@/components/shared/usage/activity-chart";
 import { UsageStatusCard } from "@/components/shared/usage/usage-status-card";
+import {
+  useHeatingActivityUsage,
+  useHeatingTopUsers,
+  useHeatingActivityStats,
+} from "@/services/query/heating-ocr";
+import { useDateParams } from "../hooks/use-date-params";
+import {
+  mapActivityChartData,
+  mapTopUsersData,
+  mapActivityStatsData,
+} from "../utils/activity.utils";
 
 export function ActivityTab() {
-  const { data: topUsers, isLoading: isTopUsersLoading } = useTopUsers();
+  const { year, monthName, monthIndex } = useDateParams();
 
-  const topUsersData =
-    topUsers?.map((user) => ({
-      name: user.name,
-      value: user.value,
-    })) || [];
+  const { data: activityData, isLoading: isActivityLoading } =
+    useHeatingActivityUsage(year, monthIndex);
+  const { data: topUsersData, isLoading: isTopUsersLoading } =
+    useHeatingTopUsers(year, monthIndex);
+  const { data: statsData, isLoading: isStatsLoading } =
+    useHeatingActivityStats(year, monthIndex);
 
-  const activityStatusData = [
-    { name: "In Progress", value: 3 },
-    { name: "Completed", value: 12 },
-    { name: "Pending", value: 5 },
-    { name: "On Hold", value: 2 },
-    { name: "Cancelled", value: 1 },
-    { name: "In Review", value: 4 },
-    { name: "Draft", value: 7 },
-    { name: "Deleted", value: 0 },
-    { name: "Archived", value: 10 },
-    { name: "Flagged", value: 3 },
-  ];
+  const chartData = mapActivityChartData(activityData);
+  const mappedTopUsers = mapTopUsersData(topUsersData);
+  const mappedStats = mapActivityStatsData(statsData);
 
   return (
     <div className="flex flex-col gap-6">
-      <ActivityChart />
+      <ActivityChart
+        data={chartData}
+        isLoading={isActivityLoading}
+        month={monthName}
+        year={year.toString()}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <UsageStatusCard
           title="Top Users Status"
-          data={topUsersData}
+          data={mappedTopUsers}
           isLoading={isTopUsersLoading}
         />
-        <UsageStatusCard title="Activity Status" data={activityStatusData} />
+        <UsageStatusCard
+          title="Activity Status"
+          data={mappedStats}
+          isLoading={isStatsLoading}
+        />
       </div>
     </div>
   );

@@ -9,9 +9,14 @@ export function ActivityChart() {
 
   const { data: dailyData, isLoading } = useActivityData(month, year);
 
+  const mappedData = dailyData?.map((item) => ({
+    ...item,
+    activity: item.questions,
+  }));
+
   return (
     <SharedActivityChart
-      data={dailyData}
+      data={mappedData}
       isLoading={isLoading}
       month={month}
       year={year}

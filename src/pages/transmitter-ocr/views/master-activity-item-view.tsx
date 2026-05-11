@@ -1,19 +1,24 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { MasterActivityItemHeader } from "../components/master-activity-item/master-activity-item-header";
-import { MasterDataTable } from "../components/master-activity-item/master-data-table";
-import { useMasterActivityRecords } from "@/services/query/transmitter-ocr/transmitter-ocr.service";
+import { MasterActivityItemHeader } from "../components/activity-item/master/master-activity-item-header";
+import { MasterDataTable } from "../components/activity-item/master/master-data-table";
+import {
+  useMasterActivityRecords,
+  useMasterActivity,
+} from "@/services/query/transmitter-ocr";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
-import { type MasterDataRecord } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
+import { type MasterDataRecord } from "@/services/query/transmitter-ocr/types";
 
 interface FormValues {
   records: MasterDataRecord[];
 }
 
 export function MasterActivityItemView() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { data: activity } = useMasterActivity(id);
   const { data: initialRecords, isLoading } = useMasterActivityRecords(id);
 
   const { control, register, reset, setValue, getValues } = useForm<FormValues>(
@@ -49,9 +54,7 @@ export function MasterActivityItemView() {
     // Here you would call your API to save the data
   };
 
-  const itemName = initialRecords?.[0]
-    ? "Gauges Test 1 27-04-26"
-    : "Loading..."; // Mock title for now
+  const itemName = activity?.title || "Loading...";
 
   return (
     <>
@@ -59,6 +62,7 @@ export function MasterActivityItemView() {
         itemName={itemName}
         onGlobalUnitChange={handleGlobalUnitChange}
         onSave={() => handleSave(getValues())}
+        onBack={() => navigate(-1)}
       />
 
       <div className="p-4 md:p-8 space-y-6">

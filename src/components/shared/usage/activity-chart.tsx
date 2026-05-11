@@ -28,8 +28,8 @@ import {
 import { BarChart3 } from "lucide-react";
 
 interface ActivityRow {
-  day: string | number;
-  activity: number;
+  label: string | number;
+  value: number;
 }
 
 interface ActivityChartProps {
@@ -40,7 +40,7 @@ interface ActivityChartProps {
 }
 
 const CONFIG = {
-  activity: {
+  value: {
     label: "Activity",
     color: "var(--chart-1)",
   },
@@ -86,7 +86,7 @@ export function ActivityChart({
                 content={<ChartTooltipContent hideLabel />}
               />
 
-              <Bar dataKey="activity" fill="var(--color-activity)" radius={3} />
+              <Bar dataKey="value" fill="var(--color-value)" radius={3} />
             </BarChart>
           </ChartContainer>
         ) : (
@@ -122,12 +122,12 @@ EmptyState.displayName = "EmptyState";
 const XAxisComponent = memo(() => {
   return (
     <XAxis
-      dataKey="day"
+      dataKey="label"
       axisLine={false}
       tickLine={false}
       tickMargin={10}
       label={{
-        value: "Day",
+        value: "Timeline",
         position: "insideBottom",
         offset: -25,
         className: "text-xs font-bold",
@@ -145,7 +145,7 @@ const YAxisComponent = memo(() => {
       tickLine={false}
       tickMargin={10}
       label={{
-        value: "Activity",
+        value: "Activity Volume",
         angle: -90,
         position: "insideLeft",
         offset: -10,

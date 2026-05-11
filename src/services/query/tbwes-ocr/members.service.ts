@@ -79,6 +79,6 @@ export const useTbwesCurrentMember = () => {
       const { data } = await tbwesApi.get<Member>("/api/tbwes_ocr/member/me");
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };

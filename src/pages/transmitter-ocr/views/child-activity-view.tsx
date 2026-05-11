@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useChildActivities } from "@/services/query/transmitter-ocr/transmitter-ocr.service";
+import { useChildActivities } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { AddChildActivityDialog } from "../components/child-activity/add-child-activity-dialog";
+import { AddChildActivityDialog } from "../components/activity/child/add-child-activity-dialog";
 
 export function ChildActivityView() {
   const { data: activities = [], isLoading } = useChildActivities();
@@ -33,7 +33,12 @@ export function ChildActivityView() {
             ))}
           </div>
         ) : (
-          <SharedActivityList activities={activities} />
+          <SharedActivityList
+            activities={activities}
+            getHref={(activity) =>
+              `/transmitter-ocr/child-activity/${activity.id}`
+            }
+          />
         )}
       </FeaturePageLayout>
 

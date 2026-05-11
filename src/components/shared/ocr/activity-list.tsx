@@ -15,15 +15,19 @@ interface SharedActivityListProps {
   hideStatus?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
+  onEdit?: (activity: ActivityItem) => void;
+  onDelete?: (activity: ActivityItem) => void;
 }
 
 export function SharedActivityList({
-  activities,
+  activities = [],
   getHref,
   hideActions,
   hideStatus,
   emptyTitle = "No Activities Found",
   emptyDescription = "Try adjusting your filters or add a new activity to get started.",
+  onEdit,
+  onDelete,
 }: SharedActivityListProps) {
   if (activities.length === 0) {
     return (
@@ -50,6 +54,8 @@ export function SharedActivityList({
           href={getHref?.(activity) || activity.id}
           hideActions={hideActions}
           hideStatus={hideStatus}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
       ))}
     </div>

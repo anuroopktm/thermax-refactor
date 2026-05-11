@@ -89,7 +89,7 @@ export function MembersView() {
           searchTerm={searchTerm}
           onSearchChange={handleSearchChange}
           roleFilter={roleFilter}
-          onRoleFilterChange={setRoleFilter}
+          onRoleFilterChange={(val) => val && setRoleFilter(val)}
         />
       }
     >

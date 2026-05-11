@@ -43,7 +43,7 @@ export function ActivityItemView() {
   const { data: activity, isLoading, isFetching } = useTbwesActivityDetail(id);
 
   const { mutateAsync: updateActivity, isPending: isUpdating } =
-    useTbwesUpdateActivity(id);
+    useTbwesUpdateActivity(id!);
 
   const fields = useMemo(() => mapTbwesToFields(activity), [activity]);
 
@@ -54,12 +54,11 @@ export function ActivityItemView() {
     values: defaultValues as ActivityItemFormValues,
   });
 
-  const { handleSave, handleStatusUpdate, handleToggleActive } =
-    useActivityActions({
-      activity,
-      form,
-      updateActivity,
-    });
+  const { handleStatusUpdate, handleToggleActive } = useActivityActions({
+    activity,
+    form,
+    updateActivity,
+  });
 
   const title = activity?.title ?? "Loading...";
 

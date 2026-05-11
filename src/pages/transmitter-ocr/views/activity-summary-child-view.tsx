@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useChildActivities } from "@/services/query/transmitter-ocr/transmitter-ocr.service";
+import { useChildActivities } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ActivitySummaryChildView() {
@@ -24,8 +24,8 @@ export function ActivitySummaryChildView() {
       ) : (
         <SharedActivityList
           activities={activities}
-          getHref={(id) =>
-            `/transmitter-ocr/activity-summary/${masterId}/${id}`
+          getHref={(activity) =>
+            `/transmitter-ocr/activity-summary/${masterId}/${activity.id}`
           }
           hideActions
         />

@@ -7,5 +7,5 @@ interface ActivityItemHeaderProps {
 }
 
 export function ActivityItemHeader(props: ActivityItemHeaderProps) {
-  return <SharedActivityItemHeader {...props} />;
+  return <SharedActivityItemHeader title={props.itemName} {...props} />;
 }

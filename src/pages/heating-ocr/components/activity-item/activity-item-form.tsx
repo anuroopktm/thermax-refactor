@@ -1,26 +1,16 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  activityItemSchema,
-  type ActivityItemFormValues,
-} from "../../validations/activity-item.schema";
-import { type DynamicField } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
-import { useMemo, useEffect } from "react";
+import { type UseFormReturn } from "react-hook-form";
+import { useEffect } from "react";
 import { DynamicFormFields } from "@/components/shared/ocr/dynamic-form-fields";
-import { deriveDefaultValues, applyConfidenceErrors } from "@/lib/ocr-logic";
+import { applyConfidenceErrors } from "@/lib/ocr-logic";
+import { type ActivityItemFormValues } from "../../validations/activity-item.schema";
+import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 
-interface ActivityItemFormProps {
-  fields?: DynamicField[];
+interface Props {
+  fields: DynamicField[];
+  form: UseFormReturn<ActivityItemFormValues>;
 }
 
-export function ActivityItemForm({ fields = [] }: ActivityItemFormProps) {
-  const defaultValues = useMemo(() => deriveDefaultValues(fields), [fields]);
-
-  const form = useForm<ActivityItemFormValues>({
-    resolver: zodResolver(activityItemSchema),
-    values: defaultValues as ActivityItemFormValues,
-  });
-
+export function ActivityItemForm({ fields, form }: Props) {
   // Apply confidence errors when fields change
   useEffect(() => {
     if (fields.length > 0) {
@@ -29,7 +19,7 @@ export function ActivityItemForm({ fields = [] }: ActivityItemFormProps) {
   }, [fields, form]);
 
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <DynamicFormFields form={form} fields={fields} />
     </form>
   );

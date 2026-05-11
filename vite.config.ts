@@ -17,8 +17,10 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       allowedHosts: [
-        "shgzb-103-141-54-142.run.pinggy-free.link",
-        "gpamp-103-141-54-142.run.pinggy-free.link",
+        "byfzo-103-141-54-142.run.pinggy-free.link",
+        "toamc-103-141-54-142.run.pinggy-free.link",
+        "rfozy-103-141-54-142.run.pinggy-free.link",
+        "egdbu-103-141-54-142.run.pinggy-free.link"
       ],
       proxy: {
         "/api": {
@@ -35,6 +37,27 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/tbwes-api/, ""),
+          headers: {
+            "x-pinggy-no-warning": "true",
+            "User-Agent": "curl/7.64.1",
+          },
+        },
+        "/heating-api": {
+          target: env.VITE_API_HEATING_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/heating-api/, "/api3"),
+          headers: {
+            "x-pinggy-no-warning": "true",
+            "User-Agent": "curl/7.64.1",
+          },
+        },
+        "/transmitter-api": {
+          target: env.VITE_API_TRANSMITTER_OCR_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) =>
+            path.replace(/^\/transmitter-api/, "/api/transmitter_ocr"),
           headers: {
             "x-pinggy-no-warning": "true",
             "User-Agent": "curl/7.64.1",

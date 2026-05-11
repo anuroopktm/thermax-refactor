@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useHeatingCreateActivity } from "@/services/query/heating-ocr";
 import {
   Dialog,
   DialogContent,
@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { ActivityForm } from "./activity-form";
 import { type ActivityForm as ActivityFormType } from "../../validations/activity.schema";
+import { toast } from "sonner";
 
 interface AddActivityDialogProps {
   open: boolean;
@@ -17,25 +18,29 @@ export function AddActivityDialog({
   open,
   onOpenChange,
 }: AddActivityDialogProps) {
-  const [isSaving, setIsSaving] = useState(false);
+  const { mutateAsync: createActivity, isPending: isSaving } =
+    useHeatingCreateActivity();
 
   const handleSubmit = async (data: ActivityFormType) => {
-    setIsSaving(true);
-    try {
-      console.log("Creating Activity:", data);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      onOpenChange(false);
-    } catch (error) {
-      console.error("Failed to create activity:", error);
-    } finally {
-      setIsSaving(false);
-    }
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("document", data.file[0]);
+
+    toast.promise(createActivity(formData), {
+      loading: "Creating activity...",
+      success: () => {
+        onOpenChange(false);
+        return "Activity created successfully!";
+      },
+      error: (err) =>
+        err.response?.data?.detail ||
+        "Failed to create activity. Please try again.",
+    });
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent showCloseButton={false} className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Create Activity</DialogTitle>
         </DialogHeader>

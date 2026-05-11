@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { TabbedContentLayout } from "@/components/layout/tabbed-content-layout";
-import { CostTab } from "../components/child-usage/cost/cost-tab";
-import { ActivityTab } from "../components/child-usage/activity/activity-tab";
+import { CostTab } from "../components/usage/child/cost/cost-tab";
+import { ActivityTab } from "../components/usage/child/activity/activity-tab";
 import { UsageDateFilter } from "@/components/shared/usage/usage-date-filter";
 
 const USAGE_TABS = [

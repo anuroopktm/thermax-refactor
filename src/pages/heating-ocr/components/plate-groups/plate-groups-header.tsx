@@ -5,10 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { StickyHeader } from "@/components/shared/layout/sticky-header";
 
 interface PlateGroupsHeaderProps {
+  title?: string;
   totalInvalidCount: number;
 }
 
 export function PlateGroupsHeader({
+  title = "Plate Groups",
   totalInvalidCount,
 }: PlateGroupsHeaderProps) {
   const navigate = useNavigate();
@@ -24,8 +26,8 @@ export function PlateGroupsHeader({
         >
           <ArrowLeft className="size-5" />
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          Plate Groups
+        <h1 className="text-2xl font-bold tracking-tight text-foreground truncate max-w-md">
+          {title}
         </h1>
       </div>
 

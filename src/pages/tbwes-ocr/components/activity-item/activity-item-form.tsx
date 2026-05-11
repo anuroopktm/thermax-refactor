@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { DynamicFormFields } from "@/components/shared/ocr/dynamic-form-fields";
 import { applyConfidenceErrors } from "@/lib/ocr-logic";
 import { type ActivityItemFormValues } from "../../validations/activity-item.schema";
-import { type DynamicField } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
+import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 
 interface Props {
   fields: DynamicField[];

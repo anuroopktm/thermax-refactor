@@ -23,7 +23,7 @@ export const useTbwesCostUsage = (year: number, month: number) => {
       );
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
@@ -37,7 +37,7 @@ export const useTbwesActivityUsage = (year: number, month: number) => {
       );
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
@@ -77,7 +77,7 @@ export const useTbwesActivityStats = (year: number, month: number) => {
       );
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
@@ -95,7 +95,7 @@ export const useTbwesTopUsers = (
       );
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
@@ -108,7 +108,7 @@ export const useTbwesUsageLimit = () => {
       );
       return data;
     },
-    retry: (_, error) => error?.response.status !== 404,
+    retry: (_, error) => error?.response?.status !== 404,
   });
 };
 

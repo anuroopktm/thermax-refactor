@@ -10,13 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import { formatDate, formatStatus, getStatusVariant } from "@/lib/utils";
 
 export interface ActivityItem {
+  template?: string | null;
   id: string;
   title: string;
   createdAt: string;
   status: string;
   userInitials: string;
+  // [key: string]: any;
 }
 
 interface SharedActivityCardProps {
@@ -24,6 +27,8 @@ interface SharedActivityCardProps {
   href?: string;
   hideActions?: boolean;
   hideStatus?: boolean;
+  onEdit?: (activity: ActivityItem) => void;
+  onDelete?: (activity: ActivityItem) => void;
 }
 
 export function SharedActivityCard({
@@ -31,6 +36,8 @@ export function SharedActivityCard({
   href,
   hideActions,
   hideStatus,
+  onEdit,
+  onDelete,
 }: SharedActivityCardProps) {
   const content = (
     <Card className="group-hover:shadow-md transition cursor-pointer">
@@ -46,51 +53,51 @@ export function SharedActivityCard({
             {activity.title}
           </h3>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Created on: {activity.createdAt}
+            Created on: {formatDate(activity.createdAt)}
           </p>
         </div>
 
         {!hideStatus && (
-          <Badge
-            variant={
-              activity.status.toLowerCase() === "in progress"
-                ? "warning"
-                : "outline"
-            }
-          >
-            {activity.status}
+          <Badge variant={getStatusVariant(activity.status)}>
+            {formatStatus(activity.status)}
           </Badge>
         )}
 
         {!hideActions && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="cursor-pointer"
-                  >
-                    <MoreHorizontal />
-                  </Button>
-                }
-              />
-              <DropdownMenuContent align="end" className="min-w-24">
-                <DropdownMenuItem className="cursor-pointer">
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive cursor-pointer">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              render={
+                <Button variant="ghost" size="icon" className="cursor-pointer">
+                  <MoreHorizontal />
+                </Button>
+              }
+            />
+            <DropdownMenuContent
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              align="end"
+              className="min-w-24"
+            >
+              <DropdownMenuItem
+                onClick={() => onEdit?.(activity)}
+                className="cursor-pointer"
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onDelete?.(activity)}
+                className="text-destructive cursor-pointer"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </CardContent>
     </Card>

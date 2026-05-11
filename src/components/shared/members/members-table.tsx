@@ -123,7 +123,7 @@ const SkeletonTableRows = ({ count = 5 }: { count?: number }) => {
   );
 };
 
-/* ---------------- Empty State (shadcn) ---------------- */
+/* ---------------- Empty State ---------------- */
 
 const EmptyStateRow = () => {
   return (

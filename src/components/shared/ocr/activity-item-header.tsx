@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
-
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { StickyHeader } from "../layout/sticky-header";
@@ -18,8 +16,6 @@ export function ActivityItemHeader({
   actions,
   onBack,
 }: ActivityItemHeaderProps) {
-  const navigate = useNavigate();
-
   return (
     <StickyHeader>
       <div className="flex-1 flex items-center gap-4">
@@ -27,16 +23,18 @@ export function ActivityItemHeader({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(-1)}
+            onClick={onBack}
             className="cursor-pointer"
           >
             <ArrowLeft className="size-5" />
           </Button>
         )}
+
         <div className="min-w-0">
           <h1 className="text-xl font-bold tracking-tight text-foreground truncate max-w-[300px]">
             {title}
           </h1>
+
           {description && (
             <p className="text-sm text-muted-foreground mt-1">{description}</p>
           )}

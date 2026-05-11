@@ -1,6 +1,6 @@
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useMasterActivities } from "@/services/query/transmitter-ocr/transmitter-ocr.service";
+import { useMasterActivities } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ActivitySummaryMasterView() {
@@ -20,7 +20,9 @@ export function ActivitySummaryMasterView() {
       ) : (
         <SharedActivityList
           activities={activities}
-          getHref={(id) => `/transmitter-ocr/activity-summary/${id}`}
+          getHref={(activity) =>
+            `/transmitter-ocr/activity-summary/${activity.id}`
+          }
           hideActions
           hideStatus
         />

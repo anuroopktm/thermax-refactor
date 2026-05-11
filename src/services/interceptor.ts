@@ -8,13 +8,26 @@ export const tbwesApi = axios.create({
   baseURL: "/tbwes-api",
 });
 
+export const heatingApi = axios.create({
+  baseURL: "/heating-api",
+});
+
+export const transmitterApi = axios.create({
+  baseURL: "/transmitter-api",
+});
+
 // Request interceptor to add the bearer token
 const addAuthInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("access_token");
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        const authHeader = `Bearer ${token}`;
+        config.headers.Authorization = authHeader;
+        config.headers.authorization = authHeader; // lowercase for strict backends
+        console.log(`[AuthInterceptor] Added token for ${config.url}`);
+      } else {
+        console.warn(`[AuthInterceptor] No token found for ${config.url}`);
       }
       return config;
     },
@@ -38,6 +51,8 @@ const addAuthInterceptor = (instance: AxiosInstance) => {
 
 addAuthInterceptor(api);
 addAuthInterceptor(tbwesApi);
+addAuthInterceptor(heatingApi);
+addAuthInterceptor(transmitterApi);
 
 // Mock delay helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -151,7 +166,7 @@ const mockData: Record<string, any> = {
     "Show me the latest market trends in the energy sector for 2024.",
     "What are the maintenance requirements for Project X equipment?",
   ],
-  "/transmitter-ocr/activity-summary": [
+  "/child_usage/activity": [
     {
       id: "1",
       serialNo: 1,
@@ -255,7 +270,7 @@ const mockData: Record<string, any> = {
       remarks: ["All fields valid"],
     },
   ],
-  "/transmitter-ocr/master-activities": [
+  "/master_activity": [
     {
       id: "1",
       title: "Plate Activity 1 27-04-26",
@@ -279,7 +294,7 @@ const mockData: Record<string, any> = {
       userInitials: "TA",
     },
   ],
-  "/transmitter-ocr/child-activities": [
+  "/child_activity": [
     {
       id: "1",
       title: "Child Activity Test 1",
@@ -295,7 +310,7 @@ const mockData: Record<string, any> = {
       userInitials: "TA",
     },
   ],
-  "/transmitter-ocr/activity-item/1": {
+  "/child_activity/1/details": {
     id: "1",
     name: "12-PG-620sa",
     fields: [
@@ -322,18 +337,37 @@ const mockData: Record<string, any> = {
       },
     ],
   },
-  "/transmitter-ocr/master-activity-records/1": Array.from(
-    { length: 36 },
-    (_, i) => ({
-      id: `${i + 1}`,
-      serialNo: i + 1,
-      tagNumber: `12-PG-${201 + i}`,
-      modelNumber: "BSPGV150",
-      lowerRange: "0",
-      upperRange: "160",
-      unit: "Kg/cm2",
-    }),
-  ),
+  "/master_activity/1/child_activities": Array.from({ length: 36 }, (_, i) => ({
+    id: `${i + 1}`,
+    serialNo: i + 1,
+    tagNumber: `12-PG-${201 + i}`,
+    modelNumber: "BSPGV150",
+    lowerRange: "0",
+    upperRange: "160",
+    unit: "Kg/cm2",
+  })),
+  "/master_usage/year-master-cost": [
+    { period: "Jan", cost: 120 },
+    { period: "Feb", cost: 150 },
+    { period: "Mar", cost: 180 },
+    { period: "Apr", cost: 200 },
+  ],
+  "/child_usage/year-child-cost": [
+    { period: "Jan", cost: 80 },
+    { period: "Feb", cost: 100 },
+    { period: "Mar", cost: 110 },
+    { period: "Apr", cost: 130 },
+  ],
+  "/master_usage/activity/stats": {
+    total: 450,
+    passed: 380,
+    failed: 70,
+  },
+  "/child_usage/activity/stats": {
+    total: 1200,
+    passed: 1000,
+    failed: 200,
+  },
 };
 
 // Simple interceptor to handle mock data for non-migrated endpoints
@@ -356,6 +390,21 @@ const addMockInterceptor = (instance: AxiosInstance) => {
 
       // Normalize path for matching
       let path = url.split("?")[0];
+
+      // If path includes proxy prefix, strip it for mock matching
+      const prefixes = [
+        "/transmitter-api",
+        "/heating-api",
+        "/tbwes-api",
+        "/api",
+      ];
+      for (const prefix of prefixes) {
+        if (path.startsWith(prefix)) {
+          path = path.slice(prefix.length);
+          break;
+        }
+      }
+
       if (!path.startsWith("/")) {
         path = "/" + path;
       }
@@ -365,9 +414,11 @@ const addMockInterceptor = (instance: AxiosInstance) => {
         path = path.slice(0, -1);
       }
 
+      console.log(`[MockInterceptor] Checking path: ${path}`);
+
       // If we have mock data for this path, return it instead of an error
       if (mockData[path]) {
-        console.log(`Returning mock data for path: ${path}`);
+        console.log(`[MockInterceptor] Returning mock data for path: ${path}`);
         await delay(500);
         return {
           data: mockData[path],
@@ -385,5 +436,7 @@ const addMockInterceptor = (instance: AxiosInstance) => {
 
 addMockInterceptor(api);
 addMockInterceptor(tbwesApi);
+addMockInterceptor(heatingApi);
+addMockInterceptor(transmitterApi);
 
 export default api;

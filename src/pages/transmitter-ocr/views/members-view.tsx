@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
-  useMembers,
-  useCreateMember,
-  useUpdateMember,
-  useDeleteMember,
-} from "@/services/query/members/members.service";
+  useTransmitterMembers as useMembers,
+  useTransmitterCreateMember as useCreateMember,
+  useTransmitterUpdateMember as useUpdateMember,
+  useTransmitterDeleteMember as useDeleteMember,
+} from "@/services/query/transmitter-ocr";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { MembersTable } from "@/components/shared/members/members-table";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
@@ -12,7 +12,7 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/members/members.types";
+import { type Member } from "@/services/query/transmitter-ocr/types";
 import { toast } from "sonner";
 
 export function MembersView() {

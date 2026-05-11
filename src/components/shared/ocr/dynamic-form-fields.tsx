@@ -7,7 +7,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { type DynamicField } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
+import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import { cn } from "@/lib/utils";
 import { isLowConfidence } from "@/lib/ocr-logic";
 

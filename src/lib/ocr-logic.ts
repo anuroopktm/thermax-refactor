@@ -1,4 +1,4 @@
-import { type DynamicField } from "@/services/query/transmitter-ocr/transmitter-ocr.types";
+import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
 
 export const CONFIDENCE_THRESHOLD = 0.7;

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
-  useMembers,
-  useCreateMember,
-  useUpdateMember,
-  useDeleteMember,
-} from "@/services/query/members/members.service";
+  useHeatingMembers,
+  useHeatingCreateMember,
+  useHeatingUpdateMember,
+  useHeatingDeleteMember,
+} from "@/services/query/heating-ocr";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { MembersTable } from "@/components/shared/members/members-table";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
@@ -12,21 +13,32 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/members/members.types";
+import { type Member as SharedMember } from "@/services/query/members/members.types";
 import { toast } from "sonner";
+import { mapHeatingQueryFilters } from "../lib/heating-mappers";
+import { type MemberForm } from "@/validations/members.schema";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [editingMember, setEditingMember] = useState<Member | null>(null);
-  const [deletingMember, setDeletingMember] = useState<Member | null>(null);
+  const [editingMember, setEditingMember] = useState<SharedMember | null>(null);
+  const [deletingMember, setDeletingMember] = useState<SharedMember | null>(
+    null,
+  );
 
-  const { data: members, isLoading } = useMembers();
+  const [searchParams] = useSearchParams();
+  const filters = useMemo(
+    () => mapHeatingQueryFilters(searchParams),
+    [searchParams],
+  );
 
-  const createMutation = useCreateMember();
-  const updateMutation = useUpdateMember(editingMember?.id || "");
-  const deleteMutation = useDeleteMember();
+  const { data, isLoading } = useHeatingMembers(filters);
+  const members = data?.result ?? [];
 
-  const handleCreate = async (data: any) => {
+  const createMutation = useHeatingCreateMember();
+  const updateMutation = useHeatingUpdateMember(editingMember?.id || "");
+  const deleteMutation = useHeatingDeleteMember();
+
+  const handleCreate = async (data: MemberForm) => {
     toast.promise(createMutation.mutateAsync(data), {
       loading: "Adding member...",
       success: () => {
@@ -37,7 +49,7 @@ export function MembersView() {
     });
   };
 
-  const handleUpdate = async (data: any) => {
+  const handleUpdate = async (data: MemberForm) => {
     toast.promise(updateMutation.mutateAsync(data), {
       loading: "Updating member...",
       success: () => {
@@ -66,9 +78,7 @@ export function MembersView() {
     <FeaturePageLayout
       title="Members"
       description={
-        isLoading
-          ? "Loading members..."
-          : `Showing ${members?.length ?? 0} members`
+        isLoading ? "Loading members..." : `Showing ${data?.total ?? 0} members`
       }
       actions={
         <Button

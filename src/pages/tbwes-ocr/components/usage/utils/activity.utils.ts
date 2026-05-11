@@ -8,8 +8,8 @@ export function mapActivityChartData(activityData?: ActivityUsage) {
   if (!activityData) return [];
 
   return activityData.day.map((day, i) => ({
-    day,
-    activity: activityData.activity[i] ?? 0,
+    label: day,
+    value: activityData.activity[i] ?? 0,
   }));
 }
 

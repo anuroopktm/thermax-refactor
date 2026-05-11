@@ -28,8 +28,8 @@ import {
 import { BarChart3 } from "lucide-react";
 
 interface ChartRow {
-  day: string | number;
-  cost: number;
+  label: string | number;
+  value: number;
 }
 
 interface Props {
@@ -40,7 +40,7 @@ interface Props {
 }
 
 const CONFIG = {
-  cost: {
+  value: {
     label: "Cost",
     color: "var(--chart-1)",
   },
@@ -86,7 +86,7 @@ export function CostChart({
                 content={<ChartTooltipContent hideLabel />}
               />
 
-              <Bar dataKey="cost" fill="var(--color-cost)" radius={3} />
+              <Bar dataKey="value" fill="var(--color-value)" radius={3} />
             </BarChart>
           </ChartContainer>
         ) : (
@@ -122,12 +122,12 @@ EmptyState.displayName = "EmptyState";
 const XAxisComponent = memo(() => {
   return (
     <XAxis
-      dataKey="day"
+      dataKey="label"
       axisLine={false}
       tickLine={false}
       tickMargin={10}
       label={{
-        value: "Day",
+        value: "Timeline",
         position: "insideBottom",
         offset: -25,
         className: "text-xs font-bold",
@@ -145,7 +145,7 @@ const YAxisComponent = memo(() => {
       tickLine={false}
       tickMargin={10}
       label={{
-        value: "Spend ($)",
+        value: "Cost Incurred ($)",
         angle: -90,
         position: "insideLeft",
         offset: -10,

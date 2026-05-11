@@ -21,7 +21,7 @@ interface MembersHeaderProps {
   searchTerm?: string;
   onSearchChange?: (value: string) => void;
   roleFilter?: string;
-  onRoleFilterChange?: (value: string) => void;
+  onRoleFilterChange?: (value: string | null) => void;
 }
 
 export function MembersHeader({

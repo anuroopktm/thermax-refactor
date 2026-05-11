@@ -20,6 +20,10 @@ export const PATHS = {
   // Transmitter OCR
   TRANSMITTER_OCR: {
     ROOT: "/transmitter-ocr",
+    ID: ":id",
+    ITEM_ID: ":itemId",
+    MASTER_ID: ":masterId",
+    CHILD_ID: ":childId",
     MASTER_ACTIVITY: "master-activity",
     MASTER_ACTIVITY_DETAIL: "master-activity/:id",
     MASTER_USAGE: "master-usage",
@@ -38,8 +42,12 @@ export const PATHS = {
   HEATING_OCR: {
     ROOT: "/heating-ocr",
     ACTIVITY: "activity",
+    ID: ":id",
+    ITEM: "item",
     ACTIVITY_ITEM: "activity/:id/item",
+    PLATE_GROUPS_SEGMENT: "plate-groups",
     PLATE_GROUPS: "activity/:id/plate-groups",
+    GROUP_ID: ":groupId",
     PLATE_GROUP_ITEM: "activity/:id/plate-groups/:groupId/item",
     MEMBERS: "members",
     USAGE: "usage",
@@ -49,6 +57,8 @@ export const PATHS = {
   TBWES_OCR: {
     ROOT: "/tbwes-ocr",
     ACTIVITY: "activity",
+    ID: ":id",
+    ITEM: "item",
     ACTIVITY_ITEM: "activity/:id/item",
     MEMBERS: "members",
     USAGE: "usage",

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { PATHS } from "../constants/routes";
 import * as Pages from "../lazy-imports";
+import { TbwesActivityCrumb } from "@/pages/tbwes-ocr/components/crumbs/tbwes-crumbs";
 
 export const tbwesOcrRoutes = [
   {
@@ -16,17 +17,22 @@ export const tbwesOcrRoutes = [
       },
       {
         path: PATHS.TBWES_OCR.ACTIVITY,
-        element: <Pages.TbwesActivityView />,
         handle: {
           crumb: "Activity",
         },
-      },
-      {
-        path: PATHS.TBWES_OCR.ACTIVITY_ITEM,
-        element: <Pages.TbwesActivityItemView />,
-        handle: {
-          crumb: "Activity Details",
-        },
+        children: [
+          {
+            index: true,
+            element: <Pages.TbwesActivityView />,
+          },
+          {
+            path: `${PATHS.TBWES_OCR.ID}/${PATHS.TBWES_OCR.ITEM}`,
+            element: <Pages.TbwesActivityItemView />,
+            handle: {
+              crumb: () => <TbwesActivityCrumb />,
+            },
+          },
+        ],
       },
       {
         path: PATHS.TBWES_OCR.MEMBERS,
