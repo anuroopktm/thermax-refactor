@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useChildActivities } from "@/services/query/transmitter-ocr";
+import { useChildActivities } from "@/services/query/transmitter-ocr/child-activities.service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";

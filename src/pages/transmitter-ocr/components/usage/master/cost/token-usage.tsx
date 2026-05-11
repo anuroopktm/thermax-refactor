@@ -1,17 +1,19 @@
 import { useSearchParams } from "react-router-dom";
-import { useTokenUsage } from "@/services/query/transmitter-ocr/usage.service";
 import { UsagePieChart } from "@/components/shared/usage/usage-pie-chart";
 import { MONTHS } from "@/components/shared/usage/usage-date-filter";
+import { useMasterTokenUsage } from "@/services/query/transmitter-ocr/master-usage.service";
 
 export function TokenUsage() {
   const [searchParams] = useSearchParams();
 
-  const year = searchParams.get("year") || "2026";
-  const monthName = searchParams.get("month") || "April";
+  const year = searchParams.get("year");
+  const monthName = searchParams.get("month");
   const monthIndex = MONTHS.indexOf(monthName);
-  const month = monthIndex !== -1 ? (monthIndex + 1).toString() : "4";
+  const month = monthIndex !== -1 ? (monthIndex + 1).toString() : undefined;
 
-  const { data: tokenUsage, isLoading: isTokenLoading } = useTokenUsage(
+  console.log("monthmonth", month, Number(month));
+
+  const { data: tokenUsage, isLoading: isTokenLoading } = useMasterTokenUsage(
     year,
     month,
   );

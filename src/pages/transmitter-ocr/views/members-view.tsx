@@ -4,7 +4,7 @@ import {
   useTransmitterCreateMember as useCreateMember,
   useTransmitterUpdateMember as useUpdateMember,
   useTransmitterDeleteMember as useDeleteMember,
-} from "@/services/query/transmitter-ocr";
+} from "@/services/query/transmitter-ocr/types/index";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { MembersTable } from "@/components/shared/members/members-table";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";

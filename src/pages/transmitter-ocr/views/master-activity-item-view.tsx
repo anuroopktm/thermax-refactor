@@ -3,23 +3,19 @@ import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { MasterActivityItemHeader } from "../components/activity-item/master/master-activity-item-header";
 import { MasterDataTable } from "../components/activity-item/master/master-data-table";
-import {
-  useMasterActivityRecords,
-  useMasterActivity,
-} from "@/services/query/transmitter-ocr";
+import { useMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
-import { type MasterDataRecord } from "@/services/query/transmitter-ocr/types";
+import type { MasterDataItem } from "@/services/query/transmitter-ocr/types";
 
 interface FormValues {
-  records: MasterDataRecord[];
+  records: Record<string, MasterDataItem>[];
 }
 
 export function MasterActivityItemView() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { data: activity } = useMasterActivity(id);
-  const { data: initialRecords, isLoading } = useMasterActivityRecords(id);
+  const { data, isLoading } = useMasterActivity(id);
 
   const { control, register, reset, setValue, getValues } = useForm<FormValues>(
     {
@@ -35,16 +31,18 @@ export function MasterActivityItemView() {
   });
 
   useEffect(() => {
-    if (initialRecords) {
-      reset({ records: initialRecords });
+    if (data?.master_data) {
+      reset({ records: data.master_data });
     }
-  }, [initialRecords, reset]);
+  }, [data?.master_data, reset]);
 
   const handleGlobalUnitChange = (unit: string | null) => {
     const currentRecords = getValues("records");
-    currentRecords.forEach((_, index) => {
-      if (unit) {
-        setValue(`records.${index}.unit`, unit);
+    currentRecords.forEach((record, index) => {
+      const key = Object.keys(record)[0];
+
+      if (unit && key) {
+        setValue(`records.${index}.${key}.Calibration Range Unit`, unit);
       }
     });
   };
@@ -54,7 +52,7 @@ export function MasterActivityItemView() {
     // Here you would call your API to save the data
   };
 
-  const itemName = activity?.title || "Loading...";
+  const itemName = data?.title || "Loading...";
 
   return (
     <>

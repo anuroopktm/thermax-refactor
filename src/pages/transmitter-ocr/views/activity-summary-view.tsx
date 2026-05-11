@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { ActivitySummaryHeader } from "../components/activity/summary/activity-summary-header";
 import { ActivitySummaryTable } from "../components/activity/summary/activity-summary-table";
-import { useActivitySummary } from "@/services/query/transmitter-ocr";
+import { useActivitySummary } from "@/services/query/transmitter-ocr/activity-summary.service";
 
 export function ActivitySummaryView() {
   const { childId } = useParams<{ masterId: string; childId: string }>();

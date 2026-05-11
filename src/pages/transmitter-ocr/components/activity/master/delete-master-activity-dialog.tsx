@@ -7,9 +7,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteMasterActivity } from "@/services/query/transmitter-ocr";
 import { toast } from "sonner";
 import type { MasterActivityItem } from "@/services/query/transmitter-ocr/types";
+import { useDeleteMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
 
 interface DeleteMasterActivityDialogProps {
   open: boolean;

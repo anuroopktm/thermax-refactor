@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   useChildTopUsers,
   useChildActivityStats,
-} from "@/services/query/transmitter-ocr";
+} from "@/services/query/transmitter-ocr/child-usage.service";
 import { ActivityChart } from "./activity-chart";
 import { UsageStatusCard } from "@/components/shared/usage/usage-status-card";
 

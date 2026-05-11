@@ -17,10 +17,10 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       allowedHosts: [
-        "byfzo-103-141-54-142.run.pinggy-free.link",
+        "qrljl-103-141-54-142.run.pinggy-free.link",
         "toamc-103-141-54-142.run.pinggy-free.link",
         "rfozy-103-141-54-142.run.pinggy-free.link",
-        "egdbu-103-141-54-142.run.pinggy-free.link"
+        "kmmiw-103-141-54-142.run.pinggy-free.link"
       ],
       proxy: {
         "/api": {

@@ -12,9 +12,9 @@ import {
   masterActivitySchema,
   type MasterActivityForm as MasterActivityFormType,
 } from "../../../validations/master-activity.schema";
-import { useUpdateMasterActivity } from "@/services/query/transmitter-ocr";
 import { toast } from "sonner";
 import type { MasterActivityItem } from "@/services/query/transmitter-ocr/types";
+import { useUpdateMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
 
 interface EditMasterActivityDialogProps {
   open: boolean;

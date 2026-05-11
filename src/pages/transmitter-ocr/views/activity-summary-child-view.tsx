@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useChildActivities } from "@/services/query/transmitter-ocr";
+import { useChildActivities } from "@/services/query/transmitter-ocr/child-activities.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ActivitySummaryChildView() {

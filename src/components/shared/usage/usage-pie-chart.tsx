@@ -132,7 +132,7 @@ export function UsagePieChart({
           <EmptyState />
         )}
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-center pt-0">
+      <CardFooter className="flex-col gap-2 text-center">
         {isLoading ? (
           <div className="space-y-2 w-full flex flex-col items-center">
             <Skeleton className="h-8 w-24" />

@@ -12,18 +12,13 @@ export const useSignIn = () => {
       params.append("username", user.email);
       params.append("password", user.password);
 
-      const { data } = await api.post<SignInResponse>(
-        "/login/access-token",
-        params,
-      );
-
-      // Save token to localStorage
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.removeItem("chat_id");
-      }
+      const { data } = await api.post("/login/access-token", params);
 
       return data;
+    },
+
+    onSuccess: (data) => {
+      localStorage.setItem("access_token", data.access_token);
     },
   });
 };
@@ -31,9 +26,10 @@ export const useSignIn = () => {
 export const useAuthUrl = () => {
   return useMutation<string, AxiosError<ApiError>>({
     mutationFn: async () => {
-      const { data } = await api.get<string>("/microsoft/login", {
+      const { data } = await api.get("/microsoft/login", {
         params: { redirect: "/ai-studio" },
       });
+
       return data;
     },
   });
@@ -42,16 +38,12 @@ export const useAuthUrl = () => {
 export const useExchangeCode = () => {
   return useMutation<SignInResponse, AxiosError<ApiError>, string>({
     mutationFn: async (params: string) => {
-      const { data } = await api.get<SignInResponse>(
-        `/login/access-token?${params}`,
-      );
-
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.removeItem("chat_id");
-      }
+      const { data } = await api.get(`/login/access-token?${params}`);
 
       return data;
+    },
+    onSuccess: (data) => {
+      localStorage.setItem("access_token", data.access_token);
     },
   });
 };
@@ -60,8 +52,9 @@ export const useMe = () => {
   return useQuery<UserMeResponse, AxiosError<ApiError>>({
     queryKey: ["auth", "me"],
     queryFn: async () => {
-      const response = await api.get<UserMeResponse>("/user/me/");
-      return response.data;
+      const { data } = await api.get("/user/me/");
+
+      return data;
     },
   });
 };

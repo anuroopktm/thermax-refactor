@@ -11,8 +11,8 @@ import {
   masterActivitySchema,
   type MasterActivityForm as MasterActivityFormType,
 } from "../../../validations/master-activity.schema";
-import { useCreateMasterActivity } from "@/services/query/transmitter-ocr";
 import { toast } from "sonner";
+import { useCreateMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
 
 interface AddMasterActivityDialogProps {
   open: boolean;

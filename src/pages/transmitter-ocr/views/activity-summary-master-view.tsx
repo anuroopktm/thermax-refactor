@@ -1,7 +1,7 @@
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useMasterActivities } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useMasterActivities } from "@/services/query/transmitter-ocr/master-activities.service";
 
 export function ActivitySummaryMasterView() {
   const { data: activities = [], isLoading } = useMasterActivities();

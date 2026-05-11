@@ -3,14 +3,14 @@ import { ChildActivityItemHeader } from "../components/activity-item/child/child
 import { ChildActivityItemPdfViewer } from "../components/activity-item/child/child-activity-item-pdf-viewer";
 import { ChildActivityItemForm } from "../components/activity-item/child/child-activity-item-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useActivityItemDetail } from "@/services/query/transmitter-ocr";
+import { useActivityItemDetail } from "@/services/query/transmitter-ocr/child-activities.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ChildActivityItemView() {
   const { itemId } = useParams<{ itemId: string }>();
   const { data: item, isLoading } = useActivityItemDetail(itemId);
 
-  const itemName = item?.name || "Loading...";
+  const itemName = item?.title || "Loading...";
 
   return (
     <div className="flex flex-col h-full">

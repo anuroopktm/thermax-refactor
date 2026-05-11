@@ -1,5 +1,5 @@
+import { useHeatingActivityDetail } from "@/services/query/heating-ocr/activities.service";
 import { useParams } from "react-router-dom";
-import { useHeatingActivityDetail } from "@/services/query/heating-ocr";
 
 export function ActivityCrumb() {
   const { id } = useParams<{ id: string }>();

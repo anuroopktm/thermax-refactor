@@ -1,7 +1,6 @@
 import {
-  type MasterActivityItem,
+  type ActivityUsageItem,
   type ChildActivityItem,
-  type MasterDataRecord,
   type CostUsageItem,
 } from "@/services/query/transmitter-ocr/types";
 import { type ActivityItem } from "@/components/shared/ocr/activity-card";
@@ -45,14 +44,6 @@ export function mapChildToActivityCard(item: ChildActivityItem): ActivityItem {
 }
 
 /**
- * Maps API response for Master Activities
- */
-export function mapMasterActivitiesResponse(data: any) {
-  const result = extractResult<MasterActivityItem>(data);
-  return result.map(mapMasterToActivityCard);
-}
-
-/**
  * Maps API response for Child Activities
  */
 export function mapChildActivitiesResponse(data: any) {
@@ -78,35 +69,27 @@ export function mapMasterDataRecords(data: any): MasterDataRecord[] {
  * Maps API response for Cost Usage to UI model
  * Handles both parallel arrays { month: [], cost: [] } and array of objects
  */
-export function mapCostUsageData(data: any): CostUsageItem[] {
-  if (Array.isArray(data)) return data;
+export function mapCostUsageData(
+  data: CostUsageItem,
+): { label: string; value: number }[] {
+  if (!data?.day) return [];
 
-  // Handle parallel arrays format
-  if (
-    data?.month &&
-    Array.isArray(data.month) &&
-    data?.cost &&
-    Array.isArray(data.cost)
-  ) {
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return data.month.map((monthIndex: number, i: number) => ({
-      period: monthNames[monthIndex] || `Month ${monthIndex}`,
-      cost: data.cost[i] || 0,
-    }));
-  }
+  return data.day.map((dayNum: number, i: number) => ({
+    label: String(dayNum),
+    value: data.cost?.[i] || 0,
+  }));
+}
 
-  return data?.result || [];
+/**
+ * Maps API response for Activity Usage to UI model
+ */
+export function mapActivityUsageData(
+  data: ActivityUsageItem,
+): { label: string; value: number }[] {
+  if (!data?.day) return [];
+
+  return data.day.map((dayNum: number, i: number) => ({
+    label: String(dayNum),
+    value: data.activity?.[i] || 0,
+  }));
 }

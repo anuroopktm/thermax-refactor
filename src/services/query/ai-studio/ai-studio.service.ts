@@ -48,21 +48,24 @@ const appMetadata: Record<string, { imageUrl: string; path: string }> = {
 };
 
 export const useApps = (searchTerm?: string) => {
-  return useQuery<AppItem[], AxiosError<ApiError>>({
+  return useQuery<AppListResponse, AxiosError<ApiError>, AppItem[]>({
     queryKey: ["ai-studio", "apps", searchTerm],
     queryFn: async () => {
-      const { data } = await api.get<AppListResponse>("/service", {
+      const { data } = await api.get("/service", {
         params: {
           search_term: searchTerm,
         },
       });
-      return data.result.map((item) => ({
+
+      return data;
+    },
+    select: (data) =>
+      data.result.map((item) => ({
         title: item.title,
         description: item.description,
         imageUrl:
           appMetadata[item.title]?.imageUrl || "/assets/ai-studio/default.png",
         path: appMetadata[item.title]?.path || "#",
-      }));
-    },
+      })),
   });
 };

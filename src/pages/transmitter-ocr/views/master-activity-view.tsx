@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { SharedActivityList } from "@/components/shared/ocr/activity-list";
-import { useMasterActivities } from "@/services/query/transmitter-ocr";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -10,6 +9,7 @@ import { EditMasterActivityDialog } from "../components/activity/master/edit-mas
 import { DeleteMasterActivityDialog } from "../components/activity/master/delete-master-activity-dialog";
 import type { MasterActivityItem } from "@/services/query/transmitter-ocr/types";
 import type { ActivityItem } from "@/components/shared/ocr/activity-card";
+import { useMasterActivities } from "@/services/query/transmitter-ocr/master-activities.service";
 
 export function MasterActivityView() {
   const { data: activities = [], isLoading } = useMasterActivities();

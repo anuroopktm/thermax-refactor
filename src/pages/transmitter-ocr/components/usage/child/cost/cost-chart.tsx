@@ -1,22 +1,17 @@
 import { useSearchParams } from "react-router-dom";
 import { CostChart as SharedCostChart } from "@/components/shared/usage/cost-chart";
-import { useChildCostUsage } from "@/services/query/transmitter-ocr";
+import { useChildCostUsage } from "@/services/query/transmitter-ocr/child-usage.service";
 
 export function CostChart() {
   const [searchParams] = useSearchParams();
-  const year = searchParams.get("year") || "2026";
-  const month = searchParams.get("month") || "April";
+  const year = searchParams.get("year");
+  const month = searchParams.get("month");
 
-  const { data: rawData, isLoading } = useChildCostUsage(year);
-
-  const dailyData = rawData?.map((item) => ({
-    label: item.period,
-    value: item.cost,
-  }));
+  const { data, isLoading } = useChildCostUsage(year, month);
 
   return (
     <SharedCostChart
-      data={dailyData}
+      data={data}
       isLoading={isLoading}
       month={month}
       year={year}

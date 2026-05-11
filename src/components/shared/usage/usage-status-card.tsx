@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/empty";
 import { BarChart3 } from "lucide-react";
 
-interface StatusItem {
+export interface StatusItem {
   name: string;
   value: React.ReactNode;
 }
@@ -35,7 +35,7 @@ const SKELETON_ROWS = Array.from({ length: 5 });
 
 export function UsageStatusCard({
   title,
-  data,
+  data = [],
   isLoading,
 }: UsageStatusCardProps) {
   const hasData = data?.length > 0;
