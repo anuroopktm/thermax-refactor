@@ -29,7 +29,7 @@ export function AddMasterActivityDialog({
     resolver: zodResolver(masterActivitySchema),
     defaultValues: {
       title: "",
-      device_type: "Transmitter",
+      device_type: "TRANSMITTER",
       template: "",
     },
   });

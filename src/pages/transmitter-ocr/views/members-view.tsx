@@ -1,10 +1,4 @@
 import { useState } from "react";
-import {
-  useTransmitterMembers as useMembers,
-  useTransmitterCreateMember as useCreateMember,
-  useTransmitterUpdateMember as useUpdateMember,
-  useTransmitterDeleteMember as useDeleteMember,
-} from "@/services/query/transmitter-ocr/types/index";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { MembersTable } from "@/components/shared/members/members-table";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
@@ -14,20 +8,28 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { type Member } from "@/services/query/transmitter-ocr/types";
 import { toast } from "sonner";
+import {
+  useTransmitterCreateMember,
+  useTransmitterDeleteMember,
+  useTransmitterMembers,
+  useTransmitterUpdateMember,
+} from "@/services/query/transmitter-ocr/members.service";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [deletingMember, setDeletingMember] = useState<Member | null>(null);
 
-  const { data: members, isLoading } = useMembers();
+  const { data: members, isLoading } = useTransmitterMembers();
 
-  const createMutation = useCreateMember();
-  const updateMutation = useUpdateMember(editingMember?.id || "");
-  const deleteMutation = useDeleteMember();
+  const createMemberMutation = useTransmitterCreateMember();
+  const updateMemberMutation = useTransmitterUpdateMember(
+    editingMember?.id || "",
+  );
+  const deleteMemberMutation = useTransmitterDeleteMember();
 
   const handleCreate = async (data: any) => {
-    toast.promise(createMutation.mutateAsync(data), {
+    toast.promise(createMemberMutation.mutateAsync(data), {
       loading: "Adding member...",
       success: () => {
         setIsAddDialogOpen(false);
@@ -38,7 +40,7 @@ export function MembersView() {
   };
 
   const handleUpdate = async (data: any) => {
-    toast.promise(updateMutation.mutateAsync(data), {
+    toast.promise(updateMemberMutation.mutateAsync(data), {
       loading: "Updating member...",
       success: () => {
         setEditingMember(null);
@@ -50,7 +52,7 @@ export function MembersView() {
 
   const handleDelete = async () => {
     if (deletingMember) {
-      toast.promise(deleteMutation.mutateAsync(deletingMember.id), {
+      toast.promise(deleteMemberMutation.mutateAsync(deletingMember.id), {
         loading: "Deleting member...",
         success: () => {
           setDeletingMember(null);
@@ -91,7 +93,7 @@ export function MembersView() {
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
         onConfirm={handleCreate}
-        isSaving={createMutation.isPending}
+        isSaving={createMemberMutation.isPending}
       />
 
       {editingMember && (
@@ -100,7 +102,7 @@ export function MembersView() {
           open={!!editingMember}
           onOpenChange={(open) => !open && setEditingMember(null)}
           onConfirm={handleUpdate}
-          isSaving={updateMutation.isPending}
+          isSaving={updateMemberMutation.isPending}
         />
       )}
 
@@ -110,7 +112,7 @@ export function MembersView() {
           open={!!deletingMember}
           onOpenChange={(open) => !open && setDeletingMember(null)}
           onConfirm={handleDelete}
-          isDeleting={deleteMutation.isPending}
+          isDeleting={deleteMemberMutation.isPending}
         />
       )}
     </FeaturePageLayout>

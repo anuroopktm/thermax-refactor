@@ -5,7 +5,7 @@ import type { ApiError } from "../../api.types";
 import type {
   MasterActivitiesItem,
   MasterActivitiesResponse,
-  MasterActivity,
+  MasterActivityItem,
   MasterActivityResponse,
 } from "./types/master-activities.types";
 
@@ -17,7 +17,9 @@ export const useMasterActivities = () => {
   >({
     queryKey: ["transmitter-ocr", "master-activities"],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/master_activity");
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/master_activity",
+      );
       return data;
     },
     select: ({ result }) => result,
@@ -25,16 +27,20 @@ export const useMasterActivities = () => {
 };
 
 export const useMasterActivity = (id?: string) => {
-  return useQuery<MasterActivityResponse, AxiosError<ApiError>, MasterActivity>(
-    {
-      queryKey: ["transmitter-ocr", "master-activity", id],
-      queryFn: async () => {
-        const { data } = await transmitterApi.get(`/master_activity/${id}`);
-        return data;
-      },
-      enabled: !!id,
+  return useQuery<
+    MasterActivityResponse,
+    AxiosError<ApiError>,
+    MasterActivityItem
+  >({
+    queryKey: ["transmitter-ocr", "master-activity", id],
+    queryFn: async () => {
+      const { data } = await transmitterApi.get(
+        `/transmitter_ocr/master_activity/${id}`,
+      );
+      return data;
     },
-  );
+    enabled: !!id,
+  });
 };
 
 export const useCreateMasterActivity = () => {
@@ -42,7 +48,7 @@ export const useCreateMasterActivity = () => {
 
   return useMutation<void, AxiosError<ApiError>, FormData>({
     mutationFn: async (formData: FormData) =>
-      await transmitterApi.post("/master_activity", formData, {
+      await transmitterApi.post("/transmitter_ocr/master_activity", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -60,11 +66,15 @@ export const useUpdateMasterActivity = (id: string) => {
 
   return useMutation<void, AxiosError<ApiError>, FormData>({
     mutationFn: async (formData: FormData) =>
-      await transmitterApi.patch(`/master_activity/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await transmitterApi.patch(
+        `/transmitter_ocr/master_activity/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      }),
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["transmitter-ocr", "master-activities"],
@@ -81,7 +91,7 @@ export const useDeleteMasterActivity = () => {
 
   return useMutation<void, AxiosError<ApiError>, string>({
     mutationFn: async (id: string) =>
-      await transmitterApi.delete(`/master_activity/${id}`),
+      await transmitterApi.delete(`/transmitter_ocr/master_activity/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["transmitter-ocr", "master-activities"],

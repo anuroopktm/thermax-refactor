@@ -14,8 +14,8 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { useTokenUsage } from "@/services/query/usage/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useChildTokenUsage } from "@/services/query/transmitter-ocr/child-usage.service";
 
 const pieChartConfig = {
   used: {
@@ -29,7 +29,7 @@ const pieChartConfig = {
 } satisfies ChartConfig;
 
 export function TokenUsage() {
-  const { data: tokenUsage, isLoading: isTokenLoading } = useTokenUsage();
+  const { data: tokenUsage, isLoading: isTokenLoading } = useChildTokenUsage();
 
   const pieData = tokenUsage
     ? [

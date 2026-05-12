@@ -10,9 +10,12 @@ export const useChildActivities = (masterId?: string) => {
   return useQuery<ChildActivityItem[], AxiosError<ApiError>, ActivityItem[]>({
     queryKey: ["transmitter-ocr", "child-activities", masterId],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/child_activity", {
-        params: { masterId },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/child_activity",
+        {
+          params: { masterId },
+        },
+      );
       return data;
     },
     select: mapChildActivitiesResponse,
@@ -27,7 +30,9 @@ export const useActivityItemDetail = (id?: string) => {
   >({
     queryKey: ["transmitter-ocr", "activity-item", id],
     queryFn: async () => {
-      const { data } = await transmitterApi.get<any>(`/child_activity/${id}`);
+      const { data } = await transmitterApi.get<any>(
+        `/transmitter_ocr/child_activity/${id}`,
+      );
       return data;
     },
     enabled: !!id,

@@ -3,18 +3,14 @@ import { transmitterApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  CostUsageItem,
   TokenUsage,
   TopUsersUsage,
-  TopUsersItem,
   StatsUsage,
-  StatsItem,
   CostUsageResponse,
   ActivityUsageResponse,
 } from "./types";
 import {
   mapCostUsageData,
-  extractResult,
   mapActivityUsageData,
 } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
 import dayjs from "dayjs";
@@ -36,9 +32,13 @@ export const useMasterCostUsage = (
 
       console.log("montthththt", parsedMonth, month);
 
-      const { data } = await transmitterApi.post("/master_usage/cost", null, {
-        params: { year: parsedYear, month: parsedMonth },
-      });
+      const { data } = await transmitterApi.post(
+        "/transmitter_ocr/master_usage/cost",
+        null,
+        {
+          params: { year: parsedYear, month: parsedMonth },
+        },
+      );
 
       return data;
     },
@@ -57,9 +57,12 @@ export const useMasterActivityUsage = (
   >({
     queryKey: ["transmitter-ocr", "master-detailed-activity", year, month],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/master_usage/activity", {
-        params: { year, month },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/master_usage/activity",
+        {
+          params: { year, month },
+        },
+      );
 
       return data;
     },
@@ -82,12 +85,17 @@ export const useMasterTokenUsage = (
       console.log("montthththt", parsedMonth);
 
       const [limitRes, costRes] = await Promise.all([
-        transmitterApi.get<{ limit: number }>("/usage/cost/limit"),
+        transmitterApi.get<{ limit: number }>(
+          "/transmitter_ocr/usage/cost/limit",
+        ),
 
-        transmitterApi.post<{ total: number }>("/master_usage/cost", {
-          year: parsedYear,
-          month: parsedMonth,
-        }),
+        transmitterApi.post<{ total: number }>(
+          "/transmitter_ocr/master_usage/cost",
+          {
+            year: parsedYear,
+            month: parsedMonth,
+          },
+        ),
       ]);
 
       const limit = limitRes.data.limit ?? 0;
@@ -114,7 +122,7 @@ export const useMasterActivityStats = (
     queryKey: ["transmitter-ocr", "master-activity-stats", year, month],
     queryFn: async () => {
       const { data } = await transmitterApi.get(
-        "/master_usage/activity/stats",
+        "/transmitter_ocr/master_usage/activity/stats",
         { params: { year, month } },
       );
 
@@ -140,12 +148,15 @@ export const useMasterTopUsers = (
 
       console.log("dedewdew", year, month);
 
-      const { data } = await transmitterApi.get("/master_usage/activity/top", {
-        params: {
-          year: parsedYear,
-          month: parsedMonth,
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/master_usage/activity/top",
+        {
+          params: {
+            year: parsedYear,
+            month: parsedMonth,
+          },
         },
-      });
+      );
 
       return data;
     },

@@ -10,42 +10,51 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
-import { formatDate, formatStatus, getStatusVariant } from "@/lib/utils";
+import {
+  formatDate,
+  formatStatus,
+  getStatusVariant,
+  getInitials,
+} from "@/lib/utils";
 
 export interface ActivityItem {
-  template?: string | null;
   id: string;
   title: string;
-  createdAt: string;
-  status: string;
-  userInitials: string;
-  // [key: string]: any;
+  template?: string | null;
+  createdAt?: string;
+  status?: string;
+  userInitials?: string;
+  [key: string]: any;
 }
 
-interface SharedActivityCardProps {
-  activity: ActivityItem;
+interface SharedActivityCardProps<T extends ActivityItem = ActivityItem> {
+  activity: T;
   href?: string;
   hideActions?: boolean;
   hideStatus?: boolean;
-  onEdit?: (activity: ActivityItem) => void;
-  onDelete?: (activity: ActivityItem) => void;
+  onEdit?: (activity: T) => void;
+  onDelete?: (activity: T) => void;
 }
 
-export function SharedActivityCard({
+export function SharedActivityCard<T extends ActivityItem>({
   activity,
   href,
   hideActions,
   hideStatus,
   onEdit,
   onDelete,
-}: SharedActivityCardProps) {
+}: SharedActivityCardProps<T>) {
+  const initials =
+    activity.userInitials ||
+    (activity.user?.name ? getInitials(activity.user.name) : "??");
+  const displayDate =
+    activity.createdAt || activity.created_on || activity.created_at;
+
   const content = (
     <Card className="group-hover:shadow-md transition cursor-pointer">
       <CardContent className="flex items-center gap-4">
         <Avatar className="size-10">
-          <AvatarFallback className="font-medium">
-            {activity.userInitials}
-          </AvatarFallback>
+          <AvatarFallback className="font-medium">{initials}</AvatarFallback>
         </Avatar>
 
         <div className="flex-1 min-w-0">
@@ -53,7 +62,7 @@ export function SharedActivityCard({
             {activity.title}
           </h3>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Created on: {formatDate(activity.createdAt)}
+            Created on: {formatDate(displayDate)}
           </p>
         </div>
 

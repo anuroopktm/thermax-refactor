@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "@/services/interceptor";
+import { ssoApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type { AppItem, AppListResponse } from "./ai-studio.types";
@@ -51,7 +51,7 @@ export const useApps = (searchTerm?: string) => {
   return useQuery<AppListResponse, AxiosError<ApiError>, AppItem[]>({
     queryKey: ["ai-studio", "apps", searchTerm],
     queryFn: async () => {
-      const { data } = await api.get("/service", {
+      const { data } = await ssoApi.get("/service", {
         params: {
           search_term: searchTerm,
         },

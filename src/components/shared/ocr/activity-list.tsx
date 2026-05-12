@@ -8,18 +8,18 @@ import {
 } from "@/components/ui/empty";
 import { FileSearch } from "lucide-react";
 
-interface SharedActivityListProps {
-  activities: ActivityItem[];
-  getHref?: (activity: ActivityItem) => string;
+interface SharedActivityListProps<T extends ActivityItem = ActivityItem> {
+  activities: T[];
+  getHref?: (activity: T) => string;
   hideActions?: boolean;
   hideStatus?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
-  onEdit?: (activity: ActivityItem) => void;
-  onDelete?: (activity: ActivityItem) => void;
+  onEdit?: (activity: T) => void;
+  onDelete?: (activity: T) => void;
 }
 
-export function SharedActivityList({
+export function SharedActivityList<T extends ActivityItem>({
   activities = [],
   getHref,
   hideActions,
@@ -28,7 +28,7 @@ export function SharedActivityList({
   emptyDescription = "Try adjusting your filters or add a new activity to get started.",
   onEdit,
   onDelete,
-}: SharedActivityListProps) {
+}: SharedActivityListProps<T>) {
   if (activities.length === 0) {
     return (
       <Empty className="min-h-[400px]">

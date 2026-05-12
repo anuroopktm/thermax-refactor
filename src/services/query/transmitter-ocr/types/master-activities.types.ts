@@ -15,7 +15,7 @@ export interface MasterActivitiesItem {
   device_type: DeviceType;
   status: Status;
   is_extracted: boolean;
-  id: number;
+  id: string;
   user_id: number;
   price: number;
   is_active: boolean;
@@ -37,7 +37,7 @@ export interface MasterDataItem {
   "Calibration Range Unit": string;
 }
 
-export interface MasterActivity {
+export interface MasterActivityItem {
   title: string;
   filename: string;
   master_data: Record<string, MasterDataItem>[];
@@ -45,7 +45,7 @@ export interface MasterActivity {
   device_type: DeviceType;
   status: Status;
   is_extracted: boolean;
-  id: number;
+  id: string;
   user_id: number;
   price: number;
   is_active: boolean;
@@ -54,4 +54,4 @@ export interface MasterActivity {
   user: User;
 }
 
-export type MasterActivityResponse = MasterActivity;
+export type MasterActivityResponse = MasterActivityItem;

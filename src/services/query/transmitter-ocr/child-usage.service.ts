@@ -32,9 +32,13 @@ export const useChildCostUsage = (
       const parsedYear = Number(year);
       const parsedMonth = Number(month);
 
-      const { data } = await transmitterApi.post("/child_usage/cost", null, {
-        params: { year: parsedYear, month: parsedMonth },
-      });
+      const { data } = await transmitterApi.post(
+        "/transmitter_ocr/child_usage/cost",
+        null,
+        {
+          params: { year: parsedYear, month: parsedMonth },
+        },
+      );
 
       return data;
     },
@@ -53,9 +57,12 @@ export const useChildActivityUsage = (
   >({
     queryKey: ["transmitter-ocr", "child-detailed-activity", year, month],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/child_usage/activity", {
-        params: { year, month },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/child_usage/activity",
+        {
+          params: { year, month },
+        },
+      );
       return data;
     },
     select: (data) => mapActivityUsageData(data),
@@ -75,12 +82,17 @@ export const useChildTokenUsage = (
       const parsedMonth = Number(month);
 
       const [limitRes, costRes] = await Promise.all([
-        transmitterApi.get<{ limit: number }>("/usage/cost/limit"),
+        transmitterApi.get<{ limit: number }>(
+          "/transmitter_ocr/usage/cost/limit",
+        ),
 
-        transmitterApi.post<{ total: number }>("/child_usage/cost", {
-          year: parsedYear,
-          month: parsedMonth,
-        }),
+        transmitterApi.post<{ total: number }>(
+          "/transmitter_ocr/child_usage/cost",
+          {
+            year: parsedYear,
+            month: parsedMonth,
+          },
+        ),
       ]);
 
       const limit = limitRes.data.limit ?? 0;
@@ -106,9 +118,12 @@ export const useChildActivityStats = (
   return useQuery<StatsUsage, AxiosError<ApiError>, StatsItem[]>({
     queryKey: ["transmitter-ocr", "child-activity-stats", year, month],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/child_usage/activity/stats", {
-        params: { year, month },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/child_usage/activity/stats",
+        {
+          params: { year, month },
+        },
+      );
 
       return data;
     },
@@ -123,9 +138,12 @@ export const useChildTopUsers = (
   return useQuery<TopUsersUsage, AxiosError<ApiError>, TopUsersItem[]>({
     queryKey: ["transmitter-ocr", "child-top-users", year, month],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/child_usage/activity/top", {
-        params: { year, month },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/child_usage/activity/top",
+        {
+          params: { year, month },
+        },
+      );
 
       return data;
     },

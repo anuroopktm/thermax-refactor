@@ -13,13 +13,13 @@ import {
   type MasterActivityForm as MasterActivityFormType,
 } from "../../../validations/master-activity.schema";
 import { toast } from "sonner";
-import type { MasterActivityItem } from "@/services/query/transmitter-ocr/types";
+import type { MasterActivitiesItem } from "@/services/query/transmitter-ocr/types";
 import { useUpdateMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
 
 interface EditMasterActivityDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  activity: MasterActivityItem;
+  activity: MasterActivitiesItem;
 }
 
 export function EditMasterActivityDialog({

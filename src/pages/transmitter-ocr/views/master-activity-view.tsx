@@ -7,8 +7,7 @@ import { PlusCircle } from "lucide-react";
 import { AddMasterActivityDialog } from "../components/activity/master/add-master-activity-dialog";
 import { EditMasterActivityDialog } from "../components/activity/master/edit-master-activity-dialog";
 import { DeleteMasterActivityDialog } from "../components/activity/master/delete-master-activity-dialog";
-import type { MasterActivityItem } from "@/services/query/transmitter-ocr/types";
-import type { ActivityItem } from "@/components/shared/ocr/activity-card";
+import type { MasterActivitiesItem } from "@/services/query/transmitter-ocr/types";
 import { useMasterActivities } from "@/services/query/transmitter-ocr/master-activities.service";
 
 export function MasterActivityView() {
@@ -17,20 +16,20 @@ export function MasterActivityView() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] =
-    useState<MasterActivityItem | null>(null);
+    useState<MasterActivitiesItem | null>(null);
 
   const handleAdd = () => {
     setSelectedActivity(null);
     setIsAddDialogOpen(true);
   };
 
-  const handleEdit = (activity: ActivityItem) => {
-    setSelectedActivity(activity as unknown as MasterActivityItem);
+  const handleEdit = (activity: MasterActivitiesItem) => {
+    setSelectedActivity(activity);
     setIsEditDialogOpen(true);
   };
 
-  const handleDelete = (activity: ActivityItem) => {
-    setSelectedActivity(activity as unknown as MasterActivityItem);
+  const handleDelete = (activity: MasterActivitiesItem) => {
+    setSelectedActivity(activity);
     setIsDeleteDialogOpen(true);
   };
 
@@ -53,7 +52,7 @@ export function MasterActivityView() {
             ))}
           </div>
         ) : (
-          <SharedActivityList
+          <SharedActivityList<MasterActivitiesItem>
             activities={activities}
             getHref={(activity) =>
               `/transmitter-ocr/master-activity/${activity.id}`

@@ -9,9 +9,12 @@ export const useActivitySummary = (childId?: string) => {
   return useQuery<ActivitySummaryItem[], AxiosError<ApiError>, any>({
     queryKey: ["transmitter-ocr", "activity-summary", childId],
     queryFn: async () => {
-      const { data } = await transmitterApi.get("/child_usage/activity", {
-        params: { childId },
-      });
+      const { data } = await transmitterApi.get(
+        "/transmitter_ocr/child_usage/activity",
+        {
+          params: { childId },
+        },
+      );
       return data;
     },
     select: (data) => extractResult<ActivitySummaryItem>(data),
