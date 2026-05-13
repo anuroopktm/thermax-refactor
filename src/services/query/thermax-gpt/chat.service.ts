@@ -7,10 +7,11 @@ import type {
   ChatHistoryItem,
   ChatHistoryResponse,
   ChatItem,
-  ChatCreatePayload,
   ChatCreateResponse,
+  ChatUpdatePayload,
   CreateChatHistoryPayload,
   NormalizedMessage,
+  ChatCreatePayload,
 } from "./chat.types";
 import { normalizeHistoryMessages } from "@/pages/thermax-gpt/lib/chat-mappers";
 
@@ -85,6 +86,65 @@ export const useThermaxGptCreateChat = () => {
   >({
     mutationFn: async (input) => {
       const { data } = await gptApi.post("/thermax_gpt/chat/", input);
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["chat", "list"],
+        exact: false,
+      });
+    },
+  });
+};
+
+export const useThermaxGptUpdateChat = () => {
+  const queryClient = useQueryClient();
+  return useMutation<
+    ChatItem,
+    AxiosError<ApiError>,
+    { chatId: string | number; payload: ChatUpdatePayload }
+  >({
+    mutationFn: async ({ chatId, payload }) => {
+      const { data } = await gptApi.patch(`/thermax_gpt/chat/${chatId}`, null, {
+        params: payload,
+      });
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["chat", "list"],
+        exact: false,
+      });
+    },
+  });
+};
+
+export const useThermaxGptDeleteChat = () => {
+  const queryClient = useQueryClient();
+  return useMutation<void, AxiosError<ApiError>, string | number>({
+    mutationFn: async (chatId) => {
+      const { data } = await gptApi.delete(`/thermax_gpt/chat/${chatId}`);
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["chat", "list"],
+        exact: false,
+      });
+    },
+  });
+};
+
+export const useThermaxGptClearHistory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, AxiosError<ApiError>, void>({
+    mutationFn: async () => {
+      const { data } = await gptApi.delete("/thermax_gpt/chat");
+
       return data;
     },
     onSuccess: () => {
@@ -97,7 +157,6 @@ export const useThermaxGptCreateChat = () => {
 };
 
 export const useThermaxGptCreateChatHistory = () => {
-  const queryClient = useQueryClient();
   return useMutation<
     ChatHistoryItem,
     AxiosError<ApiError>,
@@ -121,9 +180,6 @@ export const useThermaxGptCreateChatHistory = () => {
       );
 
       return data;
-    },
-    onSuccess: (_, { chatId }) => {
-      queryClient.invalidateQueries({ queryKey: ["chat", "messages", chatId] });
     },
   });
 };
@@ -205,15 +261,4 @@ export const useThermaxGptChatHistoryStream = async (
 
     throw error;
   }
-};
-
-export const useSimilarQuestions = () => {
-  return useQuery<string[], AxiosError<ApiError>>({
-    queryKey: ["chat", "similar-questions"],
-    queryFn: async () => {
-      const { data } = await gptApi.get("/thermax_gpt/chat/similar-questions");
-
-      return data;
-    },
-  });
 };

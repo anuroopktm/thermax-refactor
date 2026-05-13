@@ -26,11 +26,12 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
     return (
       <div
         ref={ref}
-        className="max-w-[calc(100%-5rem)] mx-auto w-full pointer-events-auto bg-background/80 backdrop-blur-sm p-1 rounded-t-xl"
+        className="max-w-[calc(100%-5rem)] mx-auto w-full pointer-events-auto bg-background p-1 rounded-t-xl"
       >
         <Field className="gap-4">
           <InputGroup>
             <InputGroupTextarea
+              autoFocus
               placeholder="Message AI Studio..."
               value={input}
               onChange={(e) => setInput(e.target.value)}

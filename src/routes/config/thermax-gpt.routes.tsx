@@ -10,11 +10,7 @@ export const thermaxGptRoutes = [
     },
     children: [
       {
-        index: true,
-        element: <Pages.ThermaxGptPage />,
-      },
-      {
-        path: PATHS.THERMAX_GPT.CHAT_ID,
+        path: ":chatId?",
         element: <Pages.ThermaxGptPage />,
       },
       {

@@ -1,3 +1,9 @@
+import type {
+  ChatSource,
+  GeneratedMedia,
+  NormalizedMessage,
+} from "@/components/shared/chat/types/chat.types";
+
 export interface ChatItem {
   id: number;
   title: string;
@@ -13,20 +19,10 @@ export interface ChatResponse {
   result: ChatItem[];
 }
 
-interface GeneratedMedia {
-  media_type: string;
-  link: string;
-  chart_data: Record<string, any>;
-}
-
 interface ChatDocument {
   document_ids: string[];
   file_name: string;
   chunk_length: number;
-}
-
-interface ChatSource {
-  generated_media: GeneratedMedia[];
 }
 
 export interface ChatHistoryItem {
@@ -60,10 +56,14 @@ export interface ChatCreatePayload {
   type: string;
 }
 
+export interface ChatUpdatePayload {
+  title: string;
+}
+
 export interface ChatCreateResponse {
   title: string;
   type: string;
-  id: string;
+  id: number;
   user_id: number;
   is_active: boolean;
   created_on: string;
@@ -78,11 +78,4 @@ export interface CreateChatHistoryPayload {
   thinking?: boolean;
 }
 
-export interface NormalizedMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  isThinking?: boolean;
-  historyItemId?: number;
-  source?: ChatSource;
-}
+export type { ChatSource, GeneratedMedia, NormalizedMessage };

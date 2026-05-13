@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { ChatMessages } from "./chat-messages";
 import { ChatInput } from "./chat-input";
-import type { NormalizedMessage } from "@/services/query/thermax-gpt/chat.types";
+import type { NormalizedMessage } from "./types/chat.types";
+import { ChatMessages } from "./message/chat-message";
 
 interface ChatInterfaceProps {
   messages: NormalizedMessage[];
@@ -20,7 +20,7 @@ export function ChatInterface({
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
 
-  // 🔹 Auto scroll to bottom
+  // Auto scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
@@ -30,7 +30,7 @@ export function ChatInterface({
     }
   }, [messages, isTyping]);
 
-  // 🔹 Observe input height dynamically
+  // Observe input height dynamically
   useEffect(() => {
     if (!inputContainerRef.current) return;
 
@@ -46,14 +46,14 @@ export function ChatInterface({
 
   return (
     <div className="relative flex flex-1 flex-col min-h-0 h-full bg-background overflow-hidden">
-      {/* 🔹 Scrollable Content */}
+      {/* Scrollable Content */}
       <ChatMessages
         ref={scrollRef}
         messages={messages}
         bottomPadding={bottomPadding}
       />
 
-      {/* 🔹 Input */}
+      {/* Input */}
       <div className="absolute inset-x-0 bottom-0 pointer-events-none">
         <ChatInput
           ref={inputContainerRef}
