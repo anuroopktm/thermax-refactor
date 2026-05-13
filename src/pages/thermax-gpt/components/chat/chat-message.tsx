@@ -1,16 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ThinkingIndicator } from "./thinking-indicator";
-
-export interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  isThinking?: boolean;
-}
+import type { NormalizedMessage } from "@/services/query/thermax-gpt/chat.types";
 
 interface ChatMessageProps {
-  message: Message;
+  message: NormalizedMessage;
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {

@@ -15,6 +15,7 @@ import { salesEnablementRoutes } from "./config/sales-enablement.routes";
 import { transmitterOcrRoutes } from "./config/transmitter-ocr.routes";
 import { heatingOcrRoutes } from "./config/heating-ocr.routes";
 import { tbwesOcrRoutes } from "./config/tbwes-ocr.routes";
+import { thermaxGptRoutes } from "./config/thermax-gpt.routes";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
                   ...transmitterOcrRoutes,
                   ...heatingOcrRoutes,
                   ...tbwesOcrRoutes,
+                  ...thermaxGptRoutes,
                 ],
               },
             ],

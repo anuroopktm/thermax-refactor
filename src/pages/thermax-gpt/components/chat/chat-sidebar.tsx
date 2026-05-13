@@ -1,6 +1,5 @@
 import { Plus, Trash2, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -13,19 +12,43 @@ import {
   SidebarSeparator,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-
-import { useChatHistory } from "@/services/query/chat/chat.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function ChatSidebar() {
-  const navigate = useNavigate();
-  const { data: chatHistory, isLoading } = useChatHistory();
+export interface Chat {
+  id: string | number;
+  title: string;
+}
 
+interface ChatSidebarProps {
+  chats?: Chat[];
+  isLoading?: boolean;
+  isCreating?: boolean;
+  onNewChat?: () => void;
+  onClearHistory?: () => void;
+  onSettingsClick?: () => void;
+  onChatSelect?: (chat: Chat) => void;
+  activeChatId?: string | number;
+}
+
+export function ChatSidebar({
+  chats,
+  isLoading,
+  isCreating,
+  onNewChat,
+  onClearHistory,
+  onSettingsClick,
+  onChatSelect,
+  activeChatId,
+}: ChatSidebarProps) {
   return (
     <Sidebar className="top-16 h-[calc(100vh-4rem)] border-r border-border bg-background">
       {/* Header */}
       <SidebarHeader className="p-3">
-        <SidebarMenuButton className="h-10 cursor-pointer">
+        <SidebarMenuButton
+          className="h-10 cursor-pointer"
+          onClick={onNewChat}
+          disabled={isCreating}
+        >
           <Plus />
           New Chat
         </SidebarMenuButton>
@@ -43,14 +66,16 @@ export function ChatSidebar() {
                     <Skeleton className="h-9 w-full rounded-md" />
                   </SidebarMenuItem>
                 ))
-              : chatHistory?.map((chat) => (
+              : chats?.map((chat) => (
                   <SidebarMenuItem key={chat.id}>
                     <SidebarMenuButton
-                      isActive={chat.active}
+                      isActive={String(chat.id) === String(activeChatId)}
+                      onClick={() => onChatSelect?.(chat)}
                       className={cn(
                         "group h-9 w-full cursor-pointer transition truncate",
                         "hover:bg-muted",
-                        chat.active && "bg-muted text-foreground",
+                        String(chat.id) === String(activeChatId) &&
+                          "bg-muted text-foreground",
                       )}
                     >
                       {chat.title}
@@ -66,7 +91,10 @@ export function ChatSidebar() {
       <SidebarFooter className="p-3">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="h-10 cursor-pointer">
+            <SidebarMenuButton
+              className="h-10 cursor-pointer"
+              onClick={onClearHistory}
+            >
               <Trash2 />
               Clear Conversations
             </SidebarMenuButton>
@@ -75,7 +103,7 @@ export function ChatSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="h-10 cursor-pointer"
-              onClick={() => navigate("/sales-enablement/settings")}
+              onClick={onSettingsClick}
             >
               <Settings />
               Settings

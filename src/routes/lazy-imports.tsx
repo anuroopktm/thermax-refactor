@@ -9,6 +9,10 @@ export const SalesEnablementPage = lazy(
 export const SalesEnablementSettingsPage = lazy(
   () => import("@/pages/sales-enablement-tool/settings/page"),
 );
+export const ThermaxGptPage = lazy(() => import("@/pages/thermax-gpt/page"));
+export const ThermaxGptSettingsPage = lazy(
+  () => import("@/pages/thermax-gpt/settings/page"),
+);
 export const TransmitterOcrPage = lazy(
   () => import("@/pages/transmitter-ocr/page"),
 );
@@ -33,6 +37,27 @@ export const FeedbackView = lazy(() =>
   import("@/pages/sales-enablement-tool/settings/views/feedback-view").then(
     (m) => ({ default: m.FeedbackView }),
   ),
+);
+
+export const ThermaxGptUsageView = lazy(() =>
+  import("@/pages/thermax-gpt/settings/views/usage-view").then((m) => ({
+    default: m.UsageView,
+  })),
+);
+export const ThermaxGptMembersView = lazy(() =>
+  import("@/pages/thermax-gpt/settings/views/members-view").then((m) => ({
+    default: m.MembersView,
+  })),
+);
+export const ThermaxGptProductsView = lazy(() =>
+  import("@/pages/thermax-gpt/settings/views/products-view").then((m) => ({
+    default: m.ProductsView,
+  })),
+);
+export const ThermaxGptFeedbackView = lazy(() =>
+  import("@/pages/thermax-gpt/settings/views/feedback-view").then((m) => ({
+    default: m.FeedbackView,
+  })),
 );
 
 export const MasterActivityView = lazy(() =>

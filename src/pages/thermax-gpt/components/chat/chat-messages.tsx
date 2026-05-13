@@ -1,9 +1,10 @@
 import { forwardRef } from "react";
-import { ChatMessage, type Message } from "./chat-message";
+import { ChatMessage } from "./chat-message";
 import { ChatEmptyState } from "./chat-empty-state";
+import type { NormalizedMessage } from "@/services/query/thermax-gpt/chat.types";
 
 interface ChatMessagesProps {
-  messages: Message[];
+  messages: NormalizedMessage[];
   bottomPadding: number;
 }
 

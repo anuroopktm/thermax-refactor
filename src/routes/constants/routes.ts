@@ -17,6 +17,19 @@ export const PATHS = {
     },
   },
 
+  // Thermax GPT
+  THERMAX_GPT: {
+    ROOT: "/thermax-gpt",
+    CHAT_ID: ":chatId",
+    SETTINGS: {
+      ROOT: "/thermax-gpt/settings",
+      PRODUCTS: "products",
+      FEEDBACK: "feedback",
+      USAGE: "usage",
+      MEMBERS: "members",
+    },
+  },
+
   // Transmitter OCR
   TRANSMITTER_OCR: {
     ROOT: "/transmitter-ocr",

@@ -8,13 +8,19 @@ import {
   SidebarGroup,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-
-import { useSimilarQuestions } from "@/services/query/chat/chat.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function SimilarQuestions() {
-  const { data: questions, isLoading } = useSimilarQuestions();
+interface SimilarQuestionsProps {
+  questions?: string[];
+  isLoading?: boolean;
+  onQuestionClick?: (question: string) => void;
+}
 
+export function SimilarQuestions({
+  questions,
+  isLoading,
+  onQuestionClick,
+}: SimilarQuestionsProps) {
   return (
     <aside className="hidden w-80 flex-col border-l border-border bg-background lg:flex">
       <SidebarHeader className="h-16 px-4 flex-row items-center">
@@ -40,7 +46,10 @@ export function SimilarQuestions() {
             <SidebarMenu className="gap-2 px-2">
               {questions.map((q, i) => (
                 <SidebarMenuItem key={i}>
-                  <SidebarMenuButton className="h-auto min-h-9 cursor-pointer transition hover:bg-muted text-foreground p-3">
+                  <SidebarMenuButton
+                    className="h-auto min-h-9 cursor-pointer transition hover:bg-muted text-foreground p-3"
+                    onClick={() => onQuestionClick?.(q)}
+                  >
                     {q}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
