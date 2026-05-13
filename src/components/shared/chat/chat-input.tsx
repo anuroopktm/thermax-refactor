@@ -1,5 +1,5 @@
 import { forwardRef, useState } from "react";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, Paperclip } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -7,6 +7,7 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { Field, FieldDescription } from "@/components/ui/field";
+import { ChatFileUploadDialog } from "./upload/chat-file-upload-dialog";
 
 interface ChatInputProps {
   onSend: (content: string) => void;
@@ -16,6 +17,7 @@ interface ChatInputProps {
 export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
   ({ onSend, disabled }, ref) => {
     const [input, setInput] = useState("");
+    const [isUploadOpen, setIsUploadOpen] = useState(false);
 
     const handleSend = () => {
       if (!input.trim() || disabled) return;
@@ -29,7 +31,7 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
         className="max-w-[calc(100%-5rem)] mx-auto w-full pointer-events-auto bg-background p-1 rounded-t-xl"
       >
         <Field className="gap-4">
-          <InputGroup>
+          <InputGroup className="border-primary/30 hover:border-primary/50">
             <InputGroupTextarea
               autoFocus
               placeholder="Message AI Studio..."
@@ -41,18 +43,25 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
                   handleSend();
                 }
               }}
-              disabled={disabled}
               className="min-h-8 max-h-48 resize-none overflow-y-auto"
             />
             <InputGroupAddon align="block-end">
+              <InputGroupButton
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setIsUploadOpen(true)}
+                className="text-primary rounded-full cursor-pointer"
+              >
+                <Paperclip />
+              </InputGroupButton>
               <InputGroupButton
                 variant="default"
                 size="icon-sm"
                 onClick={handleSend}
                 disabled={disabled || !input.trim()}
-                className="ml-auto rounded-full cursor-pointer transition-all active:scale-95"
+                className="ml-auto rounded-full cursor-pointer"
               >
-                <SendHorizontal className="h-4 w-4" />
+                <SendHorizontal />
               </InputGroupButton>
             </InputGroupAddon>
           </InputGroup>
@@ -61,6 +70,15 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
             Thermax AI Studio can make mistakes. Check important info.
           </FieldDescription>
         </Field>
+
+        <ChatFileUploadDialog
+          open={isUploadOpen}
+          onOpenChange={setIsUploadOpen}
+          onUpload={(files) => {
+            console.log("Uploaded files:", files);
+            setIsUploadOpen(false);
+          }}
+        />
       </div>
     );
   },
