@@ -23,22 +23,8 @@ export const thermaxGptRoutes = [
           {
             index: true,
             element: (
-              <Navigate to={PATHS.THERMAX_GPT.SETTINGS.PRODUCTS} replace />
+              <Navigate to={PATHS.THERMAX_GPT.SETTINGS.MEMBERS} replace />
             ),
-          },
-          {
-            path: PATHS.THERMAX_GPT.SETTINGS.PRODUCTS,
-            element: <Pages.ThermaxGptProductsView />,
-            handle: {
-              crumb: "Products",
-            },
-          },
-          {
-            path: PATHS.THERMAX_GPT.SETTINGS.FEEDBACK,
-            element: <Pages.ThermaxGptFeedbackView />,
-            handle: {
-              crumb: "Feedback",
-            },
           },
           {
             path: PATHS.THERMAX_GPT.SETTINGS.USAGE,

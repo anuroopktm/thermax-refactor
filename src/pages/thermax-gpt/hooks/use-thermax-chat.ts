@@ -9,7 +9,7 @@ import {
 } from "@/services/query/thermax-gpt/chat.service";
 import { PATHS } from "@/routes/constants/routes";
 import type { NormalizedMessage } from "@/components/shared/chat/types/chat.types";
-import type { ChatHistoryResponse } from "@/services/query/thermax-gpt/chat.types";
+import type { ChatHistoryResponse } from "@/services/query/thermax-gpt/types";
 
 export const useThermaxChat = (chatId?: string) => {
   const navigate = useNavigate();

@@ -47,6 +47,7 @@ export function UsageView() {
 
   return (
     <FeaturePageLayout
+      className="p-0!"
       title="Usage"
       description="Monitor cost and activity across your workspace"
       actions={

@@ -12,7 +12,7 @@ import type {
   CreateChatHistoryPayload,
   NormalizedMessage,
   ChatCreatePayload,
-} from "./chat.types";
+} from "./types";
 import { normalizeHistoryMessages } from "@/pages/thermax-gpt/lib/chat-mappers";
 
 interface StreamCallbacks {

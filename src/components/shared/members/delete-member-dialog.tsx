@@ -7,11 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-interface Member {
-  id: string;
-  name: string;
-}
+import type { Member } from "@/services/query/members/members.types";
 
 interface DeleteMemberDialogProps {
   member: Member;

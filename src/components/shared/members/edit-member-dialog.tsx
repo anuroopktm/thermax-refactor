@@ -13,13 +13,7 @@ import {
   memberSchema,
   type MemberForm as MemberFormType,
 } from "@/validations/members.schema";
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+import type { Member } from "@/services/query/members/members.types";
 
 interface EditMemberDialogProps {
   member: Member;

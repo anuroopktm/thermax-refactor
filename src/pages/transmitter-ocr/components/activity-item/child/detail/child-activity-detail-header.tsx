@@ -58,7 +58,7 @@ export function ChildActivityDetailHeader({
           className="bg-transparent focus-visible:ring-0"
         />
         <InputGroupAddon className="text-muted-foreground">
-          <Search className="size-4" />
+          <Search />
         </InputGroupAddon>
       </InputGroup>
     </div>

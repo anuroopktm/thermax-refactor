@@ -51,7 +51,7 @@ export function UsageDateFilter() {
           className="size-8 cursor-pointer"
           onClick={() => handleYearChange(-1)}
         >
-          <ChevronLeft className="size-4" />
+          <ChevronLeft />
         </Button>
         <span className="px-3 text-sm font-medium w-14 text-center">
           {year}
@@ -62,7 +62,7 @@ export function UsageDateFilter() {
           className="size-8 cursor-pointer"
           onClick={() => handleYearChange(1)}
         >
-          <ChevronRight className="size-4" />
+          <ChevronRight />
         </Button>
       </div>
 
@@ -74,7 +74,7 @@ export function UsageDateFilter() {
           className="size-8 cursor-pointer"
           onClick={() => handleMonthChange(-1)}
         >
-          <ChevronLeft className="size-4" />
+          <ChevronLeft />
         </Button>
         <span className="px-3 text-sm font-medium w-24 text-center">
           {MONTHS[monthIndex]}
@@ -85,7 +85,7 @@ export function UsageDateFilter() {
           className="size-8 cursor-pointer"
           onClick={() => handleMonthChange(1)}
         >
-          <ChevronRight className="size-4" />
+          <ChevronRight />
         </Button>
       </div>
     </div>

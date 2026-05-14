@@ -23,8 +23,6 @@ export const PATHS = {
     CHAT_ID: ":chatId",
     SETTINGS: {
       ROOT: "/thermax-gpt/settings",
-      PRODUCTS: "products",
-      FEEDBACK: "feedback",
       USAGE: "usage",
       MEMBERS: "members",
     },

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
-  useMembers,
-  useCreateMember,
-  useUpdateMember,
-  useDeleteMember,
-} from "@/services/query/members/members.service";
+  useThermaxMembers,
+  useCreateThermaxMember,
+  useUpdateThermaxMember,
+  useDeleteThermaxMember,
+} from "@/services/query/thermax-gpt/members.service";
 import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { MembersTable } from "@/components/shared/members/members-table";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
@@ -20,11 +20,11 @@ export function MembersView() {
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [deletingMember, setDeletingMember] = useState<Member | null>(null);
 
-  const { data: members, isLoading } = useMembers();
+  const { data: members = [], isLoading } = useThermaxMembers();
 
-  const createMutation = useCreateMember();
-  const updateMutation = useUpdateMember(editingMember?.id || "");
-  const deleteMutation = useDeleteMember();
+  const createMutation = useCreateThermaxMember();
+  const updateMutation = useUpdateThermaxMember(editingMember?.id || 0);
+  const deleteMutation = useDeleteThermaxMember();
 
   const handleCreate = async (data: any) => {
     toast.promise(createMutation.mutateAsync(data), {
@@ -50,7 +50,7 @@ export function MembersView() {
 
   const handleDelete = async () => {
     if (deletingMember) {
-      toast.promise(deleteMutation.mutateAsync(deletingMember.id), {
+      toast.promise(deleteMutation.mutateAsync(Number(deletingMember.id)), {
         loading: "Deleting member...",
         success: () => {
           setDeletingMember(null);
@@ -64,6 +64,7 @@ export function MembersView() {
 
   return (
     <FeaturePageLayout
+      className="p-0!"
       title="Members"
       description={
         isLoading

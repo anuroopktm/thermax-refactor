@@ -7,20 +7,38 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { useTopUsers } from "@/services/query/usage/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getInitials } from "@/lib/utils";
 
-export function TopUsersList() {
-  const { data: topUsers, isLoading: isTopUsersLoading } = useTopUsers();
+interface TopUserItem {
+  name: string;
+  email?: string;
+  value: number;
+}
+
+interface TopUsersListProps {
+  title?: string;
+  description?: string;
+  data: TopUserItem[];
+  isLoading?: boolean;
+}
+
+export function TopUsersList({
+  title = "Top Users",
+  description = "Track questions asked by your team",
+  data,
+  isLoading,
+}: TopUsersListProps) {
+  const maxQuestions = Math.max(...data.map((u) => u.value), 1);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="col-span-1 flex flex-col">
       <CardHeader>
-        <CardTitle>Top Users</CardTitle>
-        <CardDescription>Track questions asked by your team</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 space-y-4 overflow-y-auto max-h-[400px] lg:max-h-none">
-        {isTopUsersLoading
+        {isLoading
           ? Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="flex items-center gap-3">
                 <Skeleton className="size-9 rounded-full" />
@@ -30,26 +48,28 @@ export function TopUsersList() {
                 </div>
               </div>
             ))
-          : topUsers?.map((user, idx) => (
+          : data.map((user, idx) => (
               <div key={idx} className="flex items-center gap-3">
                 <Avatar className="size-8">
                   <AvatarFallback className="text-xs">
-                    {user.initial}
+                    {getInitials(user.name)}
                   </AvatarFallback>
                 </Avatar>
-
                 <div className="flex-1">
                   <div className="flex justify-between text-sm font-medium">
-                    {user.name}
+                    <span>{user.name}</span>
+                    <span className="text-xs font-normal text-muted-foreground">
+                      {user.value} Qs
+                    </span>
                   </div>
-
-                  <div className="text-xs text-muted-foreground truncate">
-                    {user.email}
-                  </div>
-
+                  {user.email && (
+                    <div className="text-xs text-muted-foreground truncate">
+                      {user.email}
+                    </div>
+                  )}
                   <Progress
                     className="mt-1.25 bg-muted rounded-full h-1.5 [&>div]:h-1.5"
-                    value={user.value}
+                    value={(user.value / maxQuestions) * 100}
                   />
                 </div>
               </div>

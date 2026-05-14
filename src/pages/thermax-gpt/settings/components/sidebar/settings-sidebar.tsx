@@ -1,4 +1,4 @@
-import { Users, Gauge, Package, MessageSquare } from "lucide-react";
+import { Users, Gauge } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -11,18 +11,6 @@ import {
 } from "@/components/ui/sidebar";
 
 const MENU_ITEMS = [
-  {
-    id: "products",
-    label: "Products",
-    icon: Package,
-    path: "/thermax-gpt/settings/products",
-  },
-  {
-    id: "feedback",
-    label: "Feedback",
-    icon: MessageSquare,
-    path: "/thermax-gpt/settings/feedback",
-  },
   {
     id: "members",
     label: "Members",

@@ -39,7 +39,7 @@ export function ProductsHeader({
             onChange={(e) => onSearchChange(e.target.value)}
           />
           <InputGroupAddon className="text-muted-foreground">
-            <Search className="size-4" />
+            <Search />
           </InputGroupAddon>
         </InputGroup>
 

@@ -49,16 +49,6 @@ export const ThermaxGptMembersView = lazy(() =>
     default: m.MembersView,
   })),
 );
-export const ThermaxGptProductsView = lazy(() =>
-  import("@/pages/thermax-gpt/settings/views/products-view").then((m) => ({
-    default: m.ProductsView,
-  })),
-);
-export const ThermaxGptFeedbackView = lazy(() =>
-  import("@/pages/thermax-gpt/settings/views/feedback-view").then((m) => ({
-    default: m.FeedbackView,
-  })),
-);
 
 export const MasterActivityView = lazy(() =>
   import("@/pages/transmitter-ocr/views/master-activity-view").then((m) => ({

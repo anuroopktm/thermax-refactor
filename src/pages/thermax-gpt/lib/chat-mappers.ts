@@ -1,5 +1,5 @@
 import type { NormalizedMessage } from "@/components/shared/chat/types/chat.types";
-import type { ChatHistoryItem } from "@/services/query/thermax-gpt/chat.types";
+import type { ChatHistoryItem } from "@/services/query/thermax-gpt/types";
 
 export function normalizeHistoryMessages(
   items: ChatHistoryItem[],
