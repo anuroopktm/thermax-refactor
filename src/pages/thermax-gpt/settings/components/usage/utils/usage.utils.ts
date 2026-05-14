@@ -6,7 +6,7 @@ export function getDateParams(searchParams: URLSearchParams) {
   const monthName = searchParams.get("month") ?? dayjs().month().toString();
 
   const index = MONTHS.indexOf(monthName);
-  const monthIndex = index !== -1 ? index + 1 : 4;
+  const monthIndex = index !== -1 ? index + 1 : dayjs().month();
 
   return { year, monthName, monthIndex };
 }

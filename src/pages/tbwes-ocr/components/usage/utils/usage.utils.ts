@@ -1,11 +1,12 @@
 import { MONTHS } from "@/components/shared/usage/usage-date-filter";
+import dayjs from "dayjs";
 
 export function getDateParams(searchParams: URLSearchParams) {
-  const year = parseInt(searchParams.get("year") ?? "2026");
-  const monthName = searchParams.get("month") ?? "April";
+  const year = parseInt(searchParams.get("year") ?? dayjs().year().toString());
+  const monthName = searchParams.get("month") ?? dayjs().month().toString();
 
   const index = MONTHS.indexOf(monthName);
-  const monthIndex = index !== -1 ? index + 1 : 4;
+  const monthIndex = index !== -1 ? index + 1 : dayjs().month();
 
   return { year, monthName, monthIndex };
 }

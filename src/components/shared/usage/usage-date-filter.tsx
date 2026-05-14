@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
 
 export const MONTHS = [
   "January",
@@ -20,9 +21,10 @@ export const MONTHS = [
 export function UsageDateFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const year = parseInt(searchParams.get("year") || "2026");
-  const month = searchParams.get("month") || "April";
-  const monthIndex = MONTHS.indexOf(month) !== -1 ? MONTHS.indexOf(month) : 3;
+  const year = parseInt(searchParams.get("year") || dayjs().year().toString());
+  const month = searchParams.get("month") || dayjs().month().toString();
+  const monthIndex =
+    MONTHS.indexOf(month) !== -1 ? MONTHS.indexOf(month) : dayjs().month();
 
   const handleYearChange = (delta: number) => {
     setSearchParams((prev) => {
