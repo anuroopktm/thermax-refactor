@@ -75,7 +75,8 @@ export interface CreateChatHistoryPayload {
   chatId: string;
   human: string;
   files?: File[];
-  thinking?: boolean;
+  thinking: boolean;
+  model: string;
 }
 
 export type { ChatSource, GeneratedMedia, NormalizedMessage };

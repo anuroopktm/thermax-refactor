@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { ChatInput } from "./chat-input";
 import type { NormalizedMessage } from "./types/chat.types";
 import { ChatMessages } from "./message/chat-message";
+import { ChatInput } from "./input/chat-input";
 
 interface ChatInterfaceProps {
   messages: NormalizedMessage[];
   isLoading?: boolean;
   isTyping?: boolean;
-  onSend: (content: string) => void;
+  onSend: (content: string, modelId: string, isThinking: boolean) => void;
 }
 
 export function ChatInterface({

@@ -74,6 +74,7 @@ export const useThermaxGptChatMessages = (
     },
     select: ({ result }) => normalizeHistoryMessages(result),
     enabled: !!chatId,
+    staleTime: 60000, // 1 minute to prevent background overwrites during/after streaming
   });
 };
 
@@ -100,6 +101,7 @@ export const useThermaxGptCreateChat = () => {
 
 export const useThermaxGptUpdateChat = () => {
   const queryClient = useQueryClient();
+
   return useMutation<
     ChatItem,
     AxiosError<ApiError>,
@@ -123,6 +125,7 @@ export const useThermaxGptUpdateChat = () => {
 
 export const useThermaxGptDeleteChat = () => {
   const queryClient = useQueryClient();
+
   return useMutation<void, AxiosError<ApiError>, string | number>({
     mutationFn: async (chatId) => {
       const { data } = await gptApi.delete(`/thermax_gpt/chat/${chatId}`);
@@ -162,16 +165,15 @@ export const useThermaxGptCreateChatHistory = () => {
     AxiosError<ApiError>,
     CreateChatHistoryPayload
   >({
-    mutationFn: async ({ chatId, human, files, thinking }) => {
+    mutationFn: async ({ chatId, human, files, thinking, model }) => {
       const formData = new FormData();
 
       formData.append("human", human);
+      formData.append("thinking", String(thinking));
+      formData.append("model", model);
 
       if (files) {
         files.forEach((file) => formData.append("files", file));
-      }
-      if (thinking) {
-        formData.append("thinking", String(thinking));
       }
 
       const { data } = await gptApi.post(
@@ -187,6 +189,8 @@ export const useThermaxGptCreateChatHistory = () => {
 export const useThermaxGptChatHistoryStream = async (
   chatId: string,
   chatHistoryId: string | number,
+  model: string,
+  thinking: boolean,
   callbacks?: StreamCallbacks,
 ) => {
   const { onStart, onChunk, onEnd, onError } = callbacks || {};
@@ -194,7 +198,7 @@ export const useThermaxGptChatHistoryStream = async (
     onStart?.();
 
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_SERVICE_THERMAX_GPT_URL}/thermax_gpt/chat/${chatId}/chat_history/stream?chat_history_id=${chatHistoryId}`,
+      `${import.meta.env.VITE_BACKEND_SERVICE_THERMAX_GPT_URL}/thermax_gpt/chat/${chatId}/chat_history/stream?chat_history_id=${chatHistoryId}&model=${model}&thinking=${thinking}`,
       {
         method: "GET",
         headers: {

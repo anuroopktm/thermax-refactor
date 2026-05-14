@@ -26,7 +26,8 @@ export default function ThermaxGptPage() {
   const deleteChat = useThermaxGptDeleteChat();
   const clearHistory = useThermaxGptClearHistory();
 
-  const handleNewChat = () => navigate(PATHS.THERMAX_GPT.ROOT);
+  const handleNewChat = () =>
+    navigate(PATHS.THERMAX_GPT.ROOT, { replace: true });
 
   const handleUpdateChat = async (chatId: number, title: string) => {
     toast.promise(
@@ -65,8 +66,6 @@ export default function ThermaxGptPage() {
       error: "Failed to clear conversations",
     });
   };
-
-  console.log("messages", messages);
 
   return (
     <SidebarProvider>

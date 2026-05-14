@@ -26,15 +26,18 @@ export const useThermaxChat = (chatId?: string) => {
   const messages = useMemo(() => {
     if (!streamingMessage) return history;
 
-    // If the assistant message we are streaming is already in history, prefer history
-    // This prevents flickering/jumping when the cache update and state update overlap
     const isAlreadyInHistory = history.some(
       (m) => m.id === streamingMessage.id,
     );
+
     return isAlreadyInHistory ? history : [...history, streamingMessage];
   }, [history, streamingMessage]);
 
-  const sendMessage = async (message: string) => {
+  const sendMessage = async (
+    message: string,
+    modelId: string,
+    isThinking: boolean,
+  ) => {
     if (!message.trim()) return;
 
     try {
@@ -61,11 +64,14 @@ export const useThermaxChat = (chatId?: string) => {
       const historyItem = await sendMessageMutation.mutateAsync({
         chatId: chatIdToUse,
         human: message.trim(),
+        model: modelId,
+        thinking: isThinking,
       });
 
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
         queryKey: ["chat", "messages", chatIdToUse],
+        exact: false,
       });
 
       // Manually update cache to include the user message
@@ -89,49 +95,54 @@ export const useThermaxChat = (chatId?: string) => {
         isThinking: true,
       });
 
-      await useThermaxGptChatHistoryStream(chatIdToUse, historyItem.id, {
-        onChunk: (_, fullText) => {
-          setStreamingMessage({
-            id: streamingId,
-            role: "assistant",
-            content: fullText,
-            isThinking: false,
-          });
+      await useThermaxGptChatHistoryStream(
+        chatIdToUse,
+        historyItem.id,
+        modelId,
+        isThinking,
+        {
+          onChunk: (_, fullText) => {
+            setStreamingMessage({
+              id: streamingId,
+              role: "assistant",
+              content: fullText,
+              isThinking: false,
+            });
+          },
+
+          onEnd: (fullText) => {
+            queryClient.setQueryData<ChatHistoryResponse>(
+              ["chat", "messages", chatIdToUse],
+              (old) => {
+                const current = old ?? {
+                  total: 1,
+                  result: [historyItem],
+                };
+
+                return {
+                  ...current,
+                  result: current.result.map((item) =>
+                    item.id === historyItem.id
+                      ? { ...item, ai: fullText }
+                      : item,
+                  ),
+                };
+              },
+            );
+
+            setStreamingMessage(null);
+            setIsTyping(false);
+          },
+
+          onError: () => {
+            setIsTyping(false);
+            setStreamingMessage(null);
+          },
         },
-
-        onEnd: (fullText) => {
-          // Update cache with the AI response
-          queryClient.setQueryData<ChatHistoryResponse>(
-            ["chat", "messages", chatIdToUse],
-            (old) => {
-              const current = old ?? {
-                total: 1,
-                result: [historyItem],
-              };
-
-              return {
-                ...current,
-                result: current.result.map((item) =>
-                  item.id === historyItem.id ? { ...item, ai: fullText } : item,
-                ),
-              };
-            },
-          );
-
-          setStreamingMessage(null);
-          setIsTyping(false);
-        },
-
-        onError: () => {
-          setIsTyping(false);
-          setStreamingMessage(null);
-        },
-      });
+      );
     } catch (error) {
       setIsTyping(false);
       setStreamingMessage(null);
-
-      console.error(error);
     }
   };
 
