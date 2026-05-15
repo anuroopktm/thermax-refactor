@@ -4,9 +4,9 @@ import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
   ChatResponse,
-  ChatHistoryItem,
+  ChatHistoryModel,
   ChatHistoryResponse,
-  ChatItem,
+  ChatModel,
   ChatCreateResponse,
   ChatUpdatePayload,
   CreateChatHistoryPayload,
@@ -32,7 +32,7 @@ export const useThermaxGptChat = ({
   limit?: number;
   search_term?: string;
 } = {}) => {
-  return useQuery<ChatResponse, AxiosError<ApiError>, ChatItem[]>({
+  return useQuery<ChatResponse, AxiosError<ApiError>, ChatModel[]>({
     queryKey: thermaxGptKeys.chat.list({ skip, limit, search_term }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/chat", {
@@ -152,7 +152,7 @@ export const useThermaxGptClearHistory = () => {
 
 export const useThermaxGptCreateChatHistory = () => {
   return useMutation<
-    ChatHistoryItem,
+    ChatHistoryModel,
     AxiosError<ApiError>,
     CreateChatHistoryPayload
   >({

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -38,13 +38,13 @@ import {
   mapFieldsToHeatingUpdate,
 } from "../lib/heating-mappers";
 import {
-  type Activity,
-  type ActivityUpdateInput,
+  type HeatingActivityModel,
+  type HeatingActivityUpdatePayload,
 } from "@/services/query/heating-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 
 interface ActivityActionsProps {
-  activity?: Activity;
+  activity?: HeatingActivityModel;
   isUpdating: boolean;
   onStatusUpdate: (status: string) => void;
   onToggleActive: (value: string | null) => void;
@@ -57,10 +57,10 @@ interface ActivityContentProps {
 }
 
 interface UseActivityActionsParams {
-  activity?: Activity;
+  activity?: HeatingActivityModel;
   form: UseFormReturn<ActivityItemFormValues>;
   updateActivity: (
-    input: ActivityUpdateInput & { is_active?: boolean },
+    input: HeatingActivityUpdatePayload & { is_active?: boolean },
   ) => Promise<any>;
   submitRejectActivity: (status: string) => Promise<any>;
 }
@@ -171,106 +171,116 @@ function useActivityActions({
   };
 }
 
-/* ---------------- Header Actions ---------------- */
+/* ---------------- HEADER ACTIONS ---------------- */
 
 const ANNOTATION_OPTIONS = [
   { label: "Enable", value: "enable" },
   { label: "Disable", value: "disable" },
 ];
 
-function ActivityActions({
-  activity,
-  isUpdating,
-  onStatusUpdate,
-  onToggleActive,
-}: ActivityActionsProps) {
-  return (
-    <div className="flex items-center gap-6">
-      {/* Annotation */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-bold text-muted-foreground">
-          Annotation:
-        </span>
+const ActivityActions = memo(
+  ({
+    activity,
+    isUpdating,
+    onStatusUpdate,
+    onToggleActive,
+  }: ActivityActionsProps) => {
+    return (
+      <div className="flex items-center gap-6">
+        {/* Annotation */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold text-muted-foreground">
+            Annotation:
+          </span>
 
-        <Select
-          value={activity?.is_active ? "enable" : "disable"}
-          onValueChange={onToggleActive}
-        >
-          <SelectTrigger className="min-w-24 h-8 cursor-pointer">
-            <SelectValue placeholder="Select">
-              {(value) =>
-                ANNOTATION_OPTIONS.find((opt) => opt.value === value)?.label ??
-                value
-              }
-            </SelectValue>
-          </SelectTrigger>
+          <Select
+            value={activity?.is_active ? "enable" : "disable"}
+            onValueChange={onToggleActive}
+          >
+            <SelectTrigger className="min-w-24 h-8 cursor-pointer">
+              <SelectValue placeholder="Select">
+                {(value) =>
+                  ANNOTATION_OPTIONS.find((opt) => opt.value === value)
+                    ?.label ?? value
+                }
+              </SelectValue>
+            </SelectTrigger>
 
-          <SelectContent className="min-w-24">
-            {ANNOTATION_OPTIONS.map((opt) => (
-              <SelectItem
-                key={opt.value}
-                value={opt.value}
-                className="cursor-pointer"
-              >
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Status */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-bold text-muted-foreground">Status:</span>
-
-        <Badge variant="warning" className="border-border h-8 rounded-lg">
-          <Info />
-          Invalid
-        </Badge>
-      </div>
-
-      {/* Actions */}
-      <Button
-        onClick={() => onStatusUpdate("SUBMITTED")}
-        disabled={isUpdating}
-        className="cursor-pointer"
-      >
-        Submit
-      </Button>
-
-      <Button
-        variant="destructive"
-        onClick={() => onStatusUpdate("REJECTED")}
-        disabled={isUpdating}
-        className="cursor-pointer"
-      >
-        Reject
-      </Button>
-    </div>
-  );
-}
-
-/* ---------------- Content ---------------- */
-
-function ActivityContent({ isLoading, fields, form }: ActivityContentProps) {
-  return (
-    <div className="flex-[0.35] h-full flex flex-col bg-background">
-      <ScrollArea className="flex-1 h-full">
-        <div className="p-6 md:p-8">
-          {isLoading ? (
-            <SkeletonComponent />
-          ) : (
-            <ActivityItemForm fields={fields} form={form} />
-          )}
+            <SelectContent className="min-w-24">
+              {ANNOTATION_OPTIONS.map((opt) => (
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value}
+                  className="cursor-pointer"
+                >
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-      </ScrollArea>
-    </div>
-  );
-}
 
-/* ---------------- Skeleton ---------------- */
+        {/* Status */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold text-muted-foreground">
+            Status:
+          </span>
 
-const SkeletonComponent = () => {
+          <Badge variant="warning" className="border-border h-8 rounded-lg">
+            <Info />
+            Invalid
+          </Badge>
+        </div>
+
+        {/* Actions */}
+        <Button
+          onClick={() => onStatusUpdate("SUBMITTED")}
+          disabled={isUpdating}
+          className="cursor-pointer"
+        >
+          Submit
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={() => onStatusUpdate("REJECTED")}
+          disabled={isUpdating}
+          className="cursor-pointer"
+        >
+          Reject
+        </Button>
+      </div>
+    );
+  },
+);
+
+ActivityActions.displayName = "ActivityActions";
+
+/* ---------------- CONTENT ---------------- */
+
+const ActivityContent = memo(
+  ({ isLoading, fields, form }: ActivityContentProps) => {
+    return (
+      <div className="flex-[0.35] h-full flex flex-col bg-background">
+        <ScrollArea className="flex-1 h-full">
+          <div className="p-6 md:p-8">
+            {isLoading ? (
+              <SkeletonComponent />
+            ) : (
+              <ActivityItemForm fields={fields} form={form} />
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  },
+);
+
+ActivityContent.displayName = "ActivityContent";
+
+/* ---------------- SKELETON ---------------- */
+
+const SkeletonComponent = memo(() => {
   return (
     <div className="space-y-6">
       {Array.from({ length: 6 }).map((_, i) => (
@@ -281,4 +291,6 @@ const SkeletonComponent = () => {
       ))}
     </div>
   );
-};
+});
+
+SkeletonComponent.displayName = "SkeletonComponent";

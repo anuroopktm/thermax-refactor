@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
-import { ChildActivityItemHeader } from "../components/activity-item/child/child-activity-item-header";
-import { ChildActivityItemPdfViewer } from "../components/activity-item/child/child-activity-item-pdf-viewer";
-import { ChildActivityItemForm } from "../components/activity-item/child/child-activity-item-form";
+import { ChildActivityModelHeader } from "../components/activity-item/child/child-activity-item-header";
+import { ChildActivityModelPdfViewer } from "../components/activity-item/child/child-activity-item-pdf-viewer";
+import { ChildActivityModelForm } from "../components/activity-item/child/child-activity-item-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useActivityItemDetail } from "@/services/query/transmitter-ocr/child-activities.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function ChildActivityItemView() {
+export function ChildActivityModelView() {
   const { itemId } = useParams<{ itemId: string }>();
   const { data: item, isLoading } = useActivityItemDetail(itemId);
 
@@ -14,12 +14,12 @@ export function ChildActivityItemView() {
 
   return (
     <div className="flex flex-col h-full">
-      <ChildActivityItemHeader itemName={itemName} />
+      <ChildActivityModelHeader itemName={itemName} />
 
       <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* PDF Viewer */}
         <div className="flex-[0.65] min-w-0 h-full border-r">
-          <ChildActivityItemPdfViewer />
+          <ChildActivityModelPdfViewer />
         </div>
 
         {/* Form */}
@@ -36,7 +36,7 @@ export function ChildActivityItemView() {
                   ))}
                 </div>
               ) : (
-                <ChildActivityItemForm fields={item?.fields} />
+                <ChildActivityModelForm fields={item?.fields} />
               )}
             </div>
           </ScrollArea>

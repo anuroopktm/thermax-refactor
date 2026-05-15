@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { NormalizedMessage } from "../types/chat.types";
+import type { NormalizedMessage } from "../types";
 import { AssistantMessage } from "./assistant-message";
 import { UserMessage } from "./user-message";
 

@@ -1,14 +1,14 @@
 import {
-  type Activity,
-  type ActivityWithCount,
+  type HeatingActivityModel as RawHeatingActivity,
+  type HeatingActivityResponse,
   type HeatingField,
   type Member as HeatingMember,
   type MemberWithCount,
 } from "../../../services/query/heating-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import { getInitials } from "@/lib/utils";
-import { type ActivityItem } from "@/components/shared/ocr/activity-card";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type ActivityModel } from "@/components/shared/ocr/activity-card";
+import { type Member } from "@/services/query/shared/types";
 import {
   type CostUsageResponse,
   type CostUsageModel,
@@ -16,16 +16,18 @@ import {
   type ActivityUsageModel,
   type ActivityUsageTopUserResponse,
   type ActivityUsageStatusStatsResponse,
-} from "@/services/query/heating-ocr/types/usage.types";
+} from "@/services/query/heating-ocr/types";
 
-export interface HeatingActivityItem extends ActivityItem {
-  template: Activity["template"];
+export interface HeatingActivityModel extends ActivityModel {
+  template: RawHeatingActivity["template"];
 }
 
 /**
- * Maps TBWES Activity Detail to DynamicForm fields
+ * Maps TBWES HeatingActivityModel Detail to DynamicForm fields
  */
-export function mapHeatingToFields(activity?: Activity): DynamicField[] {
+export function mapHeatingToFields(
+  activity?: RawHeatingActivity,
+): DynamicField[] {
   const rawFields = activity?.data?.field;
 
   if (!rawFields) return [];
@@ -48,7 +50,7 @@ export function mapHeatingToFields(activity?: Activity): DynamicField[] {
  * Maps Form values back to the API structure for updates
  */
 export function mapFieldsToHeatingUpdate(
-  originalActivity: Activity | undefined,
+  originalActivity: RawHeatingActivity | undefined,
   formValues: Record<string, string>,
 ): { data: { field: HeatingField[] | HeatingField[][] } } {
   const rawFields = originalActivity?.data?.field;
@@ -100,9 +102,11 @@ export function mapHeatingQueryFilters(params: URLSearchParams): {
 }
 
 /**
- * Maps raw API Activity to the UI model used by SharedActivityCard
+ * Maps raw API HeatingActivityModel to the UI model used by SharedActivityCard
  */
-export function mapToActivityCard(activity: Activity): HeatingActivityItem {
+export function mapToActivityCard(
+  activity: RawHeatingActivity,
+): HeatingActivityModel {
   return {
     id: activity.id,
     title: activity.title,
@@ -114,11 +118,11 @@ export function mapToActivityCard(activity: Activity): HeatingActivityItem {
 }
 
 /**
- * Maps the entire Activity list response
+ * Maps the entire HeatingActivityModel list response
  */
-export function mapHeatingActivitiesResponse(data: ActivityWithCount): {
+export function mapHeatingActivitiesResponse(data: HeatingActivityResponse): {
   total: number;
-  result: HeatingActivityItem[];
+  result: HeatingActivityModel[];
 } {
   return {
     total: data.total,
@@ -163,7 +167,7 @@ export function mapCostUsageData(data: CostUsageResponse): CostUsageModel[] {
 }
 
 /**
- * Maps raw API Activity Usage to UI model
+ * Maps raw API HeatingActivityModel Usage to UI model
  */
 export function mapActivityUsageData(
   data: ActivityUsageResponse,
@@ -190,7 +194,7 @@ export function mapTopUsersData(
 }
 
 /**
- * Maps raw API Activity Status Stats to UI model
+ * Maps raw API HeatingActivityModel Status Stats to UI model
  */
 export function mapActivityStatsData(
   data: ActivityUsageStatusStatsResponse,

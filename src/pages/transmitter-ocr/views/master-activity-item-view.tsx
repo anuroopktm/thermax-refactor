@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { MasterActivityItemHeader } from "../components/activity-item/master/master-activity-item-header";
+import { MasterActivityModelHeader } from "../components/activity-item/master/master-activity-item-header";
 import { MasterDataTable } from "../components/activity-item/master/master-data-table";
 import {
   useMasterActivity,
@@ -9,14 +9,14 @@ import {
 } from "@/services/query/transmitter-ocr/master-activities.service";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
-import type { MasterDataItem } from "@/services/query/transmitter-ocr/types";
+import type { MasterDataModel } from "@/services/query/transmitter-ocr/types";
 import { toast } from "sonner";
 
 interface FormValues {
-  records: Record<string, MasterDataItem>[];
+  records: Record<string, MasterDataModel>[];
 }
 
-export function MasterActivityItemView() {
+export function MasterActivityModelView() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useMasterActivity(id);
@@ -64,7 +64,7 @@ export function MasterActivityItemView() {
 
   return (
     <>
-      <MasterActivityItemHeader
+      <MasterActivityModelHeader
         itemName={itemName}
         onGlobalUnitChange={handleGlobalUnitChange}
         onSave={() => handleSave(getValues())}

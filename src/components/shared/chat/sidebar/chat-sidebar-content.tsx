@@ -5,7 +5,7 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 
-import type { Chat } from "../types/chat.types";
+import type { Chat } from "../types";
 import { ChatSidebarLoading } from "./chat-sidebar-loading";
 import { ChatSidebarItem } from "./chat-sidebar-item";
 

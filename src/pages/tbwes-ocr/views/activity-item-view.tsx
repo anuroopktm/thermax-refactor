@@ -105,7 +105,7 @@ function useActivityActions({ activity, form, updateActivity }: any) {
         ...getPayload(),
         status,
       });
-      toast.success(`Activity ${status.toLowerCase()} successfully`);
+      toast.success(`TbwesActivityModel ${status.toLowerCase()} successfully`);
     } catch {
       toast.error("Failed to update status");
     }
@@ -126,7 +126,7 @@ function useActivityActions({ activity, form, updateActivity }: any) {
   const handleSave = form.handleSubmit(async () => {
     try {
       await updateActivity(getPayload());
-      toast.success("Activity updated successfully");
+      toast.success("TbwesActivityModel updated successfully");
     } catch {
       toast.error("Failed to update activity");
     }

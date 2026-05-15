@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/empty";
 import { cn, formatStatus, getStatusVariant, formatDate } from "@/lib/utils";
 
-import { type ActivitySummaryModel } from "@/services/query/transmitter-ocr/types/usage.types";
+import { type ActivitySummaryModel } from "@/services/query/transmitter-ocr/types";
 
 interface ActivitySummaryTableProps {
   items: ActivitySummaryModel[];

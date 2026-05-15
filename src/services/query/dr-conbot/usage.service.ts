@@ -12,7 +12,7 @@ import type {
   ActivityUsageModel,
   TopUserModel,
   UsageLimitModel,
-} from "./types/usage.types";
+} from "./types";
 
 import {
   mapCostUsageData,

@@ -11,7 +11,7 @@ import type {
   ActivityModel,
   TokenUsageModel,
   TopUserModel,
-} from "./types/usage.types";
+} from "./types";
 import { salesEnablementKeys } from "./keys";
 import {
   mapCostData,

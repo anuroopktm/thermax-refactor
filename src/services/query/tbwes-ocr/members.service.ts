@@ -9,7 +9,7 @@ import {
   mapToMember,
 } from "@/pages/tbwes-ocr/lib/tbwes-mappers";
 import { tbwesOcrKeys } from "./keys";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 
 export const useTbwesMembers = (params?: {
   skip?: number;

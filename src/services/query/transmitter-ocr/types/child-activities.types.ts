@@ -8,7 +8,7 @@ interface User {
   id: number;
 }
 
-export interface ChildActivitiesItem {
+export interface ChildActivitiesModel {
   title: string;
   filename: string;
   pages_to_trim: string;
@@ -29,10 +29,10 @@ export interface ChildActivitiesItem {
 
 export interface ChildActivitiesResponse {
   total: number;
-  result: ChildActivitiesItem[];
+  result: ChildActivitiesModel[];
 }
 
-export interface ChildActivityItem {
+export interface ChildActivityModel {
   title: string;
   filename: string;
   data: Record<string, unknown>;
@@ -55,7 +55,7 @@ export interface ChildActivityItem {
   remarks?: string[];
 }
 
-export type ChildActivityResponse = ChildActivityItem;
+export type ChildActivityResponse = ChildActivityModel;
 
 export interface DynamicField {
   name: string;

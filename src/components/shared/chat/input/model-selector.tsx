@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { InputGroupButton } from "@/components/ui/input-group";
-import { MODELS, type Model } from "../types/input.types";
+import { MODELS, type Model } from "../types";
 import { TooltipWrapper } from "./tooltip-wrapper";
 
 interface Props {

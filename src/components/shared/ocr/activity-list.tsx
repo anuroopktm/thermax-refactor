@@ -1,4 +1,4 @@
-import { SharedActivityCard, type ActivityItem } from "./activity-card";
+import { SharedActivityCard, type ActivityModel } from "./activity-card";
 import {
   Empty,
   EmptyDescription,
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/empty";
 import { FileSearch } from "lucide-react";
 
-interface SharedActivityListProps<T extends ActivityItem = ActivityItem> {
+interface SharedActivityListProps<T extends ActivityModel = ActivityModel> {
   activities: T[];
   getHref?: (activity: T) => string;
   hideActions?: boolean;
@@ -19,7 +19,7 @@ interface SharedActivityListProps<T extends ActivityItem = ActivityItem> {
   onDelete?: (activity: T) => void;
 }
 
-export function SharedActivityList<T extends ActivityItem>({
+export function SharedActivityList<T extends ActivityModel>({
   activities = [],
   getHref,
   hideActions,

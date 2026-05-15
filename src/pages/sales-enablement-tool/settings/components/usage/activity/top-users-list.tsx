@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { useTopUsers } from "@/services/query/sales-enablement/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TopUserModel } from "@/services/query/sales-enablement/types/usage.types";
+import type { TopUserModel } from "@/services/query/sales-enablement/types";
 
 export function TopUsersList() {
   const { data: topUsers = [], isLoading: isTopUsersLoading } = useTopUsers();

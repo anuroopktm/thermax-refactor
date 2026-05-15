@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { heatingApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { Activity, ActivityWithCount, ActivityUpdateInput } from "./types";
+import type {
+  HeatingActivityModel,
+  HeatingActivityResponse,
+  HeatingActivityUpdatePayload,
+} from "./types";
 import { mapHeatingActivitiesResponse } from "@/pages/heating-ocr/lib/heating-mappers";
 
 export const useHeatingActivities = (params?: {
@@ -15,7 +19,7 @@ export const useHeatingActivities = (params?: {
   return useQuery({
     queryKey: ["heating-ocr", "activities", params],
     queryFn: async () => {
-      const { data } = await heatingApi.get<ActivityWithCount>(
+      const { data } = await heatingApi.get<HeatingActivityResponse>(
         "/api/heating_ocr/activity",
         { params },
       );
@@ -26,11 +30,11 @@ export const useHeatingActivities = (params?: {
 };
 
 export const useHeatingActivityDetail = (id?: string | number) => {
-  return useQuery<Activity, AxiosError<ApiError>>({
+  return useQuery<HeatingActivityModel, AxiosError<ApiError>>({
     queryKey: ["heating-ocr", "activity", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await heatingApi.get<Activity>(
+      const { data } = await heatingApi.get<HeatingActivityModel>(
         `/api/heating_ocr/activity/${id}`,
       );
       return data;
@@ -58,9 +62,9 @@ export const useHeatingCreateActivity = () => {
 
 export const useHeatingUpdateActivity = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation<void, AxiosError<ApiError>, ActivityUpdateInput>({
-    mutationFn: async (input: ActivityUpdateInput) => {
-      await heatingApi.patch<Activity>(
+  return useMutation<void, AxiosError<ApiError>, HeatingActivityUpdatePayload>({
+    mutationFn: async (input: HeatingActivityUpdatePayload) => {
+      await heatingApi.patch<HeatingActivityModel>(
         `/api/heating_ocr/activity/${id}`,
         input,
       );
@@ -126,11 +130,11 @@ export const useHeatingMappedActivityData = (
   id?: string | number,
   group?: string[],
 ) => {
-  return useQuery<Activity, AxiosError<ApiError>>({
+  return useQuery<HeatingActivityModel, AxiosError<ApiError>>({
     queryKey: ["heating-ocr", "mapped-activity", id, group],
     enabled: !!id && !!group,
     queryFn: async () => {
-      const { data } = await heatingApi.get<Activity>(
+      const { data } = await heatingApi.get<HeatingActivityModel>(
         `/api/heating_ocr/activity/${id}/mapped-activity`,
         { params: { group: JSON.stringify(group) } },
       );

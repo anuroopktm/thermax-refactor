@@ -6,5 +6,5 @@ export function TbwesActivityCrumb() {
   const { data: activity } = useTbwesActivityDetail(id);
 
   if (!activity) return "Loading...";
-  return activity.title || `Activity #${id}`;
+  return activity.title || `TbwesActivityModel #${id}`;
 }

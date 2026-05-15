@@ -44,14 +44,14 @@ interface UsageObject {
   totalSpent: number;
 }
 
-interface ChartItem {
+interface ChartModel {
   key: string;
   value: number;
   fill: string;
 }
 
 interface Props {
-  data?: ChartItem[] | UsageObject;
+  data?: ChartModel[] | UsageObject;
   isLoading?: boolean;
   isUpdating?: boolean;
   showEditButton?: boolean;
@@ -84,7 +84,7 @@ export function TokenUsage({
     return null;
   }, [data]);
 
-  const chartData = useMemo((): ChartItem[] | undefined => {
+  const chartData = useMemo((): ChartModel[] | undefined => {
     if (!data) return undefined;
 
     if (Array.isArray(data)) return data;
@@ -267,7 +267,7 @@ EmptyState.displayName = "EmptyState";
 
 /* ---------------- CHART LABEL ---------------- */
 
-const ChartLabel = ({ value }: { value: string | number }) => (
+const ChartLabel = memo(({ value }: { value: string | number }) => (
   <RechartsLabel
     content={({ viewBox }) => {
       if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) return null;
@@ -297,4 +297,6 @@ const ChartLabel = ({ value }: { value: string | number }) => (
       );
     }}
   />
-);
+));
+
+ChartLabel.displayName = "ChartLabel";

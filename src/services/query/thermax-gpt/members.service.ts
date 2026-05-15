@@ -13,7 +13,7 @@ import {
   normalizeThermaxMembers,
   normalizeThermaxMember,
 } from "@/pages/thermax-gpt/lib/settings-mappers";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import { thermaxGptKeys } from "./keys";
 
 export const useThermaxMembers = (

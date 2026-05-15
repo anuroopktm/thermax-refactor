@@ -4,9 +4,9 @@ import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
   ChatResponse,
-  ChatHistoryItem,
+  ChatHistoryModel,
   ChatHistoryResponse,
-  ChatItem,
+  ChatModel,
   ChatCreateResponse,
   ChatUpdatePayload,
   CreateChatHistoryPayload,
@@ -32,7 +32,7 @@ export const useDrConbotChat = ({
   limit?: number;
   search_term?: string;
 } = {}) => {
-  return useQuery<ChatResponse, AxiosError<ApiError>, ChatItem[]>({
+  return useQuery<ChatResponse, AxiosError<ApiError>, ChatModel[]>({
     queryKey: drConbotKeys.chat.list({ skip, limit, search_term }),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/chat", {
@@ -152,7 +152,7 @@ export const useDrConbotClearHistory = () => {
 
 export const useDrConbotCreateChatHistory = () => {
   return useMutation<
-    ChatHistoryItem,
+    ChatHistoryModel,
     AxiosError<ApiError>,
     CreateChatHistoryPayload
   >({

@@ -73,7 +73,7 @@ export function ActivityForm({
           className="cursor-pointer"
           disabled={isSaving}
         >
-          Create Activity
+          Create TbwesActivityModel
         </Button>
       </DialogFooter>
     </>

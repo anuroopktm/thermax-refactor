@@ -17,7 +17,7 @@ import {
   getInitials,
 } from "@/lib/utils";
 
-export interface ActivityItem {
+export interface ActivityModel {
   id: number;
   title: string;
   template?: string | null;
@@ -27,7 +27,7 @@ export interface ActivityItem {
   [key: string]: any;
 }
 
-interface SharedActivityCardProps<T extends ActivityItem = ActivityItem> {
+interface SharedActivityCardProps<T extends ActivityModel = ActivityModel> {
   activity: T;
   href?: string;
   hideActions?: boolean;
@@ -36,7 +36,7 @@ interface SharedActivityCardProps<T extends ActivityItem = ActivityItem> {
   onDelete?: (activity: T) => void;
 }
 
-export function SharedActivityCard<T extends ActivityItem>({
+export function SharedActivityCard<T extends ActivityModel>({
   activity,
   href,
   hideActions,

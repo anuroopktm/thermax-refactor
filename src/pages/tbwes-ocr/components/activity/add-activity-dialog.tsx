@@ -30,7 +30,7 @@ export function AddActivityDialog({
       loading: "Creating activity...",
       success: () => {
         onOpenChange(false);
-        return "Activity created successfully!";
+        return "TbwesActivityModel created successfully!";
       },
       error: (err) =>
         err.response?.data?.detail ||
@@ -42,7 +42,7 @@ export function AddActivityDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Create Activity</DialogTitle>
+          <DialogTitle>Create TbwesActivityModel</DialogTitle>
         </DialogHeader>
         <ActivityForm
           onSubmit={handleSubmit}

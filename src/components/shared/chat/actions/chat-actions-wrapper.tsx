@@ -5,7 +5,7 @@ import { ChatDeleteDialog } from "@/components/shared/chat/actions/chat-delete-d
 
 import { ChatActionsMenu } from "./chat-actions-menu";
 
-import type { Chat } from "@/components/shared/chat/types/chat.types";
+import type { Chat } from "@/components/shared/chat/types";
 
 interface ChatActionsWrapperProps {
   chat: Chat;

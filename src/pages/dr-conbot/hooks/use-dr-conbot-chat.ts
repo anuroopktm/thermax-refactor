@@ -8,7 +8,7 @@ import {
   useDrConbotChatHistoryStream,
 } from "@/services/query/dr-conbot/chat.service";
 import { PATHS } from "@/routes/constants/routes";
-import type { NormalizedMessage } from "@/components/shared/chat/types/chat.types";
+import type { NormalizedMessage } from "@/components/shared/chat/types";
 import type { ChatHistoryResponse } from "@/services/query/dr-conbot/types";
 import { drConbotKeys } from "@/services/query/dr-conbot/keys";
 

@@ -1,12 +1,12 @@
 import {
-  type Activity,
-  type ActivityWithCount,
+  type TbwesActivityModel,
+  type TbwesActivityResponse,
   type Member as TbwesMember,
   type MemberWithCount,
 } from "../../../services/query/tbwes-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import { getInitials } from "@/lib/utils";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import {
   type CostUsageResponse,
   type CostUsageModel,
@@ -14,7 +14,7 @@ import {
   type ActivityUsageModel,
   type ActivityUsageTopUserResponse,
   type ActivityUsageStatusStatsResponse,
-} from "@/services/query/tbwes-ocr/types/usage.types";
+} from "@/services/query/tbwes-ocr/types";
 
 /**
  * TBWES OCR Field structure from API
@@ -27,9 +27,11 @@ export interface TbwesField {
 }
 
 /**
- * Maps TBWES Activity Detail to DynamicForm fields
+ * Maps TBWES TbwesActivityModel Detail to DynamicForm fields
  */
-export function mapTbwesToFields(activity?: Activity): DynamicField[] {
+export function mapTbwesToFields(
+  activity?: TbwesActivityModel,
+): DynamicField[] {
   const rawFields = (activity?.data as Record<string, unknown>)?.field as
     | TbwesField[]
     | undefined;
@@ -50,7 +52,7 @@ export function mapTbwesToFields(activity?: Activity): DynamicField[] {
  * Maps Form values back to the API structure for updates
  */
 export function mapFieldsToTbwesUpdate(
-  originalActivity: Activity | undefined,
+  originalActivity: TbwesActivityModel | undefined,
   formValues: Record<string, string>,
 ): { data: { field: TbwesField[] } } {
   const rawFields = (originalActivity?.data as Record<string, unknown>)
@@ -88,9 +90,9 @@ export function mapTbwesQueryFilters(params: URLSearchParams): {
 }
 
 /**
- * Maps raw API Activity to the UI model used by SharedActivityCard
+ * Maps raw API TbwesActivityModel to the UI model used by SharedActivityCard
  */
-export function mapToActivityCard(activity: Activity) {
+export function mapToActivityCard(activity: TbwesActivityModel) {
   return {
     ...activity,
     id: activity.id,
@@ -101,9 +103,9 @@ export function mapToActivityCard(activity: Activity) {
 }
 
 /**
- * Maps the entire Activity list response
+ * Maps the entire TbwesActivityModel list response
  */
-export function mapTbwesActivitiesResponse(data: ActivityWithCount) {
+export function mapTbwesActivitiesResponse(data: TbwesActivityResponse) {
   return {
     ...data,
     result: data.result.map(mapToActivityCard),
@@ -147,7 +149,7 @@ export function mapCostUsageData(data: CostUsageResponse): CostUsageModel[] {
 }
 
 /**
- * Maps raw API Activity Usage to UI model
+ * Maps raw API TbwesActivityModel Usage to UI model
  */
 export function mapActivityUsageData(
   data: ActivityUsageResponse,
@@ -174,7 +176,7 @@ export function mapTopUsersData(
 }
 
 /**
- * Maps raw API Activity Status Stats to UI model
+ * Maps raw API TbwesActivityModel Status Stats to UI model
  */
 export function mapActivityStatsData(
   data: ActivityUsageStatusStatsResponse,

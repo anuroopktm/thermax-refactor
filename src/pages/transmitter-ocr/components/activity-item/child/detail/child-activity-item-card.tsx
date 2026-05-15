@@ -12,11 +12,11 @@ export interface ChildActivitySubItem {
   userInitials: string;
 }
 
-interface ChildActivityItemCardProps {
+interface ChildActivityModelCardProps {
   item: ChildActivitySubItem;
 }
 
-export function ChildActivityItemCard({ item }: ChildActivityItemCardProps) {
+export function ChildActivityModelCard({ item }: ChildActivityModelCardProps) {
   return (
     <Link to={item.id}>
       <Card className="hover:shadow-md transition">

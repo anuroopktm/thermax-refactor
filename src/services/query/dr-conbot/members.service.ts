@@ -13,7 +13,7 @@ import {
   normalizeDrConbotMembers,
   normalizeDrConbotMember,
 } from "@/pages/dr-conbot/lib/settings-mappers";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import { drConbotKeys } from "./keys";
 
 export const useDrConbotMembers = (

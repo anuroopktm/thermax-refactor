@@ -3,11 +3,11 @@ import { transmitterApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  MasterActivitiesItem,
+  MasterActivitiesModel,
   MasterActivitiesResponse,
-  MasterActivityItem,
+  MasterActivityModel,
   MasterActivityResponse,
-  MasterDataItem,
+  MasterDataModel,
 } from "./types";
 import { transmitterOcrKeys } from "./keys";
 
@@ -15,7 +15,7 @@ export const useMasterActivities = () => {
   return useQuery<
     MasterActivitiesResponse,
     AxiosError<ApiError>,
-    MasterActivitiesItem[]
+    MasterActivitiesModel[]
   >({
     queryKey: transmitterOcrKeys.master.activities.list(),
     queryFn: async () => {
@@ -32,7 +32,7 @@ export const useMasterActivity = (id?: string | number) => {
   return useQuery<
     MasterActivityResponse,
     AxiosError<ApiError>,
-    MasterActivityItem
+    MasterActivityModel
   >({
     queryKey: transmitterOcrKeys.master.activities.detail(id),
     queryFn: async () => {
@@ -108,9 +108,11 @@ export const useUpdateMasterData = (id: string | number) => {
   return useMutation<
     void,
     AxiosError<ApiError>,
-    { records: Record<string, MasterDataItem>[] }
+    { records: Record<string, MasterDataModel>[] }
   >({
-    mutationFn: async (data: { records: Record<string, MasterDataItem>[] }) => {
+    mutationFn: async (data: {
+      records: Record<string, MasterDataModel>[];
+    }) => {
       await transmitterApi.patch(`/transmitter_ocr/master_activity/${id}`, {
         master_data: data.records,
       });

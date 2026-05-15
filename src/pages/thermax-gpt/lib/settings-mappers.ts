@@ -1,4 +1,4 @@
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import {
   type ThermaxMember,
   type CreateThermaxMemberPayload,
@@ -12,7 +12,7 @@ import {
   type ActivityUsageModel,
   type TopUserResponse,
   type TopUserModel,
-} from "@/services/query/thermax-gpt/types/usage.types";
+} from "@/services/query/thermax-gpt/types";
 
 export function normalizeThermaxMember(m: ThermaxMember): Member {
   return {

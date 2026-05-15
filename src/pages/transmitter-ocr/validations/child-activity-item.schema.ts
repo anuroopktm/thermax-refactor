@@ -5,6 +5,6 @@ export const childActivityItemSchema = z.record(
   z.string().min(1, "This field is required"),
 );
 
-export type ChildActivityItemFormValues = z.infer<
+export type ChildActivityModelFormValues = z.infer<
   typeof childActivityItemSchema
 >;

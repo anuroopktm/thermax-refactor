@@ -28,7 +28,7 @@ export const transmitterOcrRoutes = [
           },
           {
             path: ":id",
-            element: <Pages.MasterActivityItemView />,
+            element: <Pages.MasterActivityModelView />,
             handle: {
               crumb: (params: Params) => `Activity #${params.id}`,
             },
@@ -64,7 +64,7 @@ export const transmitterOcrRoutes = [
               },
               {
                 path: ":itemId",
-                element: <Pages.ChildActivityItemView />,
+                element: <Pages.ChildActivityModelView />,
                 handle: {
                   crumb: (params: Params) => `Item #${params.itemId}`,
                 },

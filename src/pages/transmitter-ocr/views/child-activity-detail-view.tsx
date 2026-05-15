@@ -1,5 +1,5 @@
 import { ChildActivityDetailHeader } from "../components/activity-item/child/detail/child-activity-detail-header";
-import { ChildActivityItemList } from "../components/activity-item/child/detail/child-activity-item-list";
+import { ChildActivityModelList } from "../components/activity-item/child/detail/child-activity-item-list";
 import { type ChildActivitySubItem } from "../components/activity-item/child/detail/child-activity-item-card";
 
 const MOCK_SUB_ITEMS: ChildActivitySubItem[] = [
@@ -42,7 +42,7 @@ export function ChildActivityDetailView() {
         title={activityTitle}
         totalResults={MOCK_SUB_ITEMS.length}
       />
-      <ChildActivityItemList items={MOCK_SUB_ITEMS} />
+      <ChildActivityModelList items={MOCK_SUB_ITEMS} />
     </div>
   );
 }

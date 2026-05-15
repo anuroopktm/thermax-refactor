@@ -9,6 +9,7 @@ import { PlusCircle } from "lucide-react";
 import { AddActivityDialog } from "../components/activity/add-activity-dialog";
 import { ActivityFilters } from "../components/activity/activity-filters";
 import { mapTbwesQueryFilters } from "../lib/tbwes-mappers";
+import { type ActivityModel } from "@/components/shared/ocr/activity-card";
 
 export function ActivityView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -69,7 +70,7 @@ function ActivityContent({
 }: {
   isLoading: boolean;
   isEmpty: boolean;
-  activities: any[];
+  activities: ActivityModel[];
 }) {
   if (isLoading) {
     return (

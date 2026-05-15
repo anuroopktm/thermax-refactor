@@ -26,7 +26,7 @@ export interface ActivityData {
   field?: HeatingField[] | HeatingField[][];
 }
 
-export interface Activity {
+export interface HeatingActivityModel {
   title: string;
   filename: string;
   data: ActivityData | null;
@@ -44,12 +44,12 @@ export interface Activity {
   user: ReducedUser;
 }
 
-export interface ActivityWithCount {
+export interface HeatingActivityResponse {
   total: number;
-  result: Activity[];
+  result: HeatingActivityModel[];
 }
 
-export interface ActivityUpdateInput {
+export interface HeatingActivityUpdatePayload {
   title?: string | null;
   group?: string[] | null;
   data?: ActivityData | null;

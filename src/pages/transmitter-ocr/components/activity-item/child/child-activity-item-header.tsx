@@ -10,15 +10,15 @@ import { ArrowLeft, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
-interface ChildActivityItemHeaderProps {
+interface ChildActivityModelHeaderProps {
   itemName: string;
 }
 
 import { StickyHeader } from "@/components/shared/layout/sticky-header";
 
-export function ChildActivityItemHeader({
+export function ChildActivityModelHeader({
   itemName,
-}: ChildActivityItemHeaderProps) {
+}: ChildActivityModelHeaderProps) {
   const navigate = useNavigate();
 
   return (

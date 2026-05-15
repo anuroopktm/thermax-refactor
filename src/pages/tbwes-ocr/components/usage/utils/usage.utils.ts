@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import {
   type CostUsageModel,
   type LimitModel,
-} from "@/services/query/tbwes-ocr/types/usage.types";
+} from "@/services/query/tbwes-ocr/types";
 
 export function getDateParams(searchParams: URLSearchParams) {
   const year = parseInt(searchParams.get("year") ?? dayjs().year().toString());

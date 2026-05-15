@@ -1,13 +1,13 @@
 import {
-  type ChildActivityItem,
-  type MasterActivityItem,
+  type ChildActivityModel,
+  type MasterActivityModel,
   type MasterDataRecord,
   type Member as TransmitterMember,
   type ActivitySummaryModel,
   type RemarkModel,
-  type MasterDataItem,
+  type MasterDataModel,
 } from "@/services/query/transmitter-ocr/types";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import {
   type ActivityUsageResponse,
   type ActivityUsageModel,
@@ -17,8 +17,8 @@ import {
   type StatsModel,
   type TopUsersUsageResponse,
   type TopUserModel,
-} from "@/services/query/transmitter-ocr/types/usage.types";
-import { type ActivityItem } from "@/components/shared/ocr/activity-card";
+} from "@/services/query/transmitter-ocr/types";
+import { type ActivityModel } from "@/components/shared/ocr/activity-card";
 
 /**
  * Maps raw API Member to UI model
@@ -38,11 +38,11 @@ export function normalizeTransmitterMembers(data: any): Member[] {
 }
 
 /**
- * Maps MasterActivityItem to Shared ActivityItem
+ * Maps MasterActivityModel to Shared ActivityModel
  */
 export function mapMasterToActivityCard(
-  item: MasterActivityItem,
-): ActivityItem {
+  item: MasterActivityModel,
+): ActivityModel {
   return {
     ...item,
     id: item.id,
@@ -54,9 +54,11 @@ export function mapMasterToActivityCard(
 }
 
 /**
- * Maps ChildActivityItem to Shared ActivityItem
+ * Maps ChildActivityModel to Shared ActivityModel
  */
-export function mapChildToActivityCard(item: ChildActivityItem): ActivityItem {
+export function mapChildToActivityCard(
+  item: ChildActivityModel,
+): ActivityModel {
   return {
     ...item,
     id: item.id,
@@ -70,7 +72,7 @@ export function mapChildToActivityCard(item: ChildActivityItem): ActivityItem {
 /**
  * Maps API response for Child Activities
  */
-export function mapChildActivitiesResponse(data: any): ActivityItem[] {
+export function mapChildActivitiesResponse(data: any): ActivityModel[] {
   const result = data.result || [];
   return result.map(mapChildToActivityCard);
 }
@@ -79,13 +81,13 @@ export function mapChildActivitiesResponse(data: any): ActivityItem[] {
  * Maps API response for Master Activity Records to UI model
  */
 export function mapMasterDataRecords(data: unknown): MasterDataRecord[] {
-  const masterData = (data as MasterActivityItem)?.master_data || [];
+  const masterData = (data as MasterActivityModel)?.master_data || [];
   return masterData.map(
-    (item: Record<string, MasterDataItem>, index: number) => {
-      // master_data is Record<string, MasterDataItem>[]
+    (item: Record<string, MasterDataModel>, index: number) => {
+      // master_data is Record<string, MasterDataModel>[]
       // But mapMasterDataRecords expects a flat array of records.
       // Based on previous implementation:
-      const record = Object.values(item)[0] as MasterDataItem;
+      const record = Object.values(item)[0] as MasterDataModel;
       return {
         serialNo: index + 1,
         tagNumber: record["Tag number"] || "",
@@ -167,7 +169,7 @@ export function parseRemark(remark: string): RemarkModel {
 export function mapActivitySummary(data: any): ActivitySummaryModel[] {
   const result = data.result || [];
 
-  return result.map((item: ChildActivityItem) => {
+  return result.map((item: ChildActivityModel) => {
     const activityData = (item.data?.activity as Record<string, string>) || {};
 
     return {

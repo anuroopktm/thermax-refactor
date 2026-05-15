@@ -5,6 +5,6 @@ export const masterActivityItemSchema = z.record(
   z.string().min(1, "This field is required"),
 );
 
-export type MasterActivityItemFormValues = z.infer<
+export type MasterActivityModelFormValues = z.infer<
   typeof masterActivityItemSchema
 >;

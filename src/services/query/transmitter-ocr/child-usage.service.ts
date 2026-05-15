@@ -12,7 +12,7 @@ import type {
   ActivityUsageModel,
   StatsModel,
   TopUserModel,
-} from "./types/usage.types";
+} from "./types";
 import {
   mapCostUsageData,
   mapActivityUsageData,

@@ -2,9 +2,9 @@ import type {
   ChatSource,
   GeneratedMedia,
   NormalizedMessage,
-} from "@/components/shared/chat/types/chat.types";
+} from "@/components/shared/chat/types";
 
-export interface ChatItem {
+export interface ChatModel {
   id: number;
   title: string;
   type: string | null;
@@ -16,7 +16,7 @@ export interface ChatItem {
 
 export interface ChatResponse {
   total: number;
-  result: ChatItem[];
+  result: ChatModel[];
 }
 
 interface ChatDocument {
@@ -25,7 +25,7 @@ interface ChatDocument {
   chunk_length: number;
 }
 
-export interface ChatHistoryItem {
+export interface ChatHistoryModel {
   human: string;
   human_rewrite: string;
   document_ids: string[];
@@ -48,7 +48,7 @@ export interface ChatHistoryItem {
 
 export interface ChatHistoryResponse {
   total: number;
-  result: ChatHistoryItem[];
+  result: ChatHistoryModel[];
 }
 
 export interface ChatCreatePayload {

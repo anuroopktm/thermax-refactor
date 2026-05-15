@@ -1,8 +1,8 @@
-import type { NormalizedMessage } from "@/components/shared/chat/types/chat.types";
-import type { ChatHistoryItem } from "@/services/query/dr-conbot/types";
+import type { NormalizedMessage } from "@/components/shared/chat/types";
+import type { ChatHistoryModel } from "@/services/query/dr-conbot/types";
 
 export function normalizeHistoryMessages(
-  items: ChatHistoryItem[],
+  items: ChatHistoryModel[],
 ): NormalizedMessage[] {
   return [...items]
     .sort((a, b) => a.id - b.id)

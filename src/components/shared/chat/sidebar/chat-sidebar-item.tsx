@@ -1,6 +1,6 @@
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
-import type { Chat } from "../types/chat.types";
+import type { Chat } from "../types";
 
 interface ChatSidebarItemProps {
   chat: Chat;

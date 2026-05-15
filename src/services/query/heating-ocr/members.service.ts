@@ -9,7 +9,7 @@ import {
   mapToMember,
 } from "@/pages/heating-ocr/lib/heating-mappers";
 import { heatingOcrKeys } from "./keys";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 
 export const useHeatingMembers = (params?: {
   skip?: number;

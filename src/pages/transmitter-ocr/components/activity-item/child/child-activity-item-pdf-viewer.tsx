@@ -1,5 +1,5 @@
 import { ActivityPdfViewer } from "@/components/shared/ocr/activity-pdf-viewer";
 
-export function ChildActivityItemPdfViewer() {
+export function ChildActivityModelPdfViewer() {
   return <ActivityPdfViewer />;
 }

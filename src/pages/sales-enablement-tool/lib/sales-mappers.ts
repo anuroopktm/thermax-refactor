@@ -5,11 +5,11 @@ import {
   type ActivityModel,
   type Member as SalesMember,
 } from "@/services/query/sales-enablement/types";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import {
   type TopUserResponse,
   type TopUserModel,
-} from "@/services/query/sales-enablement/types/usage.types";
+} from "@/services/query/sales-enablement/types";
 
 /**
  * Maps Cost usage data from API to UI model

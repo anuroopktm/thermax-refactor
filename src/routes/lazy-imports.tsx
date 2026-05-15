@@ -69,9 +69,9 @@ export const MasterActivityView = lazy(() =>
     default: m.MasterActivityView,
   })),
 );
-export const MasterActivityItemView = lazy(() =>
+export const MasterActivityModelView = lazy(() =>
   import("@/pages/transmitter-ocr/views/master-activity-item-view").then(
-    (m) => ({ default: m.MasterActivityItemView }),
+    (m) => ({ default: m.MasterActivityModelView }),
   ),
 );
 export const MasterUsageView = lazy(() =>
@@ -89,9 +89,9 @@ export const ChildActivityDetailView = lazy(() =>
     (m) => ({ default: m.ChildActivityDetailView }),
   ),
 );
-export const ChildActivityItemView = lazy(() =>
+export const ChildActivityModelView = lazy(() =>
   import("@/pages/transmitter-ocr/views/child-activity-item-view").then(
-    (m) => ({ default: m.ChildActivityItemView }),
+    (m) => ({ default: m.ChildActivityModelView }),
   ),
 );
 export const ChildUsageView = lazy(() =>

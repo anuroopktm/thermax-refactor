@@ -14,7 +14,7 @@ export interface ReducedUser {
   id: number;
 }
 
-export interface Activity {
+export interface TbwesActivityModel {
   title: string;
   filename: string;
   data: Record<string, unknown> | null;
@@ -32,12 +32,12 @@ export interface Activity {
   user: ReducedUser;
 }
 
-export interface ActivityWithCount {
+export interface TbwesActivityResponse {
   total: number;
-  result: Activity[];
+  result: TbwesActivityModel[];
 }
 
-export interface ActivityUpdateInput {
+export interface TbwesActivityUpdatePayload {
   title?: string | null;
   data?: Record<string, unknown> | null;
   status?: ActivityStatus;

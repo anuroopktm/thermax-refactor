@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Sidebar, SidebarSeparator } from "@/components/ui/sidebar";
 import { ChatHistoryClearDialog } from "@/components/shared/chat/actions/chat-history-delete-dialog";
-import type { Chat } from "../types/chat.types";
+import type { Chat } from "../types";
 
 import { ChatSidebarHeader } from "./chat-sidebar-header";
 import { ChatSidebarContent } from "./chat-sidebar-content";

@@ -8,7 +8,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import type { Chat } from "../types/chat.types";
+import type { Chat } from "../types";
 
 interface ChatDeleteDialogProps {
   chat: Chat | null;

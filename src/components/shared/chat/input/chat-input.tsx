@@ -5,7 +5,7 @@ import { Field, FieldDescription } from "@/components/ui/field";
 import { ChatTextarea } from "./chat-textarea";
 import { InputActions } from "./input-actions";
 import { ChatFileUploadDialog } from "../upload/chat-file-upload-dialog";
-import { MODELS } from "../types/input.types";
+import { MODELS } from "../types";
 
 interface ChatInputProps {
   onSend: (content: string, modelId: string, isThinking: boolean) => void;

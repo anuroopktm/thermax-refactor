@@ -11,7 +11,7 @@ import type {
   CostUsageModel,
   ActivityUsageModel,
   LimitModel,
-} from "./types/usage.types";
+} from "./types";
 import {
   mapCostUsageData,
   mapActivityUsageData,

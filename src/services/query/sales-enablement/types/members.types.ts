@@ -1,4 +1,4 @@
-import { type Member } from "../../shared/types/members.types";
+import { type Member } from "../../shared/types";
 
 export type { Member };
 

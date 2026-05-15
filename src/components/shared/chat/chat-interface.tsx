@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { NormalizedMessage } from "./types/chat.types";
+import type { NormalizedMessage } from "./types";
 import { ChatMessages } from "./message/chat-message";
 import { ChatInput } from "./input/chat-input";
 

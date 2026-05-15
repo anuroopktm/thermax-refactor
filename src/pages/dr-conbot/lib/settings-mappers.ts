@@ -1,4 +1,4 @@
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import {
   type DrConbotMember,
   type CreateDrConbotMemberPayload,
@@ -12,7 +12,7 @@ import {
   type ActivityUsageModel,
   type TopUserResponse,
   type TopUserModel,
-} from "@/services/query/dr-conbot/types/usage.types";
+} from "@/services/query/dr-conbot/types";
 
 export function normalizeDrConbotMember(m: DrConbotMember): Member {
   return {

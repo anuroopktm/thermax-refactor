@@ -10,7 +10,7 @@ import { AddActivityDialog } from "../components/activity/add-activity-dialog";
 import { ActivityFilters } from "../components/activity/activity-filters";
 import {
   mapHeatingQueryFilters,
-  type HeatingActivityItem,
+  type HeatingActivityModel,
 } from "../lib/heating-mappers";
 import {
   Empty,
@@ -79,7 +79,7 @@ function ActivityContent({
 }: {
   isLoading: boolean;
   isEmpty: boolean;
-  activities: HeatingActivityItem[];
+  activities: HeatingActivityModel[];
 }) {
   if (isLoading) return <ActivitySkeleton />;
   if (isEmpty) return <ActivityEmpty />;

@@ -3,19 +3,19 @@ import { transmitterApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  ChildActivityItem,
+  ChildActivityModel,
   ChildActivityResponse,
   ChildActivitiesResponse,
 } from "./types";
 import { mapChildActivitiesResponse } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
-import { type ActivityItem } from "@/components/shared/ocr/activity-card";
+import { type ActivityModel } from "@/components/shared/ocr/activity-card";
 import { transmitterOcrKeys } from "./keys";
 
 export const useChildActivities = (masterId?: string | number) => {
   return useQuery<
     ChildActivitiesResponse,
     AxiosError<ApiError>,
-    ActivityItem[]
+    ActivityModel[]
   >({
     queryKey: transmitterOcrKeys.child.activities.list(),
     queryFn: async () => {
@@ -35,7 +35,7 @@ export const useActivityItemDetail = (id?: string | number) => {
   return useQuery<
     ChildActivityResponse,
     AxiosError<ApiError>,
-    ChildActivityItem
+    ChildActivityModel
   >({
     queryKey: transmitterOcrKeys.child.activities.detail(id),
     queryFn: async () => {

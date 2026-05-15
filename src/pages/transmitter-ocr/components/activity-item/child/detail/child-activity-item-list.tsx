@@ -1,17 +1,17 @@
 import {
-  ChildActivityItemCard,
+  ChildActivityModelCard,
   type ChildActivitySubItem,
 } from "./child-activity-item-card";
 
-interface ChildActivityItemListProps {
+interface ChildActivityModelListProps {
   items: ChildActivitySubItem[];
 }
 
-export function ChildActivityItemList({ items }: ChildActivityItemListProps) {
+export function ChildActivityModelList({ items }: ChildActivityModelListProps) {
   return (
     <div className="flex flex-col gap-3">
       {items.map((item) => (
-        <ChildActivityItemCard key={item.id} item={item} />
+        <ChildActivityModelCard key={item.id} item={item} />
       ))}
     </div>
   );

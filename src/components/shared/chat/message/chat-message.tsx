@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { ChatEmptyState } from "../chat-empty-state";
-import type { NormalizedMessage } from "../types/chat.types";
+import type { NormalizedMessage } from "../types";
 import { ChatMessageItem } from "./message-item";
 
 interface ChatMessagesProps {

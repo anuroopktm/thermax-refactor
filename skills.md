@@ -34,11 +34,29 @@ The project follows a **Feature-First** modular architecture. Each feature is se
     - API Responses: `[Name]Response` (e.g., `UserResponse`).
     - UI Models: `[Name]Model` (e.g., `UserModel`).
 
+### 📂 Type Organization & Barrel Exports
+- **Directory Structure**: All service types must live in a `types/` subdirectory within the module.
+- **Barrel Exports**: Each `types/` directory must contain an `index.ts` that re-exports all sibling type files.
+- **Strict Import Rule**: Always import types from the directory/index, never from the specific file.
+    - **❌ Avoid**: `import { User } from "./types/user.types";`
+    - **✅ Prefer**: `import { User } from "./types";`
+    - **✅ Prefer**: `import { Member } from "@/services/query/shared/types";`
+
 ### 🧹 Code Quality Standards
 - **Component Limits**: Keep components under ~300 lines.
 - **Hook Limits**: Keep hooks under ~200 lines.
 - **Single Responsibility**: Extract complex business logic into custom hooks.
 - **Import Order**: 1. React, 2. Third-party, 3. Shared/Internal, 4. Relative, 5. Styles.
+
+### 🧩 Internal Sub-components
+- **Pattern**: Split complex JSX (e.g., chart axis, empty states, modal fragments) into sub-components within the same file to improve readability.
+- **Rules**:
+    - **Location**: Define sub-components **outside** the main component function, preferably at the bottom of the file.
+    - **Visual Separators**: Use clear block comments to separate logic or groups of sub-components:
+      `/* ---------------- SECTION NAME ---------------- */`
+    - **Performance**: Wrap internal sub-components in `memo()` to optimize rendering.
+    - **Scope**: Keep them in the same file if they are "implementation details" not needed elsewhere.
+    - **Migration**: Move to a separate file only if the sub-component becomes reusable or the file exceeds ~300 lines.
 
 ---
 

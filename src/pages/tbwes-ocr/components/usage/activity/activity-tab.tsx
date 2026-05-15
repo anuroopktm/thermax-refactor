@@ -32,7 +32,7 @@ export function ActivityTab() {
           isLoading={isTopUsersLoading}
         />
         <UsageStatusCard
-          title="Activity Status"
+          title="TbwesActivityModel Status"
           data={mappedStats}
           isLoading={isStatsLoading}
         />

@@ -13,7 +13,7 @@ import {
   memberSchema,
   type MemberForm as MemberFormType,
 } from "@/lib/validations/members.schema";
-import type { Member } from "@/services/query/shared/types/members.types";
+import type { Member } from "@/services/query/shared/types";
 
 interface EditMemberDialogProps {
   member: Member;

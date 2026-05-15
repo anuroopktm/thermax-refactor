@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { tbwesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { Activity, ActivityWithCount, ActivityUpdateInput } from "./types";
+import type {
+  TbwesActivityModel,
+  TbwesActivityResponse,
+  TbwesActivityUpdatePayload,
+} from "./types";
 import { mapTbwesActivitiesResponse } from "@/pages/tbwes-ocr/lib/tbwes-mappers";
 
 export const useTbwesActivities = (params?: {
@@ -15,7 +19,7 @@ export const useTbwesActivities = (params?: {
   return useQuery({
     queryKey: ["tbwes-ocr", "activities", params],
     queryFn: async () => {
-      const { data } = await tbwesApi.get<ActivityWithCount>(
+      const { data } = await tbwesApi.get<TbwesActivityResponse>(
         "/api/tbwes_ocr/activity",
         { params },
       );
@@ -26,11 +30,11 @@ export const useTbwesActivities = (params?: {
 };
 
 export const useTbwesActivityDetail = (id?: string | number) => {
-  return useQuery<Activity, AxiosError<ApiError>>({
+  return useQuery<TbwesActivityModel, AxiosError<ApiError>>({
     queryKey: ["tbwes-ocr", "activity", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await tbwesApi.get<Activity>(
+      const { data } = await tbwesApi.get<TbwesActivityModel>(
         `/api/tbwes_ocr/activity/${id}`,
       );
       return data;
@@ -40,9 +44,9 @@ export const useTbwesActivityDetail = (id?: string | number) => {
 
 export const useTbwesCreateActivity = () => {
   const queryClient = useQueryClient();
-  return useMutation<Activity, AxiosError<ApiError>, FormData>({
+  return useMutation<TbwesActivityModel, AxiosError<ApiError>, FormData>({
     mutationFn: async (formData: FormData) => {
-      const { data } = await tbwesApi.post<Activity>(
+      const { data } = await tbwesApi.post<TbwesActivityModel>(
         "/api/tbwes_ocr/activity",
         formData,
         {
@@ -61,9 +65,13 @@ export const useTbwesCreateActivity = () => {
 
 export const useTbwesUpdateActivity = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation<Activity, AxiosError<ApiError>, ActivityUpdateInput>({
-    mutationFn: async (input: ActivityUpdateInput) => {
-      const { data } = await tbwesApi.patch<Activity>(
+  return useMutation<
+    TbwesActivityModel,
+    AxiosError<ApiError>,
+    TbwesActivityUpdatePayload
+  >({
+    mutationFn: async (input: TbwesActivityUpdatePayload) => {
+      const { data } = await tbwesApi.patch<TbwesActivityModel>(
         `/api/tbwes_ocr/activity/${id}`,
         input,
       );

@@ -8,7 +8,7 @@ import {
   normalizeTransmitterMembers,
   normalizeTransmitterMember,
 } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
-import { type Member } from "@/services/query/shared/types/members.types";
+import { type Member } from "@/services/query/shared/types";
 import { transmitterOcrKeys } from "./keys";
 
 export const useTransmitterMembers = (params?: {

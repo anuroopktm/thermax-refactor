@@ -6,7 +6,7 @@ export function ActivityCrumb() {
   const { data: activity } = useHeatingActivityDetail(id);
 
   if (!activity) return "Loading...";
-  return activity.title || `Activity #${id}`;
+  return activity.title || `HeatingActivityModel #${id}`;
 }
 
 export function PlateGroupCrumb() {

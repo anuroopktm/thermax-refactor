@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import {
   type CostUsageModel,
   type UsageLimitModel,
-} from "@/services/query/thermax-gpt/types/usage.types";
+} from "@/services/query/thermax-gpt/types";
 
 export function getDateParams(searchParams: URLSearchParams) {
   const year = searchParams.get("year") ?? dayjs().year().toString();

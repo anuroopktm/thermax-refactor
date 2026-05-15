@@ -13,7 +13,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 const SAMPLE_PDF =
   "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf";
 
-export function MasterActivityItemPdfViewer() {
+export function MasterActivityModelPdfViewer() {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);

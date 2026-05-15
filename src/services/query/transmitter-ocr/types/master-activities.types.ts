@@ -8,7 +8,7 @@ interface User {
   id: number;
 }
 
-export interface MasterActivitiesItem {
+export interface MasterActivitiesModel {
   title: string;
   filename: string;
   template: string;
@@ -26,10 +26,10 @@ export interface MasterActivitiesItem {
 
 export interface MasterActivitiesResponse {
   total: number;
-  result: MasterActivitiesItem[];
+  result: MasterActivitiesModel[];
 }
 
-export interface MasterDataItem {
+export interface MasterDataModel {
   "Tag number": string;
   "Model number": string;
   "Lower Calibration Range": number;
@@ -37,10 +37,10 @@ export interface MasterDataItem {
   "Calibration Range Unit": string;
 }
 
-export interface MasterActivityItem {
+export interface MasterActivityModel {
   title: string;
   filename: string;
-  master_data: Record<string, MasterDataItem>[];
+  master_data: Record<string, MasterDataModel>[];
   template: string;
   device_type: DeviceType;
   status: Status;
@@ -54,7 +54,7 @@ export interface MasterActivityItem {
   user: User;
 }
 
-export type MasterActivityResponse = MasterActivityItem;
+export type MasterActivityResponse = MasterActivityModel;
 
 export interface MasterDataRecord {
   serialNo: number;
