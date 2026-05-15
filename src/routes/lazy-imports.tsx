@@ -13,6 +13,10 @@ export const ThermaxGptPage = lazy(() => import("@/pages/thermax-gpt/page"));
 export const ThermaxGptSettingsPage = lazy(
   () => import("@/pages/thermax-gpt/settings/page"),
 );
+export const DrConbotPage = lazy(() => import("@/pages/dr-conbot/page"));
+export const DrConbotSettingsPage = lazy(
+  () => import("@/pages/dr-conbot/settings/page"),
+);
 export const TransmitterOcrPage = lazy(
   () => import("@/pages/transmitter-ocr/page"),
 );
@@ -46,6 +50,16 @@ export const ThermaxGptUsageView = lazy(() =>
 );
 export const ThermaxGptMembersView = lazy(() =>
   import("@/pages/thermax-gpt/settings/views/members-view").then((m) => ({
+    default: m.MembersView,
+  })),
+);
+export const DrConbotUsageView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/usage-view").then((m) => ({
+    default: m.UsageView,
+  })),
+);
+export const DrConbotMembersView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/members-view").then((m) => ({
     default: m.MembersView,
   })),
 );

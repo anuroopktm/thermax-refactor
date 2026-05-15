@@ -16,6 +16,7 @@ import { transmitterOcrRoutes } from "./config/transmitter-ocr.routes";
 import { heatingOcrRoutes } from "./config/heating-ocr.routes";
 import { tbwesOcrRoutes } from "./config/tbwes-ocr.routes";
 import { thermaxGptRoutes } from "./config/thermax-gpt.routes";
+import { drConbotRoutes } from "./config/dr-conbot.routes";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
                   ...heatingOcrRoutes,
                   ...tbwesOcrRoutes,
                   ...thermaxGptRoutes,
+                  ...drConbotRoutes,
                 ],
               },
             ],

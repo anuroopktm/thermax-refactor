@@ -28,6 +28,17 @@ export const PATHS = {
     },
   },
 
+  // Dr-Conbot
+  DR_CONBOT: {
+    ROOT: "/dr-conbot",
+    CHAT_ID: ":chatId",
+    SETTINGS: {
+      ROOT: "/dr-conbot/settings",
+      USAGE: "usage",
+      MEMBERS: "members",
+    },
+  },
+
   // Transmitter OCR
   TRANSMITTER_OCR: {
     ROOT: "/transmitter-ocr",
