@@ -6,7 +6,7 @@ import type { ChildActivityItem, ChildActivityResponse } from "./types";
 import { mapChildActivitiesResponse } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
 import { type ActivityItem } from "@/components/shared/ocr/activity-card";
 
-export const useChildActivities = (masterId?: string) => {
+export const useChildActivities = (masterId?: string | number) => {
   return useQuery<ChildActivityItem[], AxiosError<ApiError>, ActivityItem[]>({
     queryKey: ["transmitter-ocr", "child-activities", masterId],
     queryFn: async () => {
@@ -22,7 +22,7 @@ export const useChildActivities = (masterId?: string) => {
   });
 };
 
-export const useActivityItemDetail = (id?: string) => {
+export const useActivityItemDetail = (id?: string | number) => {
   return useQuery<
     ChildActivityResponse,
     AxiosError<ApiError>,

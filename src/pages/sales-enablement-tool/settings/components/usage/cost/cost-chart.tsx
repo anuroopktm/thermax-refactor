@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { CostChart as SharedCostChart } from "@/components/shared/usage/cost-chart";
-import { useCostData } from "@/services/query/usage/usage.service";
+import { useCostData } from "@/services/query/sales-enablement/usage.service";
 
 export function CostChart() {
   const [searchParams] = useSearchParams();

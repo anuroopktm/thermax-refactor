@@ -4,8 +4,8 @@ import { useChildActivityUsage } from "@/services/query/transmitter-ocr/child-us
 
 export function ActivityChart() {
   const [searchParams] = useSearchParams();
-  const year = searchParams.get("year") ?? undefined;
-  const month = searchParams.get("month") ?? undefined;
+  const year = searchParams.get("year") || undefined;
+  const month = searchParams.get("month") || undefined;
 
   const { data, isLoading } = useChildActivityUsage(year, month);
 

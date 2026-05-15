@@ -11,7 +11,7 @@ import { MemberForm } from "./member-form";
 import {
   memberSchema,
   type MemberForm as MemberFormType,
-} from "@/validations/members.schema";
+} from "@/pages/sales-enablement-tool/settings/validations/members.schema";
 
 interface AddMemberDialogProps {
   open: boolean;

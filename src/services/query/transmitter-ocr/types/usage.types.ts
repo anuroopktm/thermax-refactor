@@ -39,3 +39,16 @@ export interface TopUsersItem {
 export interface TopUsersUsage {
   result: TopUsersItem[];
 }
+
+export interface ActivitySummaryItem {
+  id: number;
+  serialNo: number;
+  tagNumber: string;
+  date: string;
+  modelNumber: string;
+  unit: string;
+  lowerRange: string;
+  upperRange: string;
+  status: string;
+  remarks: string[];
+}

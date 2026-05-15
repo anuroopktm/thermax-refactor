@@ -3,7 +3,7 @@ import { heatingApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type { Member, MemberWithCount } from "./types";
-import { type MemberForm } from "@/validations/members.schema";
+import { type MemberForm } from "@/pages/sales-enablement-tool/settings/validations/members.schema";
 import { mapHeatingMembersResponse } from "@/pages/heating-ocr/lib/heating-mappers";
 
 export const useHeatingMembers = (params?: {

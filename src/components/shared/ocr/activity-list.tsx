@@ -51,7 +51,7 @@ export function SharedActivityList<T extends ActivityItem>({
         <SharedActivityCard
           key={activity.id}
           activity={activity}
-          href={getHref?.(activity) || activity.id}
+          href={getHref?.(activity) || String(activity.id)}
           hideActions={hideActions}
           hideStatus={hideStatus}
           onEdit={onEdit}

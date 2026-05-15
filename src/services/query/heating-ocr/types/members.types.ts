@@ -3,7 +3,7 @@ export type MemberRole = "OWNER" | "MEMBER";
 export interface Member {
   user_id: number;
   role: MemberRole;
-  id: string;
+  id: number;
   is_active: boolean;
   created_on: string;
   created_by: number;

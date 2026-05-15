@@ -11,7 +11,7 @@ interface Props {
 export function AppCard({ title, description, imageUrl, path }: Props) {
   return (
     <Link to={path} className="group">
-      <Card className="cursor-pointer overflow-hidden pt-0 transition-all duration-200 group-hover:shadow-lg group-hover:ring-1 group-hover:ring-primary">
+      <Card className="h-full cursor-pointer overflow-hidden pt-0 transition-all duration-200 group-hover:shadow-lg group-hover:ring-1 group-hover:ring-primary">
         {/* Image */}
         <div className="aspect-4/3 w-full overflow-hidden">
           <img

@@ -10,7 +10,7 @@ import type {
 } from "./types";
 
 import { normalizeThermaxMembers } from "@/pages/thermax-gpt/lib/settings-mappers";
-import { type Member } from "@/services/query/members/members.types";
+import { type Member } from "@/services/query/sales-enablement/types/members.types";
 
 export const useThermaxMembers = (
   skip = 0,

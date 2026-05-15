@@ -6,17 +6,15 @@ import type {
   CostUsageResponse,
   ActivityUsageResponse,
   TopUsersUsage,
-  TopUsersItem,
   StatsUsage,
-  StatsItem,
   TokenUsage,
 } from "./types";
 import {
   mapCostUsageData,
-  extractResult,
   mapActivityUsageData,
 } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
 import dayjs from "dayjs";
+import type { StatusItem } from "@/components/shared/usage/usage-status-card";
 
 export const useChildCostUsage = (
   year: string = dayjs().year().toString(),
@@ -115,7 +113,7 @@ export const useChildActivityStats = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<StatsUsage, AxiosError<ApiError>, StatsItem[]>({
+  return useQuery<StatsUsage, AxiosError<ApiError>, StatusItem[]>({
     queryKey: ["transmitter-ocr", "child-activity-stats", year, month],
     queryFn: async () => {
       const { data } = await transmitterApi.get(
@@ -127,7 +125,11 @@ export const useChildActivityStats = (
 
       return data;
     },
-    select: (data) => data?.result,
+    select: (data) =>
+      data?.result.map((item) => ({
+        name: item.stat.replaceAll("_", " "),
+        value: item.activity_count,
+      })),
   });
 };
 
@@ -135,7 +137,7 @@ export const useChildTopUsers = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<TopUsersUsage, AxiosError<ApiError>, TopUsersItem[]>({
+  return useQuery<TopUsersUsage, AxiosError<ApiError>, StatusItem[]>({
     queryKey: ["transmitter-ocr", "child-top-users", year, month],
     queryFn: async () => {
       const { data } = await transmitterApi.get(
@@ -147,6 +149,10 @@ export const useChildTopUsers = (
 
       return data;
     },
-    select: (data) => data?.result,
+    select: (data) =>
+      data?.result.map((item) => ({
+        name: item.name,
+        value: item.activity,
+      })),
   });
 };

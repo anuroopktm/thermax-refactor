@@ -14,7 +14,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { useTokenUsage } from "@/services/query/usage/usage.service";
+import { useTokenUsage } from "@/services/query/sales-enablement/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const pieChartConfig = {

@@ -5,7 +5,6 @@ import {
   type HeatingField,
 } from "../../../services/query/heating-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
-import dayjs from "dayjs";
 import { getInitials } from "@/lib/utils";
 import { type ActivityItem } from "@/components/shared/ocr/activity-card";
 
@@ -89,7 +88,7 @@ export function mapHeatingQueryFilters(params: URLSearchParams) {
  */
 export function mapToActivityCard(activity: Activity): HeatingActivityItem {
   return {
-    id: String(activity.id),
+    id: activity.id,
     title: activity.title,
     createdAt: activity.created_on,
     status: activity.status.replace(/_/g, " "),
@@ -114,7 +113,7 @@ export function mapHeatingActivitiesResponse(data: ActivityWithCount) {
 export function mapToMember(member: Member & { name: string; email: string }) {
   return {
     ...member,
-    id: String(member.id),
+    id: member.id,
     role: member.role.toLowerCase() as "owner" | "member" | "viewer",
   };
 }

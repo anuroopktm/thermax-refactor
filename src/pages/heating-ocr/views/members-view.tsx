@@ -13,10 +13,10 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member as SharedMember } from "@/services/query/members/members.types";
+import { type Member as SharedMember } from "@/services/query/sales-enablement/types/members.types";
 import { toast } from "sonner";
 import { mapHeatingQueryFilters } from "../lib/heating-mappers";
-import { type MemberForm } from "@/validations/members.schema";
+import { type MemberForm } from "@/pages/sales-enablement-tool/settings/validations/members.schema";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);

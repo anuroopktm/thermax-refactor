@@ -7,7 +7,7 @@ import type {
   MasterActivitiesResponse,
   MasterActivityItem,
   MasterActivityResponse,
-} from "./types/master-activities.types";
+} from "./types";
 
 export const useMasterActivities = () => {
   return useQuery<
@@ -26,7 +26,7 @@ export const useMasterActivities = () => {
   });
 };
 
-export const useMasterActivity = (id?: string) => {
+export const useMasterActivity = (id?: string | number) => {
   return useQuery<
     MasterActivityResponse,
     AxiosError<ApiError>,
@@ -61,7 +61,7 @@ export const useCreateMasterActivity = () => {
   });
 };
 
-export const useUpdateMasterActivity = (id: string) => {
+export const useUpdateMasterActivity = (id: string | number) => {
   const queryClient = useQueryClient();
 
   return useMutation<void, AxiosError<ApiError>, FormData>({
@@ -89,8 +89,8 @@ export const useUpdateMasterActivity = (id: string) => {
 export const useDeleteMasterActivity = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<void, AxiosError<ApiError>, string>({
-    mutationFn: async (id: string) =>
+  return useMutation<void, AxiosError<ApiError>, string | number>({
+    mutationFn: async (id: string | number) =>
       await transmitterApi.delete(`/transmitter_ocr/master_activity/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({

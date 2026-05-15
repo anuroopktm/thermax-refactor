@@ -26,12 +26,12 @@ export function ActivityTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <UsageStatusCard
           title="Top Master Users Status"
-          data={topUsers}
+          data={topUsers || []}
           isLoading={isTopUsersLoading}
         />
         <UsageStatusCard
           title="Master Activity Status"
-          data={stats}
+          data={stats || []}
           isLoading={isStatsLoading}
         />
       </div>

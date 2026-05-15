@@ -3,7 +3,6 @@ import {
   type ActivityWithCount,
 } from "../../../services/query/tbwes-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
-import dayjs from "dayjs";
 import { getInitials } from "@/lib/utils";
 
 /**
@@ -78,7 +77,7 @@ export function mapTbwesQueryFilters(params: URLSearchParams) {
 export function mapToActivityCard(activity: Activity) {
   return {
     ...activity,
-    id: String(activity.id),
+    id: activity.id,
     createdAt: activity.created_on,
     status: activity.status.replace(/_/g, " "),
     userInitials: getInitials(activity.user?.name),
@@ -101,7 +100,7 @@ export function mapTbwesActivitiesResponse(data: ActivityWithCount) {
 export function mapToMember(member: any) {
   return {
     ...member,
-    id: String(member.id),
+    id: member.id,
     role: member.role.toUpperCase() as "OWNER" | "MEMBER" | "VIEWER",
   };
 }

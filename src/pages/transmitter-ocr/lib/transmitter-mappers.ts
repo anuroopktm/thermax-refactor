@@ -2,6 +2,8 @@ import {
   type ActivityUsageItem,
   type ChildActivityItem,
   type CostUsageItem,
+  type MasterActivityItem,
+  type MasterDataRecord,
 } from "@/services/query/transmitter-ocr/types";
 import { type ActivityItem } from "@/components/shared/ocr/activity-card";
 

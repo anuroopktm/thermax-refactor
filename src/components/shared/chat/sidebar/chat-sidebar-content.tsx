@@ -33,7 +33,7 @@ export function ChatSidebarContent({
           {isLoading ? (
             <ChatSidebarLoading />
           ) : (
-            chats.map((chat) => (
+            chats?.map((chat) => (
               <ChatSidebarItem
                 key={chat.id}
                 chat={chat}

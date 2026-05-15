@@ -17,6 +17,6 @@ export const useActivitySummary = (childId?: string) => {
       );
       return data;
     },
-    select: (data) => extractResult<ActivitySummaryItem>(data),
+    select: (data) => extractResult(data),
   });
 };

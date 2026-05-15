@@ -18,7 +18,7 @@ import {
 } from "@/lib/utils";
 
 export interface ActivityItem {
-  id: string;
+  id: number;
   title: string;
   template?: string | null;
   createdAt?: string;
@@ -67,8 +67,8 @@ export function SharedActivityCard<T extends ActivityItem>({
         </div>
 
         {!hideStatus && (
-          <Badge variant={getStatusVariant(activity.status)}>
-            {formatStatus(activity.status)}
+          <Badge variant={getStatusVariant(activity.status || "Completed")}>
+            {formatStatus(activity.status || "Completed")}
           </Badge>
         )}
 

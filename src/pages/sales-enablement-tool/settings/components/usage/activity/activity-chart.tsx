@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { ActivityChart as SharedActivityChart } from "@/components/shared/usage/activity-chart";
-import { useActivityData } from "@/services/query/usage/usage.service";
+import { useActivityData } from "@/services/query/sales-enablement/usage.service";
 
 export function ActivityChart() {
   const [searchParams] = useSearchParams();
@@ -11,6 +11,7 @@ export function ActivityChart() {
 
   const mappedData = dailyData?.map((item) => ({
     ...item,
+    value: item.questions,
     activity: item.questions,
   }));
 

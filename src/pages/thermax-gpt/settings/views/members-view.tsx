@@ -12,7 +12,7 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/members/members.types";
+import { type Member } from "@/services/query/sales-enablement/types/members.types";
 import { toast } from "sonner";
 
 export function MembersView() {

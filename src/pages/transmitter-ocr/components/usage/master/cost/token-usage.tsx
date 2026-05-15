@@ -6,8 +6,8 @@ import { useMasterTokenUsage } from "@/services/query/transmitter-ocr/master-usa
 export function TokenUsage() {
   const [searchParams] = useSearchParams();
 
-  const year = searchParams.get("year");
-  const monthName = searchParams.get("month");
+  const year = searchParams.get("year") || undefined;
+  const monthName = searchParams.get("month") || "";
   const monthIndex = MONTHS.indexOf(monthName);
   const month = monthIndex !== -1 ? (monthIndex + 1).toString() : undefined;
 

@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import api from "@/services/interceptor";
+import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { MemberForm } from "@/validations/members.schema";
+import type { MemberForm } from "@/pages/sales-enablement-tool/settings/validations/members.schema";
 import type {
   Member,
   CreateMemberResponse,
   UpdateMemberResponse,
   DeleteMemberResponse,
-} from "./members.types";
+} from "./types";
 
 export const useMembers = () => {
   return useQuery<Member[], AxiosError<ApiError>>({
     queryKey: ["members"],
     queryFn: async () => {
-      const { data } = await api.get<Member[]>("/members");
+      const { data } = await salesApi.get<Member[]>("/members");
       return data;
     },
   });
@@ -24,7 +24,10 @@ export const useCreateMember = () => {
   const queryClient = useQueryClient();
   return useMutation<CreateMemberResponse, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
-      const { data } = await api.post<CreateMemberResponse>("/members", member);
+      const { data } = await salesApi.post<CreateMemberResponse>(
+        "/members",
+        member,
+      );
       return data;
     },
     onSuccess: () => {
@@ -33,11 +36,11 @@ export const useCreateMember = () => {
   });
 };
 
-export const useUpdateMember = (id: string) => {
+export const useUpdateMember = (id: string | number) => {
   const queryClient = useQueryClient();
   return useMutation<UpdateMemberResponse, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
-      const { data } = await api.post<UpdateMemberResponse>(
+      const { data } = await salesApi.post<UpdateMemberResponse>(
         `/members/${id}`,
         member,
       );
@@ -51,9 +54,13 @@ export const useUpdateMember = (id: string) => {
 
 export const useDeleteMember = () => {
   const queryClient = useQueryClient();
-  return useMutation<DeleteMemberResponse, AxiosError<ApiError>, string>({
-    mutationFn: async (id: string) => {
-      const { data } = await api.post<DeleteMemberResponse>(
+  return useMutation<
+    DeleteMemberResponse,
+    AxiosError<ApiError>,
+    string | number
+  >({
+    mutationFn: async (id: string | number) => {
+      const { data } = await salesApi.post<DeleteMemberResponse>(
         `/members/${id}/delete`,
         {},
       );

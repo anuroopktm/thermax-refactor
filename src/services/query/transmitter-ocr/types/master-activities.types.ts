@@ -15,7 +15,7 @@ export interface MasterActivitiesItem {
   device_type: DeviceType;
   status: Status;
   is_extracted: boolean;
-  id: string;
+  id: number;
   user_id: number;
   price: number;
   is_active: boolean;
@@ -45,7 +45,7 @@ export interface MasterActivityItem {
   device_type: DeviceType;
   status: Status;
   is_extracted: boolean;
-  id: string;
+  id: number;
   user_id: number;
   price: number;
   is_active: boolean;
@@ -55,3 +55,12 @@ export interface MasterActivityItem {
 }
 
 export type MasterActivityResponse = MasterActivityItem;
+
+export interface MasterDataRecord {
+  serialNo: number;
+  tagNumber: string;
+  modelNumber: string;
+  lowerRange: string;
+  upperRange: string;
+  unit: string;
+}

@@ -51,6 +51,15 @@ export interface ChildActivityItem {
   last_modified_on: string;
   user: User;
   master_title: string;
+  fields: DynamicField[];
 }
 
 export type ChildActivityResponse = ChildActivityItem;
+
+export interface DynamicField {
+  name: string;
+  label: string;
+  value: string;
+  confidence?: number;
+  message?: string;
+}

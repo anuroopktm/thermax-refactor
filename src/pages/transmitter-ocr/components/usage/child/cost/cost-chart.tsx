@@ -4,8 +4,8 @@ import { useChildCostUsage } from "@/services/query/transmitter-ocr/child-usage.
 
 export function CostChart() {
   const [searchParams] = useSearchParams();
-  const year = searchParams.get("year");
-  const month = searchParams.get("month");
+  const year = searchParams.get("year") || undefined;
+  const month = searchParams.get("month") || undefined;
 
   const { data, isLoading } = useChildCostUsage(year, month);
 

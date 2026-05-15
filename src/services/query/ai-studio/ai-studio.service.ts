@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ssoApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { AppItem, AppListResponse } from "./ai-studio.types";
+import type { AppItem, AppListResponse } from "./types";
 
 const appMetadata: Record<string, { imageUrl: string; path: string }> = {
   "Sales Enablement Tool": {
