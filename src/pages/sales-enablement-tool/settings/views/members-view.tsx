@@ -12,21 +12,22 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import { type Member } from "@/services/query/shared/types/members.types";
 import { toast } from "sonner";
+import { type MemberForm } from "@/lib/validations/members.schema";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [deletingMember, setDeletingMember] = useState<Member | null>(null);
 
-  const { data: members, isLoading } = useMembers();
+  const { data: members = [], isLoading } = useMembers();
 
   const createMutation = useCreateMember();
   const updateMutation = useUpdateMember(editingMember?.id || "");
   const deleteMutation = useDeleteMember();
 
-  const handleCreate = async (data: any) => {
+  const handleCreate = async (data: MemberForm) => {
     toast.promise(createMutation.mutateAsync(data), {
       loading: "Adding member...",
       success: () => {
@@ -37,7 +38,7 @@ export function MembersView() {
     });
   };
 
-  const handleUpdate = async (data: any) => {
+  const handleUpdate = async (data: MemberForm) => {
     toast.promise(updateMutation.mutateAsync(data), {
       loading: "Updating member...",
       success: () => {

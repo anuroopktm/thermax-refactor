@@ -12,8 +12,8 @@ import { MemberForm } from "./member-form";
 import {
   memberSchema,
   type MemberForm as MemberFormType,
-} from "@/pages/sales-enablement-tool/settings/validations/members.schema";
-import type { Member } from "@/services/query/sales-enablement/types/members.types";
+} from "@/lib/validations/members.schema";
+import type { Member } from "@/services/query/shared/types/members.types";
 
 interface EditMemberDialogProps {
   member: Member;

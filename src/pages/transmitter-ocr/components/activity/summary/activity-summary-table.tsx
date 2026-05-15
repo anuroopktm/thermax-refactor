@@ -17,10 +17,10 @@ import {
 } from "@/components/ui/empty";
 import { cn, formatStatus, getStatusVariant, formatDate } from "@/lib/utils";
 
-import { type ActivitySummaryItem } from "@/services/query/transmitter-ocr/types";
+import { type ActivitySummaryModel } from "@/services/query/transmitter-ocr/types/usage.types";
 
 interface ActivitySummaryTableProps {
-  items: ActivitySummaryItem[];
+  items: ActivitySummaryModel[];
   isLoading?: boolean;
 }
 
@@ -138,21 +138,9 @@ const EmptyStateRow = () => {
   );
 };
 
-/* ---------------- Helpers ---------------- */
-
-const parseRemark = (remark: string) => {
-  const isError = remark.includes("No value") || remark.includes("Invalid");
-
-  const [rawKey, ...valueParts] = remark.split(":");
-  const key = rawKey?.trim();
-  const value = valueParts.join(":")?.trim();
-
-  return { key, value, isError };
-};
-
 /* ---------------- Row ---------------- */
 
-const ActivitySummaryRow = ({ item }: { item: ActivitySummaryItem }) => {
+const ActivitySummaryRow = ({ item }: { item: ActivitySummaryModel }) => {
   return (
     <TableRow className="hover:bg-muted/20 transition-colors border-b last:border-0">
       <TableCell className="px-6 py-4">{item.serialNo}</TableCell>
@@ -185,24 +173,23 @@ const ActivitySummaryRow = ({ item }: { item: ActivitySummaryItem }) => {
 
       <TableCell className="px-6 py-4">
         <div className="space-y-1">
-          {item.remarks.map((remark, idx) => {
-            const { key, value, isError } = parseRemark(remark);
-
-            return (
-              <div
-                key={idx}
-                className="grid grid-cols-[auto_1fr] gap-x-2 text-[11px] leading-snug"
+          {item.remarks.map((remark, idx) => (
+            <div
+              key={idx}
+              className="grid grid-cols-[auto_1fr] gap-x-2 text-[11px] leading-snug"
+            >
+              <span
+                className={cn(
+                  "font-semibold",
+                  remark.isError && "text-destructive",
+                )}
               >
-                <span
-                  className={cn("font-semibold", isError && "text-destructive")}
-                >
-                  {key}
-                  {value ? ":" : ""}
-                </span>
-                <span>{value || "-"}</span>
-              </div>
-            );
-          })}
+                {remark.key}
+                {remark.value ? ":" : ""}
+              </span>
+              <span>{remark.value || "-"}</span>
+            </div>
+          ))}
         </div>
       </TableCell>
     </TableRow>

@@ -14,6 +14,7 @@ import type {
   ChatCreatePayload,
 } from "./types";
 import { normalizeHistoryMessages } from "@/pages/dr-conbot/lib/chat-mappers";
+import { drConbotKeys } from "./keys";
 
 interface StreamCallbacks {
   onStart?: () => void;
@@ -32,7 +33,7 @@ export const useDrConbotChat = ({
   search_term?: string;
 } = {}) => {
   return useQuery<ChatResponse, AxiosError<ApiError>, ChatItem[]>({
-    queryKey: ["dr-conbot", "chat", "list", skip, limit, search_term],
+    queryKey: drConbotKeys.chat.list({ skip, limit, search_term }),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/chat", {
         params: {
@@ -58,7 +59,7 @@ export const useDrConbotChatMessages = (
     AxiosError<ApiError>,
     NormalizedMessage[]
   >({
-    queryKey: ["dr-conbot", "chat", "messages", chatId],
+    queryKey: drConbotKeys.chat.messages(chatId),
     queryFn: async () => {
       const { data } = await conbotApi.get(
         `/doctor_conbot/chat/${chatId}/chat_history`,
@@ -92,8 +93,7 @@ export const useDrConbotCreateChat = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["dr-conbot", "chat", "list"],
-        exact: false,
+        queryKey: drConbotKeys.chat.list(),
       });
     },
   });
@@ -103,25 +103,18 @@ export const useDrConbotUpdateChat = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
-    ChatItem,
+    void,
     AxiosError<ApiError>,
     { chatId: string | number; payload: ChatUpdatePayload }
   >({
     mutationFn: async ({ chatId, payload }) => {
-      const { data } = await conbotApi.patch(
-        `/doctor_conbot/chat/${chatId}`,
-        null,
-        {
-          params: payload,
-        },
-      );
-
-      return data;
+      await conbotApi.patch(`/doctor_conbot/chat/${chatId}`, null, {
+        params: payload,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["dr-conbot", "chat", "list"],
-        exact: false,
+        queryKey: drConbotKeys.chat.list(),
       });
     },
   });
@@ -132,14 +125,11 @@ export const useDrConbotDeleteChat = () => {
 
   return useMutation<void, AxiosError<ApiError>, string | number>({
     mutationFn: async (chatId) => {
-      const { data } = await conbotApi.delete(`/doctor_conbot/chat/${chatId}`);
-
-      return data;
+      await conbotApi.delete(`/doctor_conbot/chat/${chatId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["dr-conbot", "chat", "list"],
-        exact: false,
+        queryKey: drConbotKeys.chat.list(),
       });
     },
   });
@@ -150,14 +140,11 @@ export const useDrConbotClearHistory = () => {
 
   return useMutation<void, AxiosError<ApiError>, void>({
     mutationFn: async () => {
-      const { data } = await conbotApi.delete("/doctor_conbot/chat");
-
-      return data;
+      await conbotApi.delete("/doctor_conbot/chat");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["dr-conbot", "chat", "list"],
-        exact: false,
+        queryKey: drConbotKeys.chat.list(),
       });
     },
   });
@@ -184,7 +171,6 @@ export const useDrConbotCreateChatHistory = () => {
 
 export const useDrConbotChatHistoryStream = async (
   chatId: string,
-  chatHistoryId: string | number,
   model: string,
   thinking: boolean,
   human: string,

@@ -1,12 +1,22 @@
 import {
   type Activity,
   type ActivityWithCount,
-  type Member,
   type HeatingField,
+  type Member as HeatingMember,
+  type MemberWithCount,
 } from "../../../services/query/heating-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import { getInitials } from "@/lib/utils";
 import { type ActivityItem } from "@/components/shared/ocr/activity-card";
+import { type Member } from "@/services/query/shared/types/members.types";
+import {
+  type CostUsageResponse,
+  type CostUsageModel,
+  type ActivityUsageResponse,
+  type ActivityUsageModel,
+  type ActivityUsageTopUserResponse,
+  type ActivityUsageStatusStatsResponse,
+} from "@/services/query/heating-ocr/types/usage.types";
 
 export interface HeatingActivityItem extends ActivityItem {
   template: Activity["template"];
@@ -40,12 +50,14 @@ export function mapHeatingToFields(activity?: Activity): DynamicField[] {
 export function mapFieldsToHeatingUpdate(
   originalActivity: Activity | undefined,
   formValues: Record<string, string>,
-) {
+): { data: { field: HeatingField[] | HeatingField[][] } } {
   const rawFields = originalActivity?.data?.field;
 
   if (!rawFields) return { data: { field: [] } };
 
-  const updateFields = (fields: HeatingField[] | HeatingField[][]): any => {
+  const updateFields = (
+    fields: HeatingField[] | HeatingField[][],
+  ): HeatingField[] | HeatingField[][] => {
     if (Array.isArray(fields[0])) {
       return (fields as HeatingField[][]).map((group) =>
         group.map((f) => ({
@@ -71,15 +83,19 @@ export function mapFieldsToHeatingUpdate(
 /**
  * Maps URL search params to API query filters
  */
-export function mapHeatingQueryFilters(params: URLSearchParams) {
+export function mapHeatingQueryFilters(params: URLSearchParams): {
+  search_term: string | null;
+  user_status?: string;
+  status?: string;
+} {
   const q = params.get("q");
   const user = params.get("user");
   const status = params.get("status");
 
   return {
     search_term: q,
-    user_status: user === "ALL" ? undefined : user,
-    status: status === "ALL" ? undefined : status,
+    user_status: user === "ALL" ? undefined : (user ?? undefined),
+    status: status === "ALL" ? undefined : (status ?? undefined),
   };
 }
 
@@ -100,9 +116,12 @@ export function mapToActivityCard(activity: Activity): HeatingActivityItem {
 /**
  * Maps the entire Activity list response
  */
-export function mapHeatingActivitiesResponse(data: ActivityWithCount) {
+export function mapHeatingActivitiesResponse(data: ActivityWithCount): {
+  total: number;
+  result: HeatingActivityItem[];
+} {
   return {
-    ...data,
+    total: data.total,
     result: data.result.map(mapToActivityCard),
   };
 }
@@ -110,23 +129,76 @@ export function mapHeatingActivitiesResponse(data: ActivityWithCount) {
 /**
  * Maps raw API Member to UI model
  */
-export function mapToMember(member: Member & { name: string; email: string }) {
+export function mapToMember(member: HeatingMember): Member {
   return {
-    ...member,
     id: member.id,
-    role: member.role.toLowerCase() as "owner" | "member" | "viewer",
+    name: member.name,
+    email: member.email,
+    role: member.role,
   };
 }
 
 /**
  * Maps the entire Members list response
  */
-export function mapHeatingMembersResponse(data: {
+export function mapHeatingMembersResponse(data: MemberWithCount): {
   total: number;
-  result: (Member & { name: string; email: string })[];
-}) {
+  result: Member[];
+} {
   return {
-    ...data,
+    total: data.total,
     result: data.result.map(mapToMember),
   };
+}
+
+/**
+ * Maps raw API Cost Usage to UI model
+ */
+export function mapCostUsageData(data: CostUsageResponse): CostUsageModel[] {
+  if (!data?.day) return [];
+  return data.day.map((dayNum, i) => ({
+    label: String(dayNum),
+    value: data.cost?.[i] || 0,
+  }));
+}
+
+/**
+ * Maps raw API Activity Usage to UI model
+ */
+export function mapActivityUsageData(
+  data: ActivityUsageResponse,
+): ActivityUsageModel[] {
+  if (!data?.day) return [];
+  return data.day.map((dayNum, i) => ({
+    label: String(dayNum),
+    value: data.activity?.[i] || 0,
+  }));
+}
+
+/**
+ * Maps raw API Top Users to UI model
+ */
+export function mapTopUsersData(
+  data: ActivityUsageTopUserResponse,
+): { name: string; value: number }[] {
+  return (
+    data?.result.map((user) => ({
+      name: user.name,
+      value: user.activity,
+    })) || []
+  );
+}
+
+/**
+ * Maps raw API Activity Status Stats to UI model
+ */
+export function mapActivityStatsData(
+  data: ActivityUsageStatusStatsResponse,
+): { name: string; value: number }[] {
+  return (
+    data?.result.map((stat) => ({
+      name: stat.stat.replace(/_/g, " "),
+      value: stat.activity_count,
+    })) || []
+  );
 }

@@ -3,10 +3,14 @@ import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { MasterActivityItemHeader } from "../components/activity-item/master/master-activity-item-header";
 import { MasterDataTable } from "../components/activity-item/master/master-data-table";
-import { useMasterActivity } from "@/services/query/transmitter-ocr/master-activities.service";
+import {
+  useMasterActivity,
+  useUpdateMasterData,
+} from "@/services/query/transmitter-ocr/master-activities.service";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import type { MasterDataItem } from "@/services/query/transmitter-ocr/types";
+import { toast } from "sonner";
 
 interface FormValues {
   records: Record<string, MasterDataItem>[];
@@ -16,6 +20,7 @@ export function MasterActivityItemView() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useMasterActivity(id);
+  const { mutateAsync } = useUpdateMasterData(id || 0);
 
   const { control, register, reset, setValue, getValues } = useForm<FormValues>(
     {
@@ -48,8 +53,11 @@ export function MasterActivityItemView() {
   };
 
   const handleSave = (data: FormValues) => {
-    console.log("Saving records:", data.records);
-    // Here you would call your API to save the data
+    toast.promise(mutateAsync(data), {
+      loading: "Saving...",
+      success: "Saved successfully",
+      error: "Failed to save",
+    });
   };
 
   const itemName = data?.title || "Loading...";

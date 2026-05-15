@@ -11,8 +11,6 @@ export function TokenUsage() {
   const monthIndex = MONTHS.indexOf(monthName);
   const month = monthIndex !== -1 ? (monthIndex + 1).toString() : undefined;
 
-  console.log("monthmonth", month, Number(month));
-
   const { data: tokenUsage, isLoading: isTokenLoading } = useMasterTokenUsage(
     year,
     month,

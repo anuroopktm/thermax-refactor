@@ -8,7 +8,7 @@ import {
 } from "@/services/query/thermax-gpt/usage.service";
 import { useThermaxMe } from "@/services/query/thermax-gpt/members.service";
 import { useDateParams } from "../hooks/use-date-params";
-import { mapChartData, getUsageStats } from "../utils/usage.utils";
+import { getUsageStats } from "../utils/usage.utils";
 import { useSearchParams } from "react-router-dom";
 
 export function CostTab() {
@@ -25,7 +25,6 @@ export function CostTab() {
   const { data: currentMember } = useThermaxMe();
   const { mutateAsync, isPending } = useUpdateThermaxUsageLimit();
 
-  const chartData = mapChartData(costData);
   const usageData = getUsageStats(costData, limitData);
 
   const isOwner = currentMember?.role === "OWNER";
@@ -39,12 +38,10 @@ export function CostTab() {
     });
   };
 
-  console.log("monthIndex", monthIndex);
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
       <CostChart
-        data={chartData}
+        data={costData || []}
         isLoading={isCostLoading}
         month={monthName}
         year={year.toString()}

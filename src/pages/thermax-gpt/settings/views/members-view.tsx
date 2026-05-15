@@ -12,8 +12,13 @@ import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import { type Member } from "@/services/query/shared/types/members.types";
 import { toast } from "sonner";
+import { type MemberForm } from "@/lib/validations/members.schema";
+import {
+  mapToCreateMemberPayload,
+  mapToUpdateMemberPayload,
+} from "../../lib/settings-mappers";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -26,8 +31,10 @@ export function MembersView() {
   const updateMutation = useUpdateThermaxMember(editingMember?.id || 0);
   const deleteMutation = useDeleteThermaxMember();
 
-  const handleCreate = async (data: any) => {
-    toast.promise(createMutation.mutateAsync(data), {
+  const handleCreate = async (data: MemberForm) => {
+    const payload = mapToCreateMemberPayload(data);
+
+    toast.promise(createMutation.mutateAsync(payload), {
       loading: "Adding member...",
       success: () => {
         setIsAddDialogOpen(false);
@@ -37,8 +44,10 @@ export function MembersView() {
     });
   };
 
-  const handleUpdate = async (data: any) => {
-    toast.promise(updateMutation.mutateAsync(data), {
+  const handleUpdate = async (data: MemberForm) => {
+    const payload = mapToUpdateMemberPayload(data);
+
+    toast.promise(updateMutation.mutateAsync(payload), {
       loading: "Updating member...",
       success: () => {
         setEditingMember(null);

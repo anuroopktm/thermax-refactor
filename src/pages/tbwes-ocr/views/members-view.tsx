@@ -11,7 +11,7 @@ import { MembersHeader } from "@/components/shared/members/members-header";
 import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
 import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog";
 import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import { type Member } from "@/services/query/shared/types/members.types";
 import debounce from "lodash.debounce";
 import { toast } from "sonner";
 

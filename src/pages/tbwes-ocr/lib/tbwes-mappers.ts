@@ -1,9 +1,20 @@
 import {
   type Activity,
   type ActivityWithCount,
+  type Member as TbwesMember,
+  type MemberWithCount,
 } from "../../../services/query/tbwes-ocr/types";
 import { type DynamicField } from "@/services/query/transmitter-ocr/types";
 import { getInitials } from "@/lib/utils";
+import { type Member } from "@/services/query/shared/types/members.types";
+import {
+  type CostUsageResponse,
+  type CostUsageModel,
+  type ActivityUsageResponse,
+  type ActivityUsageModel,
+  type ActivityUsageTopUserResponse,
+  type ActivityUsageStatusStatsResponse,
+} from "@/services/query/tbwes-ocr/types/usage.types";
 
 /**
  * TBWES OCR Field structure from API
@@ -19,7 +30,9 @@ export interface TbwesField {
  * Maps TBWES Activity Detail to DynamicForm fields
  */
 export function mapTbwesToFields(activity?: Activity): DynamicField[] {
-  const rawFields = (activity?.data as any)?.field as TbwesField[] | undefined;
+  const rawFields = (activity?.data as Record<string, unknown>)?.field as
+    | TbwesField[]
+    | undefined;
 
   if (!rawFields) return [];
 
@@ -39,10 +52,9 @@ export function mapTbwesToFields(activity?: Activity): DynamicField[] {
 export function mapFieldsToTbwesUpdate(
   originalActivity: Activity | undefined,
   formValues: Record<string, string>,
-) {
-  const rawFields = (originalActivity?.data as any)?.field as
-    | TbwesField[]
-    | undefined;
+): { data: { field: TbwesField[] } } {
+  const rawFields = (originalActivity?.data as Record<string, unknown>)
+    ?.field as TbwesField[] | undefined;
 
   if (!rawFields) return { data: { field: [] } };
 
@@ -59,15 +71,19 @@ export function mapFieldsToTbwesUpdate(
 /**
  * Maps URL search params to API query filters
  */
-export function mapTbwesQueryFilters(params: URLSearchParams) {
+export function mapTbwesQueryFilters(params: URLSearchParams): {
+  search_term: string | null;
+  user_status?: string;
+  status?: string;
+} {
   const q = params.get("q");
   const user = params.get("user");
   const status = params.get("status");
 
   return {
     search_term: q,
-    user_status: user === "ALL" ? undefined : user,
-    status: status === "ALL" ? undefined : status,
+    user_status: user === "ALL" ? undefined : (user ?? undefined),
+    status: status === "ALL" ? undefined : (status ?? undefined),
   };
 }
 
@@ -97,20 +113,76 @@ export function mapTbwesActivitiesResponse(data: ActivityWithCount) {
 /**
  * Maps raw API Member to UI model
  */
-export function mapToMember(member: any) {
+export function mapToMember(member: TbwesMember): Member {
   return {
-    ...member,
     id: member.id,
-    role: member.role.toUpperCase() as "OWNER" | "MEMBER" | "VIEWER",
+    name: member.name,
+    email: member.email,
+    role: member.role as "owner" | "member",
   };
 }
 
 /**
  * Maps the entire Members list response
  */
-export function mapTbwesMembersResponse(data: any) {
+export function mapTbwesMembersResponse(data: MemberWithCount): {
+  total: number;
+  result: Member[];
+} {
   return {
-    ...data,
+    total: data.total,
     result: data.result.map(mapToMember),
   };
+}
+
+/**
+ * Maps raw API Cost Usage to UI model
+ */
+export function mapCostUsageData(data: CostUsageResponse): CostUsageModel[] {
+  if (!data?.day) return [];
+  return data.day.map((dayNum, i) => ({
+    label: String(dayNum),
+    value: data.cost?.[i] || 0,
+  }));
+}
+
+/**
+ * Maps raw API Activity Usage to UI model
+ */
+export function mapActivityUsageData(
+  data: ActivityUsageResponse,
+): ActivityUsageModel[] {
+  if (!data?.day) return [];
+  return data.day.map((dayNum, i) => ({
+    label: String(dayNum),
+    value: data.activity?.[i] || 0,
+  }));
+}
+
+/**
+ * Maps raw API Top Users to UI model
+ */
+export function mapTopUsersData(
+  data: ActivityUsageTopUserResponse,
+): { name: string; value: number }[] {
+  return (
+    data?.result.map((user) => ({
+      name: user.name,
+      value: user.activity,
+    })) || []
+  );
+}
+
+/**
+ * Maps raw API Activity Status Stats to UI model
+ */
+export function mapActivityStatsData(
+  data: ActivityUsageStatusStatsResponse,
+): { name: string; value: number }[] {
+  return (
+    data?.result.map((stat) => ({
+      name: stat.stat.replace(/_/g, " "),
+      value: stat.activity_count,
+    })) || []
+  );
 }

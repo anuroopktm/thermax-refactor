@@ -6,29 +6,16 @@ import {
   useTbwesActivityStats,
 } from "@/services/query/tbwes-ocr";
 import { useDateParams } from "../hooks/use-date-params";
-import {
-  mapActivityChartData,
-  mapTopUsersData,
-  mapActivityStatsData,
-} from "../utils/activity.utils";
 
 export function ActivityTab() {
   const { year, monthName, monthIndex } = useDateParams();
 
-  const { data: activityData, isLoading: isActivityLoading } =
+  const { data: chartData = [], isLoading: isActivityLoading } =
     useTbwesActivityUsage(year, monthIndex);
-  const { data: topUsersData, isLoading: isTopUsersLoading } = useTbwesTopUsers(
-    year,
-    monthIndex,
-  );
-  const { data: statsData, isLoading: isStatsLoading } = useTbwesActivityStats(
-    year,
-    monthIndex,
-  );
-
-  const chartData = mapActivityChartData(activityData);
-  const mappedTopUsers = mapTopUsersData(topUsersData);
-  const mappedStats = mapActivityStatsData(statsData);
+  const { data: mappedTopUsers = [], isLoading: isTopUsersLoading } =
+    useTbwesTopUsers(year, monthIndex);
+  const { data: mappedStats = [], isLoading: isStatsLoading } =
+    useTbwesActivityStats(year, monthIndex);
 
   return (
     <div className="flex flex-col gap-6">

@@ -40,18 +40,13 @@ export const useHeatingActivityDetail = (id?: string | number) => {
 
 export const useHeatingCreateActivity = () => {
   const queryClient = useQueryClient();
-  return useMutation<Activity, AxiosError<ApiError>, FormData>({
+  return useMutation<void, AxiosError<ApiError>, FormData>({
     mutationFn: async (formData: FormData) => {
-      const { data } = await heatingApi.post<Activity>(
-        "/api/heating_ocr/activity",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      await heatingApi.post("/api/heating_ocr/activity", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
-      return data;
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -63,13 +58,12 @@ export const useHeatingCreateActivity = () => {
 
 export const useHeatingUpdateActivity = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation<Activity, AxiosError<ApiError>, ActivityUpdateInput>({
+  return useMutation<void, AxiosError<ApiError>, ActivityUpdateInput>({
     mutationFn: async (input: ActivityUpdateInput) => {
-      const { data } = await heatingApi.patch<Activity>(
+      await heatingApi.patch<Activity>(
         `/api/heating_ocr/activity/${id}`,
         input,
       );
-      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -98,14 +92,11 @@ export const useHeatingDeleteActivity = () => {
 
 export const useHeatingSubmitRejectActivity = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation<Activity, AxiosError<ApiError>, string>({
+  return useMutation<void, AxiosError<ApiError>, string>({
     mutationFn: async (status: string) => {
-      const { data } = await heatingApi.post<Activity>(
-        `/api/heating_ocr/activity/${id}`,
-        null,
-        { params: { status } },
-      );
-      return data;
+      await heatingApi.post(`/api/heating_ocr/activity/${id}`, null, {
+        params: { status },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

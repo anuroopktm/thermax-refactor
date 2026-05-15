@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { useTopUsers } from "@/services/query/sales-enablement/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TopUser } from "@/services/query/sales-enablement/types/usage.types";
+import type { TopUserModel } from "@/services/query/sales-enablement/types/usage.types";
 
 export function TopUsersList() {
   const { data: topUsers = [], isLoading: isTopUsersLoading } = useTopUsers();
@@ -47,7 +47,7 @@ function SkeletonGrid() {
 
 /* ----------------Top Users Grid ---------------- */
 
-function TopUsersGrid({ data }: { data: TopUser[] }) {
+function TopUsersGrid({ data }: { data: TopUserModel[] }) {
   return data?.map((user, idx) => (
     <div key={idx} className="flex items-center gap-3">
       <Avatar className="size-8">

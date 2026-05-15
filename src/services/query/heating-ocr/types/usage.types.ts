@@ -1,47 +1,57 @@
-export interface ActivityUsage {
+export interface ActivityUsageResponse {
   day: number[];
   activity: number[];
   total: number;
 }
 
-export interface CostUsage {
+export interface ActivityUsageModel {
+  label: string;
+  value: number;
+}
+
+export interface CostUsageResponse {
   day: number[];
   cost: number[];
   total: number;
 }
 
-export interface ActivityYearUsage {
+export interface CostUsageModel {
+  label: string;
+  value: number;
+}
+
+export interface ActivityYearUsageResponse {
   month: number[];
   activity: number[];
   total: number;
 }
 
-export interface CostUsageByYear {
+export interface CostUsageByYearResponse {
   month: number[];
   cost: number[];
   total: number;
 }
 
-export interface StatusStats {
+export interface StatusStatsResponse {
   stat: string;
   activity_count: number;
 }
 
-export interface ActivityUsageStatusStats {
-  result: StatusStats[];
+export interface ActivityUsageStatusStatsResponse {
+  result: StatusStatsResponse[];
 }
 
-export interface TopUser {
+export interface TopUserResponse {
   name: string;
   email: string;
   activity: number;
 }
 
-export interface ActivityUsageTopUser {
-  result: TopUser[];
+export interface ActivityUsageTopUserResponse {
+  result: TopUserResponse[];
 }
 
-export interface Limit {
+export interface LimitResponse {
   limit: number;
   id: number;
   is_active: boolean;
@@ -49,4 +59,8 @@ export interface Limit {
   created_by: number;
   last_modified_on: string;
   last_modified_by: number;
+}
+
+export interface LimitModel {
+  limit: number;
 }

@@ -2,9 +2,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { tbwesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
-import type { Member, MemberWithCount } from "./types";
-import { type MemberForm } from "@/pages/sales-enablement-tool/settings/validations/members.schema";
-import { mapTbwesMembersResponse } from "@/pages/tbwes-ocr/lib/tbwes-mappers";
+import type { Member as TbwesMember } from "./types";
+import { type MemberForm } from "@/lib/validations/members.schema";
+import {
+  mapTbwesMembersResponse,
+  mapToMember,
+} from "@/pages/tbwes-ocr/lib/tbwes-mappers";
+import { tbwesOcrKeys } from "./keys";
+import { type Member } from "@/services/query/shared/types/members.types";
 
 export const useTbwesMembers = (params?: {
   skip?: number;
@@ -13,12 +18,9 @@ export const useTbwesMembers = (params?: {
   role?: string | null;
 }) => {
   return useQuery({
-    queryKey: ["tbwes-ocr", "members", params],
+    queryKey: tbwesOcrKeys.members.list(params),
     queryFn: async () => {
-      const { data } = await tbwesApi.get<MemberWithCount>(
-        "/api/tbwes_ocr/member",
-        { params },
-      );
+      const { data } = await tbwesApi.get("/api/tbwes_ocr/member", { params });
       return data;
     },
     select: mapTbwesMembersResponse,
@@ -27,35 +29,29 @@ export const useTbwesMembers = (params?: {
 
 export const useTbwesCreateMember = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, AxiosError<ApiError>, MemberForm>({
+  return useMutation<void, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
-      const { data } = await tbwesApi.post("/api/tbwes_ocr/member", null, {
+      await tbwesApi.post("/api/tbwes_ocr/member", null, {
         params: member,
       });
-      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tbwes-ocr", "members"] });
+      queryClient.invalidateQueries({ queryKey: tbwesOcrKeys.members.all });
     },
   });
 };
 
 export const useTbwesUpdateMember = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, AxiosError<ApiError>, MemberForm>({
+  return useMutation<void, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
       const { email, ...updateData } = member;
-      const { data } = await tbwesApi.patch(
-        `/api/tbwes_ocr/member/${id}`,
-        null,
-        {
-          params: updateData,
-        },
-      );
-      return data;
+      await tbwesApi.patch(`/api/tbwes_ocr/member/${id}`, null, {
+        params: updateData,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tbwes-ocr", "members"] });
+      queryClient.invalidateQueries({ queryKey: tbwesOcrKeys.members.all });
     },
   });
 };
@@ -67,18 +63,19 @@ export const useTbwesDeleteMember = () => {
       await tbwesApi.delete(`/api/tbwes_ocr/member/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tbwes-ocr", "members"] });
+      queryClient.invalidateQueries({ queryKey: tbwesOcrKeys.members.all });
     },
   });
 };
 
 export const useTbwesCurrentMember = () => {
-  return useQuery<Member, AxiosError<ApiError>>({
-    queryKey: ["tbwes-ocr", "members", "me"],
+  return useQuery<TbwesMember, AxiosError<ApiError>, Member>({
+    queryKey: tbwesOcrKeys.members.me(),
     queryFn: async () => {
-      const { data } = await tbwesApi.get<Member>("/api/tbwes_ocr/member/me");
+      const { data } = await tbwesApi.get("/api/tbwes_ocr/member/me");
       return data;
     },
+    select: mapToMember,
     retry: (_, error) => error?.response?.status !== 404,
   });
 };

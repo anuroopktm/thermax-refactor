@@ -1,6 +1,6 @@
 export interface DrConbotMember {
   user_id: number;
-  role: "OWNER" | "MEMBER" | null;
+  role: string | null;
   thrmx_gpt_user_service_mapping: Record<string, string>[];
   id: number;
   is_active: boolean;
@@ -21,11 +21,11 @@ export interface CreateDrConbotMemberPayload {
   email: string;
   name: string;
   thrmx_gpt_user_service_mapping: Record<string, string>[];
-  role: "OWNER" | "MEMBER" | null;
+  role: string;
 }
 
 export interface UpdateDrConbotMemberPayload {
   name?: string;
-  role?: "OWNER" | "MEMBER" | null;
+  role?: string;
   thrmx_gpt_user_service_mapping?: Record<string, string>[];
 }

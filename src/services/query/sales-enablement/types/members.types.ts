@@ -1,9 +1,6 @@
-export interface Member {
-  id: number;
-  name: string;
-  email: string;
-  role: "owner" | "member" | "viewer";
-}
+import { type Member } from "../../shared/types/members.types";
+
+export type { Member };
 
 export interface CreateMemberResponse {
   message: string;

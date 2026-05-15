@@ -3,27 +3,31 @@ import { conbotApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  CostUsage,
-  ActivityUsage,
+  CostUsageResponse,
+  ActivityUsageResponse,
   ActivityUsageTopUserResponse,
-  UsageLimit,
+  UsageLimitResponse,
   UserDownloadRequest,
-} from "./types";
+  CostUsageModel,
+  ActivityUsageModel,
+  TopUserModel,
+  UsageLimitModel,
+} from "./types/usage.types";
 
 import {
-  mapActivityChartData,
+  mapCostUsageData,
+  mapActivityUsageData,
   mapTopUsersData,
-  type ActivityChartItem,
-  type TopUserItem,
-} from "@/pages/dr-conbot/settings/components/usage/utils/activity.utils";
+} from "@/pages/dr-conbot/lib/settings-mappers";
+import { drConbotKeys } from "./keys";
 
 export const useDrConbotCostUsage = (
   year: string,
   month: number,
   type = "All",
 ) => {
-  return useQuery<CostUsage, AxiosError<ApiError>>({
-    queryKey: ["dr-conbot", "usage", "cost", year, month, type],
+  return useQuery<CostUsageResponse, AxiosError<ApiError>, CostUsageModel[]>({
+    queryKey: drConbotKeys.usage.cost.list({ year, month, type }),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/usage/cost", {
         params: { year, month, type },
@@ -31,6 +35,7 @@ export const useDrConbotCostUsage = (
 
       return data;
     },
+    select: mapCostUsageData,
   });
 };
 
@@ -39,8 +44,12 @@ export const useDrConbotActivityUsage = (
   month: number,
   type = "All",
 ) => {
-  return useQuery<ActivityUsage, AxiosError<ApiError>, ActivityChartItem[]>({
-    queryKey: ["dr-conbot", "usage", "activity", year, month, type],
+  return useQuery<
+    ActivityUsageResponse,
+    AxiosError<ApiError>,
+    ActivityUsageModel[]
+  >({
+    queryKey: drConbotKeys.usage.activity.list({ year, month, type }),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/usage/activity", {
         params: { year, month, type },
@@ -48,7 +57,7 @@ export const useDrConbotActivityUsage = (
 
       return data;
     },
-    select: mapActivityChartData,
+    select: mapActivityUsageData,
   });
 };
 
@@ -62,19 +71,15 @@ export const useDrConbotTopUsers = (
   return useQuery<
     ActivityUsageTopUserResponse,
     AxiosError<ApiError>,
-    TopUserItem[]
+    TopUserModel[]
   >({
-    queryKey: [
-      "dr-conbot",
-      "usage",
-      "activity",
-      "top",
+    queryKey: drConbotKeys.usage.activity.top({
       year,
       month,
       type,
       skip,
       limit,
-    ],
+    }),
     queryFn: async () => {
       const { data } = await conbotApi.get(
         "/doctor_conbot/usage/activity/top",
@@ -85,39 +90,34 @@ export const useDrConbotTopUsers = (
 
       return data;
     },
-    select: mapTopUsersData,
+    select: (data) => mapTopUsersData(data.result),
   });
 };
 
 export const useDrConbotUsageLimit = () => {
-  return useQuery<UsageLimit, AxiosError<ApiError>>({
-    queryKey: ["dr-conbot", "usage", "cost", "limit"],
+  return useQuery<UsageLimitResponse, AxiosError<ApiError>, UsageLimitModel>({
+    queryKey: drConbotKeys.usage.cost.limit(),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/usage/cost/limit");
 
       return data;
     },
+    select: (data) => ({ limit: data.limit }),
   });
 };
 
 export const useUpdateDrConbotUsageLimit = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<UsageLimit, AxiosError<ApiError>, number>({
+  return useMutation<void, AxiosError<ApiError>, number>({
     mutationFn: async (limit) => {
-      const { data } = await conbotApi.patch(
-        "/doctor_conbot/usage/cost/limit",
-        null,
-        {
-          params: { limit },
-        },
-      );
-
-      return data;
+      await conbotApi.patch("/doctor_conbot/usage/cost/limit", null, {
+        params: { limit },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["dr-conbot", "usage", "cost", "limit"],
+        queryKey: drConbotKeys.usage.cost.limit(),
       });
     },
   });

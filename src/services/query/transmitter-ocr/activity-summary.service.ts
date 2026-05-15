@@ -1,22 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { transmitterApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
-import type { ApiError } from "../../api.types";
-import type { ActivitySummaryItem } from "./types/usage.types";
-import { extractResult } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
+import type { ApiError, PaginatedResponse } from "../../api.types";
+import type { ActivitySummaryModel } from "./types/usage.types";
+import type { ChildActivityItem } from "./types/child-activities.types";
+import { mapActivitySummary } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
+import { transmitterOcrKeys } from "./keys";
 
 export const useActivitySummary = (childId?: string) => {
-  return useQuery<ActivitySummaryItem[], AxiosError<ApiError>, any>({
-    queryKey: ["transmitter-ocr", "activity-summary", childId],
+  return useQuery<
+    PaginatedResponse<ChildActivityItem>,
+    AxiosError<ApiError>,
+    ActivitySummaryModel[]
+  >({
+    queryKey: transmitterOcrKeys.summary.list({ childId }),
     queryFn: async () => {
-      const { data } = await transmitterApi.get(
-        "/transmitter_ocr/child_usage/activity",
-        {
-          params: { childId },
-        },
-      );
+      const { data } = await transmitterApi.get<
+        PaginatedResponse<ChildActivityItem>
+      >("/transmitter_ocr/child_usage/activity", {
+        params: { childId },
+      });
       return data;
     },
-    select: (data) => extractResult(data),
+    select: mapActivitySummary,
   });
 };

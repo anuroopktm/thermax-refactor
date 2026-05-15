@@ -3,27 +3,31 @@ import { gptApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  CostUsage,
-  ActivityUsage,
+  CostUsageResponse,
+  ActivityUsageResponse,
   ActivityUsageTopUserResponse,
-  UsageLimit,
+  UsageLimitResponse,
   UserDownloadRequest,
-} from "./types";
+  CostUsageModel,
+  ActivityUsageModel,
+  TopUserModel,
+  UsageLimitModel,
+} from "./types/usage.types";
 
 import {
-  mapActivityChartData,
+  mapCostUsageData,
+  mapActivityUsageData,
   mapTopUsersData,
-  type ActivityChartItem,
-  type TopUserItem,
-} from "@/pages/thermax-gpt/settings/components/usage/utils/activity.utils";
+} from "@/pages/thermax-gpt/lib/settings-mappers";
+import { thermaxGptKeys } from "./keys";
 
 export const useThermaxCostUsage = (
   year: string,
   month: number,
   type = "All",
 ) => {
-  return useQuery<CostUsage, AxiosError<ApiError>>({
-    queryKey: ["thermax-gpt", "usage", "cost", year, month, type],
+  return useQuery<CostUsageResponse, AxiosError<ApiError>, CostUsageModel[]>({
+    queryKey: thermaxGptKeys.usage.cost.list({ year, month, type }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/usage/cost", {
         params: { year, month, type },
@@ -31,6 +35,7 @@ export const useThermaxCostUsage = (
 
       return data;
     },
+    select: mapCostUsageData,
   });
 };
 
@@ -39,8 +44,12 @@ export const useThermaxActivityUsage = (
   month: number,
   type = "All",
 ) => {
-  return useQuery<ActivityUsage, AxiosError<ApiError>, ActivityChartItem[]>({
-    queryKey: ["thermax-gpt", "usage", "activity", year, month, type],
+  return useQuery<
+    ActivityUsageResponse,
+    AxiosError<ApiError>,
+    ActivityUsageModel[]
+  >({
+    queryKey: thermaxGptKeys.usage.activity.list({ year, month, type }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/usage/activity", {
         params: { year, month, type },
@@ -48,7 +57,7 @@ export const useThermaxActivityUsage = (
 
       return data;
     },
-    select: mapActivityChartData,
+    select: mapActivityUsageData,
   });
 };
 
@@ -62,19 +71,15 @@ export const useThermaxTopUsers = (
   return useQuery<
     ActivityUsageTopUserResponse,
     AxiosError<ApiError>,
-    TopUserItem[]
+    TopUserModel[]
   >({
-    queryKey: [
-      "thermax-gpt",
-      "usage",
-      "activity",
-      "top",
+    queryKey: thermaxGptKeys.usage.activity.top({
       year,
       month,
       type,
       skip,
       limit,
-    ],
+    }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/usage/activity/top", {
         params: { year, month, type, skip, limit },
@@ -82,25 +87,26 @@ export const useThermaxTopUsers = (
 
       return data;
     },
-    select: mapTopUsersData,
+    select: (data) => mapTopUsersData(data.result),
   });
 };
 
 export const useThermaxUsageLimit = () => {
-  return useQuery<UsageLimit, AxiosError<ApiError>>({
-    queryKey: ["thermax-gpt", "usage", "cost", "limit"],
+  return useQuery<UsageLimitResponse, AxiosError<ApiError>, UsageLimitModel>({
+    queryKey: thermaxGptKeys.usage.cost.limit(),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/usage/cost/limit");
 
       return data;
     },
+    select: (data) => ({ limit: data.limit }),
   });
 };
 
 export const useUpdateThermaxUsageLimit = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<UsageLimit, AxiosError<ApiError>, number>({
+  return useMutation<UsageLimitResponse, AxiosError<ApiError>, number>({
     mutationFn: async (limit) => {
       const { data } = await gptApi.patch(
         "/thermax_gpt/usage/cost/limit",
@@ -114,7 +120,7 @@ export const useUpdateThermaxUsageLimit = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["thermax-gpt", "usage", "cost", "limit"],
+        queryKey: thermaxGptKeys.usage.cost.limit(),
       });
     },
   });

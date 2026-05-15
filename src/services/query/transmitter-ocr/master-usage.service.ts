@@ -3,34 +3,34 @@ import { transmitterApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  TokenUsage,
-  TopUsersUsage,
-  StatsUsage,
+  TokenUsageModel,
+  TopUsersUsageResponse,
+  StatsUsageResponse,
   CostUsageResponse,
   ActivityUsageResponse,
-} from "./types";
+  CostUsageModel,
+  ActivityUsageModel,
+  StatsModel,
+  TopUserModel,
+} from "./types/usage.types";
 import {
   mapCostUsageData,
   mapActivityUsageData,
+  mapActivityStatsData,
+  mapTopUsersData,
 } from "@/pages/transmitter-ocr/lib/transmitter-mappers";
 import dayjs from "dayjs";
-import type { StatusItem } from "@/components/shared/usage/usage-status-card";
+import { transmitterOcrKeys } from "./keys";
 
 export const useMasterCostUsage = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<
-    CostUsageResponse,
-    AxiosError<ApiError>,
-    { label: string; value: number }[]
-  >({
-    queryKey: ["transmitter-ocr", "master-cost-usage", year, month],
+  return useQuery<CostUsageResponse, AxiosError<ApiError>, CostUsageModel[]>({
+    queryKey: transmitterOcrKeys.master.usage.cost({ year, month }),
     queryFn: async () => {
       const parsedYear = Number(year);
       const parsedMonth = Number(month);
-
-      console.log("montthththt", parsedMonth, month);
 
       const { data } = await transmitterApi.post(
         "/transmitter_ocr/master_usage/cost",
@@ -42,7 +42,7 @@ export const useMasterCostUsage = (
 
       return data;
     },
-    select: (data) => mapCostUsageData(data),
+    select: mapCostUsageData,
   });
 };
 
@@ -53,9 +53,9 @@ export const useMasterActivityUsage = (
   return useQuery<
     ActivityUsageResponse,
     AxiosError<ApiError>,
-    { label: string; value: number }[]
+    ActivityUsageModel[]
   >({
-    queryKey: ["transmitter-ocr", "master-detailed-activity", year, month],
+    queryKey: transmitterOcrKeys.master.usage.activity({ year, month }),
     queryFn: async () => {
       const { data } = await transmitterApi.get(
         "/transmitter_ocr/master_usage/activity",
@@ -66,23 +66,19 @@ export const useMasterActivityUsage = (
 
       return data;
     },
-    select: (data) => mapActivityUsageData(data),
+    select: mapActivityUsageData,
   });
 };
-
-//////////////////////////////////////////////////////////
 
 export const useMasterTokenUsage = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<TokenUsage, AxiosError<ApiError>>({
-    queryKey: ["transmitter-ocr", "master-token-usage", year, month],
+  return useQuery<TokenUsageModel, AxiosError<ApiError>>({
+    queryKey: transmitterOcrKeys.master.usage.tokens({ year, month }),
     queryFn: async () => {
       const parsedYear = Number(year);
       const parsedMonth = Number(month);
-
-      console.log("montthththt", parsedMonth);
 
       const [limitRes, costRes] = await Promise.all([
         transmitterApi.get<{ limit: number }>(
@@ -118,8 +114,8 @@ export const useMasterActivityStats = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<StatsUsage, AxiosError<ApiError>, StatusItem[]>({
-    queryKey: ["transmitter-ocr", "master-activity-stats", year, month],
+  return useQuery<StatsUsageResponse, AxiosError<ApiError>, StatsModel[]>({
+    queryKey: transmitterOcrKeys.master.usage.stats({ year, month }),
     queryFn: async () => {
       const { data } = await transmitterApi.get(
         "/transmitter_ocr/master_usage/activity/stats",
@@ -128,11 +124,7 @@ export const useMasterActivityStats = (
 
       return data;
     },
-    select: (data) =>
-      data?.result.map((item) => ({
-        name: item.stat.replaceAll("_", " "),
-        value: item.activity_count,
-      })),
+    select: mapActivityStatsData,
   });
 };
 
@@ -140,13 +132,11 @@ export const useMasterTopUsers = (
   year: string = dayjs().year().toString(),
   month: string = dayjs().month().toString(),
 ) => {
-  return useQuery<TopUsersUsage, AxiosError<ApiError>, StatusItem[]>({
-    queryKey: ["transmitter-ocr", "master-top-users", year, month],
+  return useQuery<TopUsersUsageResponse, AxiosError<ApiError>, TopUserModel[]>({
+    queryKey: transmitterOcrKeys.master.usage.top({ year, month }),
     queryFn: async () => {
       const parsedYear = Number(year);
       const parsedMonth = Number(month);
-
-      console.log("dedewdew", year, month);
 
       const { data } = await transmitterApi.get(
         "/transmitter_ocr/master_usage/activity/top",
@@ -160,10 +150,6 @@ export const useMasterTopUsers = (
 
       return data;
     },
-    select: (data) =>
-      data?.result.map((item) => ({
-        name: item.name,
-        value: item.activity,
-      })),
+    select: mapTopUsersData,
   });
 };

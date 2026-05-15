@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import { type MemberForm as MemberFormType } from "@/pages/sales-enablement-tool/settings/validations/members.schema";
+import { type MemberForm as MemberFormType } from "@/lib/validations/members.schema";
 import { DialogFooter } from "@/components/ui/dialog";
 
 export const ROLE_OPTIONS = [

@@ -1,5 +1,9 @@
 import { MONTHS } from "@/components/shared/usage/usage-date-filter";
 import dayjs from "dayjs";
+import {
+  type CostUsageModel,
+  type LimitModel,
+} from "@/services/query/heating-ocr/types/usage.types";
 
 export function getDateParams(searchParams: URLSearchParams) {
   const year = parseInt(searchParams.get("year") ?? dayjs().year().toString());
@@ -11,28 +15,13 @@ export function getDateParams(searchParams: URLSearchParams) {
   return { year, monthName, monthIndex };
 }
 
-type CostData = {
-  day: number[];
-  cost: number[];
-  total: number;
-};
-
-export function mapChartData(costData?: CostData) {
-  if (!costData) return [];
-
-  return costData.day.map((day, i) => ({
-    label: day,
-    value: costData.cost[i] ?? 0,
-  }));
-}
-
 export function getUsageStats(
-  costData?: CostData,
-  limitData?: { limit: number },
+  costData?: CostUsageModel[],
+  limitData?: LimitModel,
 ) {
   if (!costData || !limitData) return undefined;
 
-  const totalSpent = costData.total ?? 0;
+  const totalSpent = costData.reduce((acc, curr) => acc + curr.value, 0);
   const limit = limitData.limit ?? 0;
   const remaining = Math.max(0, limit - totalSpent);
 

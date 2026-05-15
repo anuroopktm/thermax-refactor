@@ -17,8 +17,8 @@ export interface ReducedUser {
 export interface Activity {
   title: string;
   filename: string;
-  data: Record<string, any> | null;
-  coordinates: Record<string, any> | null;
+  data: Record<string, unknown> | null;
+  coordinates: Record<string, unknown> | null;
   status: ActivityStatus;
   file_status: ActivityFileStatus;
   id: number;
@@ -39,7 +39,7 @@ export interface ActivityWithCount {
 
 export interface ActivityUpdateInput {
   title?: string | null;
-  data?: Record<string, any> | null;
+  data?: Record<string, unknown> | null;
   status?: ActivityStatus;
   is_active?: boolean;
 }

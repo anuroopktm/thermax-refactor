@@ -35,8 +35,8 @@ export interface ChildActivitiesResponse {
 export interface ChildActivityItem {
   title: string;
   filename: string;
-  data: Record<string, any>;
-  coordinates: Record<string, any>;
+  data: Record<string, unknown>;
+  coordinates: Record<string, unknown>;
   pages_to_trim: string;
   split_count: number;
   status: Status;
@@ -52,6 +52,7 @@ export interface ChildActivityItem {
   user: User;
   master_title: string;
   fields: DynamicField[];
+  remarks?: string[];
 }
 
 export type ChildActivityResponse = ChildActivityItem;

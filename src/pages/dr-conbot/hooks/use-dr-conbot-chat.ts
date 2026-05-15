@@ -10,6 +10,7 @@ import {
 import { PATHS } from "@/routes/constants/routes";
 import type { NormalizedMessage } from "@/components/shared/chat/types/chat.types";
 import type { ChatHistoryResponse } from "@/services/query/dr-conbot/types";
+import { drConbotKeys } from "@/services/query/dr-conbot/keys";
 
 export const useDrConbotChat = (chatId?: string) => {
   const navigate = useNavigate();
@@ -68,12 +69,12 @@ export const useDrConbotChat = (chatId?: string) => {
       });
 
       await queryClient.cancelQueries({
-        queryKey: ["dr-conbot", "chat", "messages", chatIdToUse],
+        queryKey: drConbotKeys.chat.messages(chatIdToUse),
         exact: false,
       });
 
       queryClient.setQueryData<ChatHistoryResponse>(
-        ["dr-conbot", "chat", "messages", chatIdToUse],
+        drConbotKeys.chat.messages(chatIdToUse),
         (old) => {
           const current = old ?? { total: 0, result: [] };
           return {
@@ -94,12 +95,11 @@ export const useDrConbotChat = (chatId?: string) => {
 
       await useDrConbotChatHistoryStream(
         chatIdToUse,
-        historyItem.id,
         modelId,
         isThinking,
         message.trim(),
         {
-          onChunk: (_, fullText) => {
+          onChunk: (_, fullText: string) => {
             setStreamingMessage({
               id: streamingId,
               role: "assistant",
@@ -108,9 +108,9 @@ export const useDrConbotChat = (chatId?: string) => {
             });
           },
 
-          onEnd: (fullText) => {
+          onEnd: (fullText: string) => {
             queryClient.setQueryData<ChatHistoryResponse>(
-              ["dr-conbot", "chat", "messages", chatIdToUse],
+              drConbotKeys.chat.messages(chatIdToUse),
               (old) => {
                 const current = old ?? {
                   total: 1,

@@ -1,5 +1,9 @@
 import { MONTHS } from "@/components/shared/usage/usage-date-filter";
 import dayjs from "dayjs";
+import {
+  type CostUsageModel,
+  type UsageLimitModel,
+} from "@/services/query/dr-conbot/types/usage.types";
 
 export function getDateParams(searchParams: URLSearchParams) {
   const year = searchParams.get("year") ?? dayjs().year().toString();
@@ -11,28 +15,18 @@ export function getDateParams(searchParams: URLSearchParams) {
   return { year, monthName, monthIndex };
 }
 
-type CostData = {
-  day: number[];
-  cost: number[];
-  total: number;
-};
-
-export function mapChartData(costData?: CostData) {
-  if (!costData) return [];
-
-  return costData.day.map((day, i) => ({
-    label: day,
-    value: costData.cost[i] ?? 0,
-  }));
-}
-
 export function getUsageStats(
-  costData?: CostData,
-  limitData?: { limit: number },
+  costData?: CostUsageModel[],
+  limitData?: UsageLimitModel,
 ) {
   if (!costData || !limitData) return undefined;
 
-  const totalSpent = costData.total ?? 0;
+  // For Dr-Conbot, we might need the total totalSpent which was in the raw Response
+  // but we can calculate it from the Model if we don't have it.
+  // However, it's better if the Mapper returns the total too if needed.
+  // Actually, let's just use the raw response for stats if needed, or update the model.
+
+  const totalSpent = costData.reduce((acc, curr) => acc + curr.value, 0);
   const limit = limitData.limit ?? 0;
   const remaining = Math.max(0, limit - totalSpent);
 

@@ -58,7 +58,7 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
         <ChatFileUploadDialog
           open={isUploadOpen}
           onOpenChange={setIsUploadOpen}
-          onUpload={(files) => console.log("Uploaded files:", files)}
+          onUpload={() => {}}
         />
       </div>
     );

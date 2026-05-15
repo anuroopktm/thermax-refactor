@@ -9,8 +9,12 @@ import type {
   UpdateThermaxMemberPayload,
 } from "./types";
 
-import { normalizeThermaxMembers } from "@/pages/thermax-gpt/lib/settings-mappers";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import {
+  normalizeThermaxMembers,
+  normalizeThermaxMember,
+} from "@/pages/thermax-gpt/lib/settings-mappers";
+import { type Member } from "@/services/query/shared/types/members.types";
+import { thermaxGptKeys } from "./keys";
 
 export const useThermaxMembers = (
   skip = 0,
@@ -18,7 +22,7 @@ export const useThermaxMembers = (
   searchTerm?: string,
 ) => {
   return useQuery<ThermaxMembersResponse, AxiosError<ApiError>, Member[]>({
-    queryKey: ["thermax-gpt", "members", skip, limit, searchTerm],
+    queryKey: thermaxGptKeys.members.list({ skip, limit, searchTerm }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/member", {
         params: { skip, limit, search_term: searchTerm },
@@ -31,13 +35,14 @@ export const useThermaxMembers = (
 };
 
 export const useThermaxMe = () => {
-  return useQuery<ThermaxMember, AxiosError<ApiError>>({
-    queryKey: ["thermax-gpt", "members", "me"],
+  return useQuery<ThermaxMember, AxiosError<ApiError>, Member>({
+    queryKey: thermaxGptKeys.members.me(),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/member/me/");
 
       return data;
     },
+    select: normalizeThermaxMember,
   });
 };
 
@@ -55,7 +60,7 @@ export const useCreateThermaxMember = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["thermax-gpt", "members"] });
+      queryClient.invalidateQueries({ queryKey: thermaxGptKeys.members.all });
     },
   });
 };
@@ -77,7 +82,7 @@ export const useUpdateThermaxMember = (memberId: number) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["thermax-gpt", "members"] });
+      queryClient.invalidateQueries({ queryKey: thermaxGptKeys.members.all });
     },
   });
 };
@@ -90,7 +95,7 @@ export const useDeleteThermaxMember = () => {
       await gptApi.delete(`/thermax_gpt/member/${memberId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["thermax-gpt", "members"] });
+      queryClient.invalidateQueries({ queryKey: thermaxGptKeys.members.all });
     },
   });
 };

@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import { type Member } from "@/services/query/shared/types/members.types";
 
 interface MemberActionsProps {
   member: Member;

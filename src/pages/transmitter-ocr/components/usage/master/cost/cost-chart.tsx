@@ -9,8 +9,6 @@ export function CostChart() {
 
   const { data, isLoading } = useMasterCostUsage(year, month);
 
-  console.log("datadata", data);
-
   return (
     <SharedCostChart
       data={data}

@@ -8,7 +8,7 @@ import {
 } from "@/services/query/dr-conbot/usage.service";
 import { useDrConbotMe } from "@/services/query/dr-conbot/members.service";
 import { useDateParams } from "../hooks/use-date-params";
-import { mapChartData, getUsageStats } from "../utils/usage.utils";
+import { getUsageStats } from "../utils/usage.utils";
 import { useSearchParams } from "react-router-dom";
 
 export function CostTab() {
@@ -26,7 +26,6 @@ export function CostTab() {
   const { data: currentMember } = useDrConbotMe();
   const { mutateAsync, isPending } = useUpdateDrConbotUsageLimit();
 
-  const chartData = mapChartData(costData);
   const usageData = getUsageStats(costData, limitData);
 
   const isOwner = currentMember?.role === "OWNER";
@@ -40,12 +39,10 @@ export function CostTab() {
     });
   };
 
-  console.log("monthIndex", monthIndex);
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
       <CostChart
-        data={chartData}
+        data={costData || []}
         isLoading={isCostLoading}
         month={monthName}
         year={year.toString()}

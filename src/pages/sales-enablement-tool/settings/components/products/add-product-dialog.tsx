@@ -5,7 +5,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./product-form";
-import { type ProductForm as ProductFormType } from "@/pages/sales-enablement-tool/settings/validations/products.schema";
+import { type ProductForm as ProductFormType } from "../../validations/products.schema";
+import { toast } from "sonner";
 
 interface AddProductDialogProps {
   open: boolean;
@@ -16,20 +17,23 @@ export function AddProductDialog({
   open,
   onOpenChange,
 }: AddProductDialogProps) {
-  const handleAddProduct = async (data: ProductFormType) => {
-    console.log("Adding product:", data);
-    // Mock API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    onOpenChange(false);
+  const handleAddProduct = async (_: ProductFormType) => {
+    toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
+      loading: "Adding product...",
+      success: () => {
+        onOpenChange(false);
+        return "Product added successfully";
+      },
+      error: "Failed to add product",
+    });
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
-
         <ProductForm
           onSubmit={handleAddProduct}
           onCancel={() => onOpenChange(false)}

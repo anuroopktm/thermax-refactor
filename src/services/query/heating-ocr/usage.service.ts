@@ -3,80 +3,72 @@ import { heatingApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  ActivityUsage,
-  CostUsage,
-  ActivityYearUsage,
-  CostUsageByYear,
-  ActivityUsageStatusStats,
-  ActivityUsageTopUser,
-  Limit,
-} from "./types";
+  CostUsageResponse,
+  ActivityUsageResponse,
+  ActivityUsageTopUserResponse,
+  ActivityUsageStatusStatsResponse,
+  LimitResponse,
+  CostUsageModel,
+  ActivityUsageModel,
+  LimitModel,
+} from "./types/usage.types";
+import {
+  mapCostUsageData,
+  mapActivityUsageData,
+  mapTopUsersData,
+  mapActivityStatsData,
+} from "@/pages/heating-ocr/lib/heating-mappers";
+import { heatingOcrKeys } from "./keys";
 
 export const useHeatingCostUsage = (year: number, month: number) => {
-  return useQuery<CostUsage, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "cost", year, month],
+  return useQuery<CostUsageResponse, AxiosError<ApiError>, CostUsageModel[]>({
+    queryKey: heatingOcrKeys.usage.cost.list({ year, month }),
     queryFn: async () => {
-      const { data } = await heatingApi.post<CostUsage>(
+      const { data } = await heatingApi.post(
         "/api/heating_ocr/usage/cost",
         null,
         { params: { year, month } },
       );
       return data;
     },
+    select: mapCostUsageData,
     retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
 export const useHeatingActivityUsage = (year: number, month: number) => {
-  return useQuery<ActivityUsage, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "activity", year, month],
+  return useQuery<
+    ActivityUsageResponse,
+    AxiosError<ApiError>,
+    ActivityUsageModel[]
+  >({
+    queryKey: heatingOcrKeys.usage.activity.list({ year, month }),
     queryFn: async () => {
-      const { data } = await heatingApi.get<ActivityUsage>(
-        "/api/heating_ocr/usage/activity",
-        { params: { year, month } },
-      );
+      const { data } = await heatingApi.get("/api/heating_ocr/usage/activity", {
+        params: { year, month },
+      });
       return data;
     },
+    select: mapActivityUsageData,
     retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
-export const useHeatingCostUsageByYear = (year: number) => {
-  return useQuery<CostUsageByYear, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "cost-year", year],
-    queryFn: async () => {
-      const { data } = await heatingApi.get<CostUsageByYear>(
-        "/api/heating_ocr/usage/year-cost",
-        { params: { year } },
-      );
-      return data;
-    },
-  });
-};
-
-export const useHeatingActivityUsageByYear = (year: number) => {
-  return useQuery<ActivityYearUsage, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "activity-year", year],
-    queryFn: async () => {
-      const { data } = await heatingApi.get<ActivityYearUsage>(
-        "/api/heating_ocr/usage/year-activity",
-        { params: { year } },
-      );
-      return data;
-    },
-  });
-};
-
 export const useHeatingActivityStats = (year: number, month: number) => {
-  return useQuery<ActivityUsageStatusStats, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "stats", year, month],
+  return useQuery<
+    ActivityUsageStatusStatsResponse,
+    AxiosError<ApiError>,
+    { name: string; value: number }[]
+  >({
+    queryKey: heatingOcrKeys.usage.activity.stats({ year, month }),
     queryFn: async () => {
-      const { data } = await heatingApi.get<ActivityUsageStatusStats>(
+      const { data } = await heatingApi.get(
         "/api/heating_ocr/usage/activity/stats",
         { params: { year, month } },
       );
       return data;
     },
+    select: mapActivityStatsData,
     retry: (_, error) => error?.response?.status !== 404,
   });
 };
@@ -86,46 +78,49 @@ export const useHeatingTopUsers = (
   month: number,
   limit: number = 5,
 ) => {
-  return useQuery<ActivityUsageTopUser, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "top-users", year, month, limit],
+  return useQuery<
+    ActivityUsageTopUserResponse,
+    AxiosError<ApiError>,
+    { name: string; value: number }[]
+  >({
+    queryKey: heatingOcrKeys.usage.activity.top({ year, month, limit }),
     queryFn: async () => {
-      const { data } = await heatingApi.get<ActivityUsageTopUser>(
+      const { data } = await heatingApi.get(
         "/api/heating_ocr/usage/activity/top",
         { params: { year, month, limit } },
       );
       return data;
     },
+    select: mapTopUsersData,
     retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
 export const useHeatingUsageLimit = () => {
-  return useQuery<Limit, AxiosError<ApiError>>({
-    queryKey: ["heating-ocr", "usage", "limit"],
+  return useQuery<LimitResponse, AxiosError<ApiError>, LimitModel>({
+    queryKey: heatingOcrKeys.usage.cost.limit(),
     queryFn: async () => {
-      const { data } = await heatingApi.get<Limit>(
+      const { data } = await heatingApi.get(
         "/api/heating_ocr/usage/cost/limit",
       );
       return data;
     },
+    select: (data) => ({ limit: data.limit }),
     retry: (_, error) => error?.response?.status !== 404,
   });
 };
 
 export const useHeatingUpdateUsageLimit = () => {
   const queryClient = useQueryClient();
-  return useMutation<Limit, AxiosError<ApiError>, number>({
+  return useMutation<void, AxiosError<ApiError>, number>({
     mutationFn: async (limit: number) => {
-      const { data } = await heatingApi.patch<Limit>(
-        "/api/heating_ocr/usage/cost/limit",
-        null,
-        { params: { limit } },
-      );
-      return data;
+      await heatingApi.patch("/api/heating_ocr/usage/cost/limit", null, {
+        params: { limit },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["heating-ocr", "usage", "limit"],
+        queryKey: heatingOcrKeys.usage.cost.all,
       });
     },
   });

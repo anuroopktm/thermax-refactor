@@ -1,46 +1,68 @@
-export interface ActivityUsageItem {
+export interface ActivityUsageResponse {
   day: number[];
   activity: number[];
   total: number;
 }
 
-export type ActivityUsageResponse = ActivityUsageItem;
+export interface ActivityUsageModel {
+  label: string;
+  value: number;
+}
 
-export interface CostUsageItem {
+export interface CostUsageResponse {
   day: number[];
   cost: number[];
   total: number;
 }
 
-export type CostUsageResponse = CostUsageItem;
+export interface CostUsageModel {
+  label: string;
+  value: number;
+}
 
-export interface TokenUsage {
+export interface TokenUsageModel {
   used: number;
   remaining: number;
   totalSpent: number;
   limit: number;
 }
 
-export interface StatsItem {
+export interface StatsItemResponse {
   stat: string;
   activity_count: number;
 }
 
-export interface StatsUsage {
-  result: StatsItem[];
+export interface StatsUsageResponse {
+  result: StatsItemResponse[];
 }
 
-export interface TopUsersItem {
+export interface StatsModel {
+  name: string;
+  value: number;
+}
+
+export interface TopUsersItemResponse {
   name: string;
   email: string;
   activity: number;
 }
 
-export interface TopUsersUsage {
-  result: TopUsersItem[];
+export interface TopUsersUsageResponse {
+  result: TopUsersItemResponse[];
 }
 
-export interface ActivitySummaryItem {
+export interface TopUserModel {
+  name: string;
+  value: number;
+}
+
+export interface RemarkModel {
+  key: string;
+  value: string;
+  isError: boolean;
+}
+
+export interface ActivitySummaryModel {
   id: number;
   serialNo: number;
   tagNumber: string;
@@ -50,5 +72,5 @@ export interface ActivitySummaryItem {
   lowerRange: string;
   upperRange: string;
   status: string;
-  remarks: string[];
+  remarks: RemarkModel[];
 }

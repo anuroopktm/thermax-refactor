@@ -6,25 +6,16 @@ import {
   useHeatingActivityStats,
 } from "@/services/query/heating-ocr";
 import { useDateParams } from "../hooks/use-date-params";
-import {
-  mapActivityChartData,
-  mapTopUsersData,
-  mapActivityStatsData,
-} from "../utils/activity.utils";
 
 export function ActivityTab() {
   const { year, monthName, monthIndex } = useDateParams();
 
-  const { data: activityData, isLoading: isActivityLoading } =
+  const { data: chartData = [], isLoading: isActivityLoading } =
     useHeatingActivityUsage(year, monthIndex);
-  const { data: topUsersData, isLoading: isTopUsersLoading } =
+  const { data: mappedTopUsers = [], isLoading: isTopUsersLoading } =
     useHeatingTopUsers(year, monthIndex);
-  const { data: statsData, isLoading: isStatsLoading } =
+  const { data: mappedStats = [], isLoading: isStatsLoading } =
     useHeatingActivityStats(year, monthIndex);
-
-  const chartData = mapActivityChartData(activityData);
-  const mappedTopUsers = mapTopUsersData(topUsersData);
-  const mappedStats = mapActivityStatsData(statsData);
 
   return (
     <div className="flex flex-col gap-6">

@@ -8,7 +8,7 @@ import {
   useHeatingUpdateUsageLimit,
 } from "@/services/query/heating-ocr";
 import { useDateParams } from "../hooks/use-date-params";
-import { mapChartData, getUsageStats } from "../utils/usage.utils";
+import { getUsageStats } from "../utils/usage.utils";
 
 export function CostTab() {
   const { year, monthName, monthIndex } = useDateParams();
@@ -21,10 +21,9 @@ export function CostTab() {
   const { data: currentMember } = useHeatingCurrentMember();
   const { mutateAsync, isPending } = useHeatingUpdateUsageLimit();
 
-  const chartData = mapChartData(costData);
   const usageData = getUsageStats(costData, limitData);
 
-  const isOwner = currentMember?.role === "OWNER";
+  const isOwner = currentMember?.role === "owner";
   const isLoading = isCostLoading || isLimitLoading;
 
   const handleUpdateLimit = async (newLimit: number) => {
@@ -38,7 +37,7 @@ export function CostTab() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
       <CostChart
-        data={chartData}
+        data={costData || []}
         isLoading={isCostLoading}
         month={monthName}
         year={year.toString()}

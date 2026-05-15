@@ -14,6 +14,7 @@ import type {
   ChatCreatePayload,
 } from "./types";
 import { normalizeHistoryMessages } from "@/pages/thermax-gpt/lib/chat-mappers";
+import { thermaxGptKeys } from "./keys";
 
 interface StreamCallbacks {
   onStart?: () => void;
@@ -32,7 +33,7 @@ export const useThermaxGptChat = ({
   search_term?: string;
 } = {}) => {
   return useQuery<ChatResponse, AxiosError<ApiError>, ChatItem[]>({
-    queryKey: ["chat", "list", skip, limit, search_term],
+    queryKey: thermaxGptKeys.chat.list({ skip, limit, search_term }),
     queryFn: async () => {
       const { data } = await gptApi.get("/thermax_gpt/chat", {
         params: {
@@ -58,7 +59,7 @@ export const useThermaxGptChatMessages = (
     AxiosError<ApiError>,
     NormalizedMessage[]
   >({
-    queryKey: ["chat", "messages", chatId],
+    queryKey: thermaxGptKeys.chat.messages(chatId),
     queryFn: async () => {
       const { data } = await gptApi.get(
         `/thermax_gpt/chat/${chatId}/chat_history`,
@@ -92,8 +93,7 @@ export const useThermaxGptCreateChat = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["chat", "list"],
-        exact: false,
+        queryKey: thermaxGptKeys.chat.list(),
       });
     },
   });
@@ -103,21 +103,18 @@ export const useThermaxGptUpdateChat = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
-    ChatItem,
+    void,
     AxiosError<ApiError>,
     { chatId: string | number; payload: ChatUpdatePayload }
   >({
     mutationFn: async ({ chatId, payload }) => {
-      const { data } = await gptApi.patch(`/thermax_gpt/chat/${chatId}`, null, {
+      await gptApi.patch(`/thermax_gpt/chat/${chatId}`, null, {
         params: payload,
       });
-
-      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["chat", "list"],
-        exact: false,
+        queryKey: thermaxGptKeys.chat.list(),
       });
     },
   });
@@ -128,14 +125,11 @@ export const useThermaxGptDeleteChat = () => {
 
   return useMutation<void, AxiosError<ApiError>, string | number>({
     mutationFn: async (chatId) => {
-      const { data } = await gptApi.delete(`/thermax_gpt/chat/${chatId}`);
-
-      return data;
+      await gptApi.delete(`/thermax_gpt/chat/${chatId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["chat", "list"],
-        exact: false,
+        queryKey: thermaxGptKeys.chat.list(),
       });
     },
   });
@@ -146,14 +140,11 @@ export const useThermaxGptClearHistory = () => {
 
   return useMutation<void, AxiosError<ApiError>, void>({
     mutationFn: async () => {
-      const { data } = await gptApi.delete("/thermax_gpt/chat");
-
-      return data;
+      await gptApi.delete("/thermax_gpt/chat");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["chat", "list"],
-        exact: false,
+        queryKey: thermaxGptKeys.chat.list(),
       });
     },
   });

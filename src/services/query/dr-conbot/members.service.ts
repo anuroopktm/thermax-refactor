@@ -9,8 +9,12 @@ import type {
   UpdateDrConbotMemberPayload,
 } from "./types";
 
-import { normalizeDrConbotMembers } from "@/pages/dr-conbot/lib/settings-mappers";
-import { type Member } from "@/services/query/sales-enablement/types/members.types";
+import {
+  normalizeDrConbotMembers,
+  normalizeDrConbotMember,
+} from "@/pages/dr-conbot/lib/settings-mappers";
+import { type Member } from "@/services/query/shared/types/members.types";
+import { drConbotKeys } from "./keys";
 
 export const useDrConbotMembers = (
   skip = 0,
@@ -18,7 +22,7 @@ export const useDrConbotMembers = (
   searchTerm?: string,
 ) => {
   return useQuery<DrConbotMembersResponse, AxiosError<ApiError>, Member[]>({
-    queryKey: ["dr-conbot", "members", skip, limit, searchTerm],
+    queryKey: drConbotKeys.members.list({ skip, limit, searchTerm }),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/member", {
         params: { skip, limit, search_term: searchTerm },
@@ -31,13 +35,14 @@ export const useDrConbotMembers = (
 };
 
 export const useDrConbotMe = () => {
-  return useQuery<DrConbotMember, AxiosError<ApiError>>({
-    queryKey: ["dr-conbot", "members", "me"],
+  return useQuery<DrConbotMember, AxiosError<ApiError>, Member>({
+    queryKey: drConbotKeys.members.me(),
     queryFn: async () => {
       const { data } = await conbotApi.get("/doctor_conbot/member/me");
 
       return data;
     },
+    select: normalizeDrConbotMember,
   });
 };
 
@@ -55,7 +60,7 @@ export const useCreateDrConbotMember = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dr-conbot", "members"] });
+      queryClient.invalidateQueries({ queryKey: drConbotKeys.members.all });
     },
   });
 };
@@ -77,7 +82,7 @@ export const useUpdateDrConbotMember = (memberId: number) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dr-conbot", "members"] });
+      queryClient.invalidateQueries({ queryKey: drConbotKeys.members.all });
     },
   });
 };
@@ -90,7 +95,7 @@ export const useDeleteDrConbotMember = () => {
       await conbotApi.delete(`/doctor_conbot/member/${memberId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dr-conbot", "members"] });
+      queryClient.invalidateQueries({ queryKey: drConbotKeys.members.all });
     },
   });
 };
