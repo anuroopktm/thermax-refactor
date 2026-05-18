@@ -21,14 +21,13 @@ export interface DrConbotFaqsResponse {
 
 export interface FaqModel {
   id: number;
-  user: string;
-  question: string;
-  answer: string;
-  status: string;
-  source: string;
   filename: string;
+  description: string;
+  status: string;
   kind: string;
   createdOn: string;
+  isActive: boolean;
+  categoryId: number | null;
 }
 
 export interface FaqCreatePayload {
@@ -40,8 +39,4 @@ export interface FaqCreatePayload {
 export interface FaqUpdatePayload {
   description?: string;
   kind?: string;
-}
-
-export interface CategoryDocumentLinkResponse {
-  link: string;
 }

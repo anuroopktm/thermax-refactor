@@ -106,7 +106,12 @@ export function ChildActivityForm({
           {/* File Upload */}
           <Field>
             <FieldLabel htmlFor="picture">File Upload*</FieldLabel>
-            <Input id="picture" type="file" {...form.register("file")} />
+            <Input
+              id="picture"
+              type="file"
+              className="cursor-pointer"
+              {...form.register("file")}
+            />
             <FieldError errors={[form.formState.errors.file]} />
           </Field>
         </FieldGroup>
@@ -127,7 +132,7 @@ export function ChildActivityForm({
           className="cursor-pointer"
           disabled={isSaving}
         >
-          {isSaving ? "Saving..." : "Save"}
+          Save
         </Button>
       </DialogFooter>
     </>

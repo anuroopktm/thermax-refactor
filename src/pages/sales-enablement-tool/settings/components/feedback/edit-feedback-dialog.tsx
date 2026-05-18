@@ -56,7 +56,7 @@ export function EditFeedbackDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-4xl" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Edit Feedback</DialogTitle>
         </DialogHeader>

@@ -63,14 +63,14 @@ export const DrConbotMembersView = lazy(() =>
     default: m.MembersView,
   })),
 );
-export const DrConbotProductsView = lazy(() =>
-  import("@/pages/dr-conbot/settings/views/products-view").then((m) => ({
-    default: m.ProductsView,
+export const DrConbotCategoriesView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/categories-view").then((m) => ({
+    default: m.CategoriesView,
   })),
 );
-export const DrConbotFeedbackView = lazy(() =>
-  import("@/pages/dr-conbot/settings/views/feedback-view").then((m) => ({
-    default: m.FeedbackView,
+export const DrConbotFaqView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/faq-view").then((m) => ({
+    default: m.FaqView,
   })),
 );
 

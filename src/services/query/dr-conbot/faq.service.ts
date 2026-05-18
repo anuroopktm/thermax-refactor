@@ -28,14 +28,9 @@ export const useDrConbotFaqs = (skip = 0, limit = 100, searchTerm?: string) => {
 export const useCreateDrConbotFaq = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    DrConbotFaqResponse,
-    AxiosError<ApiError>,
-    { formData: FormData; description: string; kind: string }
-  >({
-    mutationFn: async ({ formData, description, kind }) => {
+  return useMutation<DrConbotFaqResponse, AxiosError<ApiError>, FormData>({
+    mutationFn: async (formData) => {
       const { data } = await conbotApi.post("/doctor_conbot/faq", formData, {
-        params: { description, kind },
         headers: { "Content-Type": "multipart/form-data" },
       });
       return data;

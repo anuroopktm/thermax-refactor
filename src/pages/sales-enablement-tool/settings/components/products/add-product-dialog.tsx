@@ -4,8 +4,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ProductForm } from "./product-form";
-import { type ProductForm as ProductFormType } from "../../validations/products.schema";
+import { ProductForm } from "@/components/shared/products/product-form";
+import { type ProductForm as ProductFormType } from "@/lib/validations/products.schema";
 import { toast } from "sonner";
 
 interface AddProductDialogProps {
@@ -30,7 +30,7 @@ export function AddProductDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px]" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>

@@ -34,8 +34,8 @@ export const PATHS = {
     CHAT_ID: ":chatId",
     SETTINGS: {
       ROOT: "/dr-conbot/settings",
-      PRODUCTS: "products",
-      FEEDBACK: "feedback",
+      CATEGORIES: "categories",
+      FAQ: "faq",
       USAGE: "usage",
       MEMBERS: "members",
     },

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ProductsHeader } from "../components/products/products-header";
-import { ProductsList } from "../components/products/products-list";
+import { ProductsHeader } from "@/components/shared/products/products-header";
+import { ProductsList } from "@/components/shared/products/products-list";
+import { ProductFilesList } from "@/components/shared/products/product-files-list";
 import { AddProductDialog } from "../components/products/add-product-dialog";
 
 // Mock data for products
@@ -53,15 +54,29 @@ export function ProductsView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
+  // Filter products based on search query
+  const filteredProducts = MOCK_PRODUCTS.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <div className="space-y-6">
       <ProductsHeader
         onAdd={() => setIsAddDialogOpen(true)}
-        searchQuery={searchQuery}
+        searchTerm={searchQuery}
         onSearchChange={setSearchQuery}
       />
 
-      <ProductsList products={MOCK_PRODUCTS} />
+      <ProductsList
+        products={filteredProducts}
+        onEdit={() => {}}
+        onDelete={() => {}}
+        onAttachFile={() => {}}
+        renderFilesList={(productId) => {
+          const product = MOCK_PRODUCTS.find((p) => p.id === productId);
+          return <ProductFilesList files={product?.files || []} />;
+        }}
+      />
 
       <AddProductDialog
         open={isAddDialogOpen}

@@ -7,37 +7,37 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import type { Member } from "@/services/query/shared/types";
+import type { FaqModel } from "@/services/query/dr-conbot/types";
 
-interface DeleteMemberDialogProps {
-  member: Member;
+interface DeleteFaqDialogProps {
+  faq: FaqModel;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => Promise<any>;
   isDeleting: boolean;
 }
 
-export function DeleteMemberDialog({
-  member,
+export function DeleteFaqDialog({
+  faq,
   open,
   onOpenChange,
   onConfirm,
   isDeleting,
-}: DeleteMemberDialogProps) {
+}: DeleteFaqDialogProps) {
   const handleDelete = () => {
     onConfirm();
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>Delete Member</DialogTitle>
+          <DialogTitle>Delete FAQ Document</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently remove{" "}
-            <span className="font-medium">{member.name}</span>.
+            This action cannot be undone. This will permanently remove the
+            document <span className="font-medium">{faq.filename}</span>.
           </DialogDescription>
         </DialogHeader>
-
         <DialogFooter>
           <Button
             variant="outline"
@@ -47,9 +47,7 @@ export function DeleteMemberDialog({
           >
             Cancel
           </Button>
-          -
           <Button
-            variant="destructive"
             className="cursor-pointer"
             onClick={handleDelete}
             disabled={isDeleting}

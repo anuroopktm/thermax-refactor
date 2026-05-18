@@ -1,4 +1,4 @@
-import { Users, Gauge, Package, MessageSquare } from "lucide-react";
+import { Users, Gauge, Store, Link2 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -12,16 +12,16 @@ import {
 
 const MENU_ITEMS = [
   {
-    id: "products",
-    label: "Products",
-    icon: Package,
-    path: "/dr-conbot/settings/products",
+    id: "categories",
+    label: "Categories",
+    icon: Store,
+    path: "/dr-conbot/settings/categories",
   },
   {
-    id: "feedback",
-    label: "Feedback",
-    icon: MessageSquare,
-    path: "/dr-conbot/settings/feedback",
+    id: "faq",
+    label: "FAQ",
+    icon: Link2,
+    path: "/dr-conbot/settings/faq",
   },
   {
     id: "members",

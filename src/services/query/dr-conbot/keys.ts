@@ -40,13 +40,13 @@ export const drConbotKeys = {
       limit: () => ["dr-conbot", "usage", "cost", "limit"] as const,
     },
   },
-  products: {
-    all: ["dr-conbot", "products"] as const,
+  categories: {
+    all: ["dr-conbot", "categories"] as const,
     list: (params?: Record<string, unknown>) =>
-      ["dr-conbot", "products", "list", ...(params ? [params] : [])] as const,
-    detail: (id: number) => ["dr-conbot", "products", "detail", id] as const,
-    documents: (productId: number) =>
-      ["dr-conbot", "products", "documents", productId] as const,
+      ["dr-conbot", "categories", "list", ...(params ? [params] : [])] as const,
+    detail: (id: number) => ["dr-conbot", "categories", "detail", id] as const,
+    documents: (categoryId: number) =>
+      ["dr-conbot", "categories", "documents", categoryId] as const,
   },
   faqs: {
     all: ["dr-conbot", "faqs"] as const,

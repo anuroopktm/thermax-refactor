@@ -22,20 +22,22 @@ export const drConbotRoutes = [
         children: [
           {
             index: true,
-            element: <Navigate to={PATHS.DR_CONBOT.SETTINGS.MEMBERS} replace />,
+            element: (
+              <Navigate to={PATHS.DR_CONBOT.SETTINGS.CATEGORIES} replace />
+            ),
           },
           {
-            path: PATHS.DR_CONBOT.SETTINGS.PRODUCTS,
-            element: <Pages.DrConbotProductsView />,
+            path: PATHS.DR_CONBOT.SETTINGS.CATEGORIES,
+            element: <Pages.DrConbotCategoriesView />,
             handle: {
-              crumb: "Products",
+              crumb: "Categories",
             },
           },
           {
-            path: PATHS.DR_CONBOT.SETTINGS.FEEDBACK,
-            element: <Pages.DrConbotFeedbackView />,
+            path: PATHS.DR_CONBOT.SETTINGS.FAQ,
+            element: <Pages.DrConbotFaqView />,
             handle: {
-              crumb: "Feedback",
+              crumb: "FAQ",
             },
           },
           {

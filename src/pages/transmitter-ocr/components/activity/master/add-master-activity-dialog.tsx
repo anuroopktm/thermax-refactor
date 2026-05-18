@@ -56,7 +56,7 @@ export function AddMasterActivityDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px]" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Create Master Activity</DialogTitle>
         </DialogHeader>

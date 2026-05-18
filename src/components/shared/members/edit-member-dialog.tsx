@@ -55,7 +55,7 @@ export function EditMemberDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Edit Member</DialogTitle>
           <DialogDescription>Update member details and role.</DialogDescription>

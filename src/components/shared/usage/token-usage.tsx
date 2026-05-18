@@ -204,7 +204,7 @@ export function TokenUsage({
 
       {/* Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>Update Limit</DialogTitle>
             <DialogDescription>
@@ -235,7 +235,7 @@ export function TokenUsage({
                 Cancel
               </Button>
               <Button type="submit" disabled={isUpdating}>
-                {isUpdating ? "Updating..." : "Update Limit"}
+                Update Limit
               </Button>
             </DialogFooter>
           </form>

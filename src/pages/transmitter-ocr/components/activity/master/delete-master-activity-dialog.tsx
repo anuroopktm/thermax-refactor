@@ -40,7 +40,7 @@ export function DeleteMasterActivityDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Delete Master Activity</DialogTitle>
           <DialogDescription>

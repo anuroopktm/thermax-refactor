@@ -71,7 +71,7 @@ export function EditMasterActivityDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px]" showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Edit Master Activity</DialogTitle>
         </DialogHeader>

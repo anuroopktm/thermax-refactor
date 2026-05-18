@@ -3,10 +3,10 @@ import {
   type DrConbotMember,
   type CreateDrConbotMemberPayload,
   type UpdateDrConbotMemberPayload,
-  type DrConbotProductResponse,
-  type ProductModel,
-  type DrConbotProductDocumentResponse,
-  type ProductFileModel,
+  type DrConbotCategoryResponse,
+  type CategoryModel,
+  type DrConbotCategoryDocumentResponse,
+  type CategoryFileModel,
   type DrConbotFaqResponse,
   type FaqModel,
 } from "@/services/query/dr-conbot/types";
@@ -86,9 +86,9 @@ export function mapTopUsersData(data: TopUserResponse[]): TopUserModel[] {
   );
 }
 
-export function normalizeProductDocument(
-  doc: DrConbotProductDocumentResponse,
-): ProductFileModel {
+export function normalizeCategoryDocument(
+  doc: DrConbotCategoryDocumentResponse,
+): CategoryFileModel {
   return {
     id: String(doc.id),
     name: doc.filename,
@@ -99,30 +99,30 @@ export function normalizeProductDocument(
   };
 }
 
-export function normalizeProductDocuments(
-  docs: DrConbotProductDocumentResponse[],
-): ProductFileModel[] {
-  return docs ? docs.map(normalizeProductDocument) : [];
+export function normalizeCategoryDocuments(
+  docs: DrConbotCategoryDocumentResponse[],
+): CategoryFileModel[] {
+  return docs ? docs.map(normalizeCategoryDocument) : [];
 }
 
-export function normalizeProduct(
-  p: DrConbotProductResponse,
-  docs: DrConbotProductDocumentResponse[] = [],
-): ProductModel {
+export function normalizeCategory(
+  p: DrConbotCategoryResponse,
+  docs: DrConbotCategoryDocumentResponse[] = [],
+): CategoryModel {
   return {
     id: String(p.id),
     name: p.title,
     description: p.description,
-    models: p.short_title || "",
+    short_title: p.short_title || "",
     fileCount: p.total_document,
-    files: normalizeProductDocuments(docs),
+    files: normalizeCategoryDocuments(docs),
   };
 }
 
-export function normalizeProducts(
-  products: DrConbotProductResponse[],
-): ProductModel[] {
-  return products ? products.map((p) => normalizeProduct(p)) : [];
+export function normalizeCategories(
+  categories: DrConbotCategoryResponse[],
+): CategoryModel[] {
+  return categories ? categories.map((c) => normalizeCategory(c)) : [];
 }
 
 export function normalizeFaq(f: DrConbotFaqResponse): FaqModel {
@@ -133,17 +133,22 @@ export function normalizeFaq(f: DrConbotFaqResponse): FaqModel {
   };
   return {
     id: f.id,
-    user: "AD",
-    question: f.description || f.filename,
-    answer: f.filename,
-    status: statusMap[f.status] || "Not Specified",
-    source: f.kind,
     filename: f.filename,
+    description: f.description,
+    status: statusMap[f.status] || "Not Specified",
     kind: f.kind,
     createdOn: f.created_on,
+    isActive: f.is_active,
+    categoryId: f.category_id,
   };
 }
 
 export function normalizeFaqs(faqs: DrConbotFaqResponse[]): FaqModel[] {
   return faqs ? faqs.map(normalizeFaq) : [];
 }
+
+// Backward compatibility legacy mappings
+export const normalizeProductDocument = normalizeCategoryDocument;
+export const normalizeProductDocuments = normalizeCategoryDocuments;
+export const normalizeProduct = normalizeCategory;
+export const normalizeProducts = normalizeCategories;
