@@ -61,7 +61,7 @@ export function ProductFilesList({
 
 const FilesEmptyState = memo(() => {
   return (
-    <Empty className="py-6 border border-dashed rounded-md bg-transparent">
+    <Empty className="py-6 border border-dashed rounded-md">
       <EmptyHeader>
         <EmptyMedia>
           <FolderOpen className="size-6 text-primary" />

@@ -55,7 +55,7 @@ export function ChildActivityDetailHeader({
       <InputGroup className="w-64 h-9">
         <InputGroupInput
           placeholder="Search activity..."
-          className="bg-transparent focus-visible:ring-0"
+          className="focus-visible:ring-0"
         />
         <InputGroupAddon className="text-muted-foreground">
           <Search />

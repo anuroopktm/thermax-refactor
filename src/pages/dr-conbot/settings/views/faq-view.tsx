@@ -37,6 +37,7 @@ export function FaqView() {
 
   return (
     <FeaturePageLayout
+      className="p-0!"
       title="FAQ Documents"
       description={isLoading ? "Loading results..." : resultText}
       actions={

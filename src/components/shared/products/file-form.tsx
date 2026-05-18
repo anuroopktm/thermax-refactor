@@ -79,7 +79,7 @@ export function FileForm({
               render={({ field }) => (
                 <>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="cursor-pointer bg-transparent">
+                    <SelectTrigger className="cursor-pointer">
                       <SelectValue placeholder="Select type">
                         {(value) =>
                           KIND_OPTIONS.find((opt) => opt.value === value)
@@ -111,7 +111,7 @@ export function FileForm({
             <Textarea
               placeholder="Enter file description..."
               {...form.register("description")}
-              className="bg-transparent min-h-[120px]"
+              className="min-h-[120px]"
             />
             <FieldError errors={[form.formState.errors.description]} />
           </Field>

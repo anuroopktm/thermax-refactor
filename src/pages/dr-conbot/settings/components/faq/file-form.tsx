@@ -59,7 +59,7 @@ export function FileForm({
             <Textarea
               placeholder="Enter FAQ description..."
               {...form.register("description")}
-              className="bg-transparent min-h-[120px]"
+              className="min-h-[120px]"
             />
             <FieldError errors={[form.formState.errors.description]} />
           </Field>

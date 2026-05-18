@@ -23,7 +23,7 @@ export function FaqHeader({
         <InputGroupInput
           type="search"
           placeholder="Search FAQs..."
-          className="bg-transparent focus-visible:ring-0"
+          className="focus-visible:ring-0"
           value={searchTerm}
           onChange={(e) => onSearchChange?.(e.target.value)}
         />

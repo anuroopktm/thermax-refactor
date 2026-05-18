@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CardAction } from "@/components/ui/card";
 import { EditFaqDialog } from "./edit-faq-dialog";
+import { DeleteFaqDialog } from "./delete-faq-dialog";
 import { type FaqModel } from "@/services/query/dr-conbot/types";
 import { useDeleteDrConbotFaq } from "@/services/query/dr-conbot/faq.service";
 import { conbotApi } from "@/services/interceptor";
@@ -33,10 +34,11 @@ const STATUS_MAP = {
 
 export function FaqCard({ faq }: FaqCardProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const deleteMutation = useDeleteDrConbotFaq();
 
-  const handleViewFile = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleViewFile = async () => {
     try {
       const { data } = await conbotApi.get(`/doctor_conbot/faq/${faq.id}/link`);
       if (data?.link) {
@@ -49,20 +51,18 @@ export function FaqCard({ faq }: FaqCardProps) {
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (
-      confirm(
-        "Are you sure you want to remove this FAQ document? This will delete it permanently.",
-      )
-    ) {
-      toast.promise(deleteMutation.mutateAsync(faq.id), {
-        loading: "Deleting document...",
-        success: "Document deleted successfully",
-        error: (err) =>
-          err?.response?.data?.detail || "Failed to delete document",
-      });
-    }
+  const handleDelete = () => setShowDeleteConfirm(true);
+
+  const confirmDelete = async () => {
+    toast.promise(deleteMutation.mutateAsync(faq.id), {
+      loading: "Deleting document...",
+      success: () => {
+        setShowDeleteConfirm(false);
+        return "Document deleted successfully";
+      },
+      error: (err) =>
+        err?.response?.data?.detail || "Failed to delete document",
+    });
   };
 
   const statusBadge = STATUS_MAP[faq.status as keyof typeof STATUS_MAP] || {
@@ -90,6 +90,10 @@ export function FaqCard({ faq }: FaqCardProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
                 render={
                   <CardAction>
                     <Button
@@ -102,15 +106,22 @@ export function FaqCard({ faq }: FaqCardProps) {
                   </CardAction>
                 }
               />
-              <DropdownMenuContent align="end" className="min-w-28">
+              <DropdownMenuContent
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+                align="end"
+                className="min-w-28"
+              >
                 <DropdownMenuItem
-                  className="cursor-pointer font-medium"
+                  className="cursor-pointer"
                   onClick={() => setIsEditDialogOpen(true)}
                 >
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="cursor-pointer font-medium text-destructive focus:text-destructive"
+                  className="cursor-pointer"
                   onClick={handleDelete}
                 >
                   Delete
@@ -125,6 +136,14 @@ export function FaqCard({ faq }: FaqCardProps) {
         faq={faq}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
+      />
+
+      <DeleteFaqDialog
+        faq={faq}
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onConfirm={confirmDelete}
+        isDeleting={deleteMutation.isPending}
       />
     </>
   );

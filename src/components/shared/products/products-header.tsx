@@ -23,7 +23,7 @@ export function ProductsHeader({
         <InputGroupInput
           type="search"
           placeholder="Search products..."
-          className="bg-transparent focus-visible:ring-0"
+          className="focus-visible:ring-0"
           value={searchTerm}
           onChange={(e) => onSearchChange?.(e.target.value)}
         />

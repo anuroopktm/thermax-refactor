@@ -29,9 +29,10 @@ interface EditFaqDialogProps {
 }
 
 export function EditFaqDialog({ faq, open, onOpenChange }: EditFaqDialogProps) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const updateMutation = useUpdateDrConbotFaq(faq.id);
   const deleteMutation = useDeleteDrConbotFaq();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const id = useId();
   const form = useForm<EditFaqForm>({
@@ -78,13 +79,13 @@ export function EditFaqDialog({ faq, open, onOpenChange }: EditFaqDialogProps) {
           <form id={id} onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <FieldGroup className="flex-row">
-                {/* Filename Readonly */}
+                {/* Filename */}
                 <Field className="flex-1">
                   <Label>Filename</Label>
                   <Input value={faq.filename} disabled />
                 </Field>
 
-                {/* Status Display Only */}
+                {/* Status */}
                 <Field className="flex-1">
                   <Label>Pipeline Status</Label>
                   <Input value={faq.status} disabled />
@@ -96,6 +97,7 @@ export function EditFaqDialog({ faq, open, onOpenChange }: EditFaqDialogProps) {
                 <Label>Description*</Label>
                 <Textarea
                   placeholder="Enter document description..."
+                  className="min-h-[120px]"
                   {...form.register("description")}
                 />
                 <FieldError errors={[form.formState.errors.description]} />

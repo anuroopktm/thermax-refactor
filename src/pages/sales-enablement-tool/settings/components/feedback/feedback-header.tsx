@@ -29,7 +29,7 @@ export function FeedbackHeader({
           placeholder="Search feedback..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="bg-transparent focus-visible:ring-0"
+          className="focus-visible:ring-0"
         />
         <InputGroupAddon className="text-muted-foreground">
           <Search />

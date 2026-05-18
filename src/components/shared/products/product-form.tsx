@@ -44,11 +44,7 @@ export function ProductForm({
           {/* Title */}
           <Field>
             <Label>Title*</Label>
-            <Input
-              placeholder="Product title"
-              {...form.register("title")}
-              className="bg-transparent"
-            />
+            <Input placeholder="Product title" {...form.register("title")} />
             <FieldError errors={[form.formState.errors.title]} />
           </Field>
 
@@ -58,7 +54,6 @@ export function ProductForm({
             <Input
               placeholder="Product short title"
               {...form.register("short_title")}
-              className="bg-transparent"
             />
             <FieldError errors={[form.formState.errors.short_title]} />
           </Field>
@@ -69,7 +64,7 @@ export function ProductForm({
             <Textarea
               placeholder="Description"
               {...form.register("description")}
-              className="bg-transparent min-h-[120px]"
+              className="min-h-[120px]"
             />
             <FieldError errors={[form.formState.errors.description]} />
           </Field>

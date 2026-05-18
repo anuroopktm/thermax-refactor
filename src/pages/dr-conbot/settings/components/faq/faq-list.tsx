@@ -18,13 +18,9 @@ interface FaqListProps {
 }
 
 export function FaqList({ faqs, isLoading = false }: FaqListProps) {
-  if (isLoading) {
-    return <FaqSkeleton />;
-  }
+  if (isLoading) return <FaqSkeleton />;
 
-  if (faqs.length === 0) {
-    return <FaqEmptyState />;
-  }
+  if (faqs.length === 0) return <FaqEmptyState />;
 
   return (
     <div className="space-y-4">
@@ -61,10 +57,7 @@ const FaqSkeleton = memo(() => {
   return (
     <div className="space-y-4">
       {Array.from({ length: 3 }).map((_, i) => (
-        <Card
-          key={i}
-          className="animate-pulse bg-transparent py-4 px-6 flex items-center justify-between"
-        >
+        <Card key={i} className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Skeleton className="size-5 rounded-md" />
             <Skeleton className="h-5 w-48 bg-muted" />

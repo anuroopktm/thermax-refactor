@@ -44,11 +44,7 @@ export function CategoryForm({
           {/* Title */}
           <Field>
             <Label>Full name*</Label>
-            <Input
-              placeholder="Full name"
-              {...form.register("title")}
-              className="bg-transparent"
-            />
+            <Input placeholder="Full name" {...form.register("title")} />
             <FieldError errors={[form.formState.errors.title]} />
           </Field>
 
@@ -58,7 +54,6 @@ export function CategoryForm({
             <Input
               placeholder="Enter aliases and abbreviations"
               {...form.register("short_title")}
-              className="bg-transparent"
             />
             <FieldError errors={[form.formState.errors.short_title]} />
           </Field>
@@ -69,7 +64,7 @@ export function CategoryForm({
             <Textarea
               placeholder="Description"
               {...form.register("description")}
-              className="bg-transparent min-h-[120px]"
+              className="min-h-[120px]"
             />
             <FieldError errors={[form.formState.errors.description]} />
           </Field>
