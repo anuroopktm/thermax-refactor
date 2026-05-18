@@ -98,6 +98,7 @@ export default function ThermaxGptPage() {
           isLoading={isLoading}
           isTyping={isTyping}
           onSend={sendMessage}
+          disclaimer="Thermax GPT can make mistakes. Check important info."
         />
       </div>
     </SidebarProvider>

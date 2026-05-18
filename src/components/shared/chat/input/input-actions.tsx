@@ -10,6 +10,8 @@ interface Props {
   canSend: boolean;
   model: string;
   setModel: (model: string) => void;
+  fileSupport?: boolean;
+  modelSupport?: boolean;
 }
 
 export function InputActions({
@@ -19,24 +21,28 @@ export function InputActions({
   canSend,
   model,
   setModel,
+  fileSupport = true,
+  modelSupport = true,
 }: Props) {
   return (
     <InputGroupAddon align="block-end">
-      <TooltipWrapper
-        render={
-          <InputGroupButton
-            variant="secondary"
-            size="icon-sm"
-            className="cursor-pointer"
-            onClick={onUpload}
-          >
-            <Paperclip />
-          </InputGroupButton>
-        }
-        content={<p>Attach files</p>}
-      />
+      {fileSupport && (
+        <TooltipWrapper
+          render={
+            <InputGroupButton
+              variant="secondary"
+              size="icon-sm"
+              className="cursor-pointer"
+              onClick={onUpload}
+            >
+              <Paperclip />
+            </InputGroupButton>
+          }
+          content={<p>Attach files</p>}
+        />
+      )}
 
-      <ModelSelector value={model} onChange={setModel} />
+      {modelSupport && <ModelSelector value={model} onChange={setModel} />}
 
       <TooltipWrapper
         render={

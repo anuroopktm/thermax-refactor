@@ -63,6 +63,16 @@ export const DrConbotMembersView = lazy(() =>
     default: m.MembersView,
   })),
 );
+export const DrConbotProductsView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/products-view").then((m) => ({
+    default: m.ProductsView,
+  })),
+);
+export const DrConbotFeedbackView = lazy(() =>
+  import("@/pages/dr-conbot/settings/views/feedback-view").then((m) => ({
+    default: m.FeedbackView,
+  })),
+);
 
 export const MasterActivityView = lazy(() =>
   import("@/pages/transmitter-ocr/views/master-activity-view").then((m) => ({

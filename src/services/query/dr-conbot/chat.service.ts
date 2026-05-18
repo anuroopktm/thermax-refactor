@@ -16,13 +16,6 @@ import type {
 import { normalizeHistoryMessages } from "@/pages/dr-conbot/lib/chat-mappers";
 import { drConbotKeys } from "./keys";
 
-interface StreamCallbacks {
-  onStart?: () => void;
-  onChunk?: (chunk: string, fullText: string) => void;
-  onEnd?: (fullText: string) => void;
-  onError?: (error: AxiosError | Error) => void;
-}
-
 export const useDrConbotChat = ({
   skip = 0,
   limit = 100,
@@ -87,7 +80,7 @@ export const useDrConbotCreateChat = () => {
     ChatCreatePayload
   >({
     mutationFn: async (input) => {
-      const { data } = await conbotApi.post("/doctor_conbot/chat", input);
+      const { data } = await conbotApi.post("/doctor_conbot/chat/", input);
 
       return data;
     },
@@ -169,85 +162,18 @@ export const useDrConbotCreateChatHistory = () => {
   });
 };
 
-export const useDrConbotChatHistoryStream = async (
-  chatId: string,
-  model: string,
-  thinking: boolean,
-  human: string,
-  callbacks?: StreamCallbacks,
-) => {
-  const { onStart, onChunk, onEnd, onError } = callbacks || {};
-  try {
-    onStart?.();
-
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_SERVICE_DOCTOR_CONBOT_URL}/doctor_conbot/chat/${chatId}/agent/?model=${model}&thinking=${thinking}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          Accept: "text/event-stream",
-        },
-        body: JSON.stringify({ human }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`Stream request failed: ${response.status}`);
-    }
-
-    if (!response.body) {
-      throw new Error("Readable stream not supported");
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    let buffer = "";
-    let fullText = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
-
-      for (const event of events) {
-        const lines = event.split("\n");
-
-        for (const line of lines) {
-          if (!line.startsWith("data:")) continue;
-
-          const jsonStr = line.slice(5).trim();
-
-          if (!jsonStr) continue;
-
-          const parsed = JSON.parse(jsonStr);
-
-          if (parsed.type === "text") {
-            fullText += parsed.content;
-            onChunk?.(parsed.content, fullText);
-          }
-
-          if (parsed.type === "end") {
-            onEnd?.(fullText);
-            return fullText;
-          }
-        }
-      }
-    }
-
-    onEnd?.(fullText);
-
-    return fullText;
-  } catch (error) {
-    onError?.(error as AxiosError);
-
-    throw error;
-  }
+export const useDrConbotSendAgentMessage = () => {
+  return useMutation<
+    ChatHistoryModel,
+    AxiosError<ApiError>,
+    { chatId: string | number; human: string }
+  >({
+    mutationFn: async ({ chatId, human }) => {
+      const { data } = await conbotApi.post(
+        `/doctor_conbot/chat/${chatId}/agent/`,
+        { human },
+      );
+      return data;
+    },
+  });
 };

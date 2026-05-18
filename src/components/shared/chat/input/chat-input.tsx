@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
 import { InputGroup } from "@/components/ui/input-group";
 import { Field, FieldDescription } from "@/components/ui/field";
 
@@ -10,10 +10,24 @@ import { MODELS } from "../types";
 interface ChatInputProps {
   onSend: (content: string, modelId: string, isThinking: boolean) => void;
   disabled?: boolean;
+  fileSupport?: boolean;
+  modelSupport?: boolean;
+  onUpload?: (files: File[]) => void;
+  disclaimer?: ReactNode;
 }
 
 export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
-  ({ onSend, disabled }, ref) => {
+  (
+    {
+      onSend,
+      disabled,
+      fileSupport = true,
+      modelSupport = true,
+      onUpload,
+      disclaimer = "Thermax AI Studio can make mistakes. Check important info.",
+    },
+    ref,
+  ) => {
     const [input, setInput] = useState("");
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const [model, setModel] = useState(MODELS[0].id);
@@ -47,19 +61,25 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
               canSend={!!input.trim()}
               model={model}
               setModel={setModel}
+              fileSupport={fileSupport}
+              modelSupport={modelSupport}
             />
           </InputGroup>
 
-          <FieldDescription className="text-center text-xs mb-4">
-            Thermax AI Studio can make mistakes. Check important info.
-          </FieldDescription>
+          {disclaimer && (
+            <FieldDescription className="text-center text-xs mb-4">
+              {disclaimer}
+            </FieldDescription>
+          )}
         </Field>
 
-        <ChatFileUploadDialog
-          open={isUploadOpen}
-          onOpenChange={setIsUploadOpen}
-          onUpload={() => {}}
-        />
+        {fileSupport && (
+          <ChatFileUploadDialog
+            open={isUploadOpen}
+            onOpenChange={setIsUploadOpen}
+            onUpload={onUpload}
+          />
+        )}
       </div>
     );
   },

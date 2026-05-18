@@ -19,7 +19,7 @@ export function normalizeThermaxMember(m: ThermaxMember): Member {
     id: m.id,
     name: m.name,
     email: m.email,
-    role: m.role,
+    role: m.role || "",
   };
 }
 

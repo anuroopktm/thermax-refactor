@@ -20,6 +20,7 @@ export default function SalesEnablementPage() {
             onSend={() => {}}
             isLoading={false}
             isTyping={false}
+            disclaimer="Sales Enablement Tool can make mistakes. Check important info."
           />
           <SimilarQuestions questions={[]} isLoading={false} />
         </div>

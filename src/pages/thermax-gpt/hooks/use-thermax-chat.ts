@@ -140,7 +140,7 @@ export const useThermaxChat = (chatId?: string) => {
           },
         },
       );
-    } catch (error) {
+    } finally {
       setIsTyping(false);
       setStreamingMessage(null);
     }

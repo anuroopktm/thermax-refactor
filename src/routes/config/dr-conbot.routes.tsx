@@ -25,6 +25,20 @@ export const drConbotRoutes = [
             element: <Navigate to={PATHS.DR_CONBOT.SETTINGS.MEMBERS} replace />,
           },
           {
+            path: PATHS.DR_CONBOT.SETTINGS.PRODUCTS,
+            element: <Pages.DrConbotProductsView />,
+            handle: {
+              crumb: "Products",
+            },
+          },
+          {
+            path: PATHS.DR_CONBOT.SETTINGS.FEEDBACK,
+            element: <Pages.DrConbotFeedbackView />,
+            handle: {
+              crumb: "Feedback",
+            },
+          },
+          {
             path: PATHS.DR_CONBOT.SETTINGS.USAGE,
             element: <Pages.DrConbotUsageView />,
             handle: {

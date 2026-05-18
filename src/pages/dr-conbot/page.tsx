@@ -97,6 +97,9 @@ export default function DrConbotPage() {
           isLoading={isLoading}
           isTyping={isTyping}
           onSend={sendMessage}
+          fileSupport={false}
+          modelSupport={false}
+          disclaimer="Dr. Conbot can make mistakes. Check important info."
         />
       </div>
     </SidebarProvider>

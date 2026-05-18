@@ -3,6 +3,12 @@ import {
   type DrConbotMember,
   type CreateDrConbotMemberPayload,
   type UpdateDrConbotMemberPayload,
+  type DrConbotProductResponse,
+  type ProductModel,
+  type DrConbotProductDocumentResponse,
+  type ProductFileModel,
+  type DrConbotFaqResponse,
+  type FaqModel,
 } from "@/services/query/dr-conbot/types";
 import { type MemberForm } from "@/lib/validations/members.schema";
 import {
@@ -19,7 +25,7 @@ export function normalizeDrConbotMember(m: DrConbotMember): Member {
     id: m.id,
     name: m.name,
     email: m.email,
-    role: m.role,
+    role: m.role || "",
   };
 }
 
@@ -78,4 +84,66 @@ export function mapTopUsersData(data: TopUserResponse[]): TopUserModel[] {
       value: item.question,
     })) || []
   );
+}
+
+export function normalizeProductDocument(
+  doc: DrConbotProductDocumentResponse,
+): ProductFileModel {
+  return {
+    id: String(doc.id),
+    name: doc.filename,
+    type: doc.filename.split(".").pop() || "",
+    status: doc.status,
+    description: doc.description || "",
+    kind: doc.kind,
+  };
+}
+
+export function normalizeProductDocuments(
+  docs: DrConbotProductDocumentResponse[],
+): ProductFileModel[] {
+  return docs ? docs.map(normalizeProductDocument) : [];
+}
+
+export function normalizeProduct(
+  p: DrConbotProductResponse,
+  docs: DrConbotProductDocumentResponse[] = [],
+): ProductModel {
+  return {
+    id: String(p.id),
+    name: p.title,
+    description: p.description,
+    models: p.short_title || "",
+    fileCount: p.total_document,
+    files: normalizeProductDocuments(docs),
+  };
+}
+
+export function normalizeProducts(
+  products: DrConbotProductResponse[],
+): ProductModel[] {
+  return products ? products.map((p) => normalizeProduct(p)) : [];
+}
+
+export function normalizeFaq(f: DrConbotFaqResponse): FaqModel {
+  const statusMap: Record<string, string> = {
+    STARTED: "in-review",
+    COMPLETED: "approved",
+    FAILED: "rejected",
+  };
+  return {
+    id: f.id,
+    user: "AD",
+    question: f.description || f.filename,
+    answer: f.filename,
+    status: statusMap[f.status] || "Not Specified",
+    source: f.kind,
+    filename: f.filename,
+    kind: f.kind,
+    createdOn: f.created_on,
+  };
+}
+
+export function normalizeFaqs(faqs: DrConbotFaqResponse[]): FaqModel[] {
+  return faqs ? faqs.map(normalizeFaq) : [];
 }

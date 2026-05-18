@@ -3,41 +3,54 @@ import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useDrConbotChatMessages,
-  useDrConbotCreateChatHistory,
   useDrConbotCreateChat,
-  useDrConbotChatHistoryStream,
+  useDrConbotSendAgentMessage,
 } from "@/services/query/dr-conbot/chat.service";
 import { PATHS } from "@/routes/constants/routes";
-import type { NormalizedMessage } from "@/components/shared/chat/types";
 import type { ChatHistoryResponse } from "@/services/query/dr-conbot/types";
 import { drConbotKeys } from "@/services/query/dr-conbot/keys";
+import type { NormalizedMessage } from "@/components/shared/chat/types";
 
 export const useDrConbotChat = (chatId?: string) => {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
-  const [streamingMessage, setStreamingMessage] =
-    useState<NormalizedMessage | null>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [pendingUserMessage, setPendingUserMessage] =
+    useState<NormalizedMessage | null>(null);
 
   const { data: history = [], isLoading } = useDrConbotChatMessages(chatId);
-  const sendMessageMutation = useDrConbotCreateChatHistory();
+  const sendAgentMessageMutation = useDrConbotSendAgentMessage();
   const createChatMutation = useDrConbotCreateChat();
 
   const messages = useMemo(() => {
-    if (!streamingMessage) return history;
+    const list = [...history];
 
-    const isAlreadyInHistory = history.some(
-      (m) => m.id === streamingMessage.id,
-    );
+    if (pendingUserMessage) {
+      const isAlreadyInHistory = history.some(
+        (m) => m.id === pendingUserMessage.id,
+      );
+      if (!isAlreadyInHistory) {
+        list.push(pendingUserMessage);
+      }
+    }
 
-    return isAlreadyInHistory ? history : [...history, streamingMessage];
-  }, [history, streamingMessage]);
+    if (isTyping) {
+      list.push({
+        id: "temp-typing-indicator",
+        role: "assistant",
+        content: "",
+        isThinking: true,
+      });
+    }
+
+    return list;
+  }, [history, pendingUserMessage, isTyping]);
 
   const sendMessage = async (
     message: string,
-    modelId: string,
-    isThinking: boolean,
+    _modelId?: string,
+    _isThinking?: boolean,
   ) => {
     if (!message.trim()) return;
 
@@ -61,11 +74,18 @@ export const useDrConbotChat = (chatId?: string) => {
 
       const chatIdToUse = String(targetChatId);
 
-      const historyItem = await sendMessageMutation.mutateAsync({
+      const tempId = `temp-${Date.now()}-human`;
+      const tempUserMsg: NormalizedMessage = {
+        id: tempId,
+        role: "user",
+        content: message.trim(),
+      };
+
+      setPendingUserMessage(tempUserMsg);
+
+      const agentResponse = await sendAgentMessageMutation.mutateAsync({
         chatId: chatIdToUse,
         human: message.trim(),
-        model: modelId,
-        thinking: isThinking,
       });
 
       await queryClient.cancelQueries({
@@ -79,68 +99,14 @@ export const useDrConbotChat = (chatId?: string) => {
           const current = old ?? { total: 0, result: [] };
           return {
             ...current,
-            result: [...current.result, historyItem],
+            result: [...current.result, agentResponse],
             total: current.total + 1,
           };
         },
       );
-
-      const streamingId = `${historyItem.id}-ai`;
-      setStreamingMessage({
-        id: streamingId,
-        role: "assistant",
-        content: "",
-        isThinking: true,
-      });
-
-      await useDrConbotChatHistoryStream(
-        chatIdToUse,
-        modelId,
-        isThinking,
-        message.trim(),
-        {
-          onChunk: (_, fullText: string) => {
-            setStreamingMessage({
-              id: streamingId,
-              role: "assistant",
-              content: fullText,
-              isThinking: false,
-            });
-          },
-
-          onEnd: (fullText: string) => {
-            queryClient.setQueryData<ChatHistoryResponse>(
-              drConbotKeys.chat.messages(chatIdToUse),
-              (old) => {
-                const current = old ?? {
-                  total: 1,
-                  result: [historyItem],
-                };
-
-                return {
-                  ...current,
-                  result: current.result.map((item) =>
-                    item.id === historyItem.id
-                      ? { ...item, ai: fullText }
-                      : item,
-                  ),
-                };
-              },
-            );
-
-            setStreamingMessage(null);
-            setIsTyping(false);
-          },
-
-          onError: () => {
-            setIsTyping(false);
-            setStreamingMessage(null);
-          },
-        },
-      );
-    } catch (error) {
+    } finally {
+      setPendingUserMessage(null);
       setIsTyping(false);
-      setStreamingMessage(null);
     }
   };
 
@@ -149,7 +115,7 @@ export const useDrConbotChat = (chatId?: string) => {
     isLoading,
     isTyping,
     sendMessage,
-    isSending: sendMessageMutation.isPending,
+    isSending: sendAgentMessageMutation.isPending,
     isCreating: createChatMutation.isPending,
   };
 };

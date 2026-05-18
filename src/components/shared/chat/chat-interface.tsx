@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { NormalizedMessage } from "./types";
 import { ChatMessages } from "./message/chat-message";
 import { ChatInput } from "./input/chat-input";
@@ -8,6 +8,10 @@ interface ChatInterfaceProps {
   isLoading?: boolean;
   isTyping?: boolean;
   onSend: (content: string, modelId: string, isThinking: boolean) => void;
+  fileSupport?: boolean;
+  modelSupport?: boolean;
+  onUpload?: (files: File[]) => void;
+  disclaimer?: ReactNode;
 }
 
 export function ChatInterface({
@@ -15,6 +19,10 @@ export function ChatInterface({
   isLoading,
   isTyping,
   onSend,
+  fileSupport,
+  modelSupport,
+  onUpload,
+  disclaimer,
 }: ChatInterfaceProps) {
   const [bottomPadding, setBottomPadding] = useState<number>(120);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -59,6 +67,10 @@ export function ChatInterface({
           ref={inputContainerRef}
           onSend={onSend}
           disabled={isTyping || isLoading}
+          fileSupport={fileSupport}
+          modelSupport={modelSupport}
+          onUpload={onUpload}
+          disclaimer={disclaimer}
         />
       </div>
     </div>
