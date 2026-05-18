@@ -4,45 +4,56 @@ import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type { AppItem, AppListResponse } from "./types";
 
+import salesEnablementImg from "@/assets/ai-studio/sales-enablement.png";
+import tbwesOcrImg from "@/assets/ai-studio/tbwes-ocr.png";
+import edgeBotImg from "@/assets/ai-studio/edge-bot.png";
+import documentTranslatorImg from "@/assets/ai-studio/document-translator.png";
+import thermaxGptImg from "@/assets/ai-studio/thermax-gpt.png";
+import drConbotImg from "@/assets/ai-studio/dr-conbot.png";
+import troubleshootingImg from "@/assets/ai-studio/troubleshooting.png";
+import cyberbuddyImg from "@/assets/ai-studio/cyberbuddy.png";
+import heatingOcrImg from "@/assets/ai-studio/heating-ocr.png";
+import transmitterOcrImg from "@/assets/ai-studio/transmitter-ocr.png";
+
 const appMetadata: Record<string, { imageUrl: string; path: string }> = {
   "Sales Enablement Tool": {
-    imageUrl: "/assets/ai-studio/sales-enablement.png",
+    imageUrl: salesEnablementImg,
     path: "/sales-enablement",
   },
   "TBWES OCR": {
-    imageUrl: "/assets/ai-studio/tbwes-ocr.png",
+    imageUrl: tbwesOcrImg,
     path: "/tbwes-ocr",
   },
   "Edge Bot": {
-    imageUrl: "/assets/ai-studio/edge-bot.png",
+    imageUrl: edgeBotImg,
     path: "/edge-bot",
   },
   "Document Translator": {
-    imageUrl: "/assets/ai-studio/document-translator.png",
+    imageUrl: documentTranslatorImg,
     path: "/document-translator",
   },
   "Thermax-GPT": {
-    imageUrl: "/assets/ai-studio/thermax-gpt.png",
+    imageUrl: thermaxGptImg,
     path: "/thermax-gpt",
   },
   "Dr. ConBot": {
-    imageUrl: "/assets/ai-studio/dr-conbot.png",
+    imageUrl: drConbotImg,
     path: "/dr-conbot",
   },
   "Smart Troubleshooting App": {
-    imageUrl: "/assets/ai-studio/troubleshooting.png",
+    imageUrl: troubleshootingImg,
     path: "/troubleshooting",
   },
   CyberBuddy: {
-    imageUrl: "/assets/ai-studio/cyberbuddy.png",
+    imageUrl: cyberbuddyImg,
     path: "/cyberbuddy",
   },
   "Heating OCR": {
-    imageUrl: "/assets/ai-studio/heating-ocr.png",
+    imageUrl: heatingOcrImg,
     path: "/heating-ocr",
   },
   "Transmitter OCR": {
-    imageUrl: "/assets/ai-studio/transmitter-ocr.png",
+    imageUrl: transmitterOcrImg,
     path: "/transmitter-ocr",
   },
 };
@@ -63,8 +74,7 @@ export const useApps = (searchTerm?: string) => {
       data.result.map((item) => ({
         title: item.title,
         description: item.description,
-        imageUrl:
-          appMetadata[item.title]?.imageUrl || "/assets/ai-studio/default.png",
+        imageUrl: appMetadata[item.title]?.imageUrl || thermaxGptImg,
         path: appMetadata[item.title]?.path || "#",
       })),
   });
