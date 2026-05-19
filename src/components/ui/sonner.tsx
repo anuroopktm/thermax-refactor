@@ -10,15 +10,14 @@ import {
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      richColors
       theme="system"
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <LoaderPinwheel className="size-4 animate-spin" />,
+        success: <CircleCheckIcon />,
+        info: <InfoIcon />,
+        warning: <TriangleAlertIcon />,
+        error: <OctagonXIcon />,
+        loading: <LoaderPinwheel className="animate-spin" />,
       }}
       style={
         {
