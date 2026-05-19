@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { ProductForm } from "@/components/shared/products/product-form";
 import { type ProductForm as ProductFormType } from "@/lib/validations/products.schema";
+import { useCreateProduct } from "@/services/query/sales-enablement/products.service";
 import { toast } from "sonner";
 
 interface AddProductDialogProps {
@@ -17,8 +18,10 @@ export function AddProductDialog({
   open,
   onOpenChange,
 }: AddProductDialogProps) {
-  const handleAddProduct = async (_: ProductFormType) => {
-    toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
+  const createProduct = useCreateProduct();
+
+  const handleAddProduct = async (data: ProductFormType) => {
+    await toast.promise(createProduct.mutateAsync(data), {
       loading: "Adding product...",
       success: () => {
         onOpenChange(false);
@@ -37,6 +40,7 @@ export function AddProductDialog({
         <ProductForm
           onSubmit={handleAddProduct}
           onCancel={() => onOpenChange(false)}
+          isSaving={createProduct.isPending}
         />
       </DialogContent>
     </Dialog>

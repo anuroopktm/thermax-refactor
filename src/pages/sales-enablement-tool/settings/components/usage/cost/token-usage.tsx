@@ -14,8 +14,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { useTokenUsage } from "@/services/query/sales-enablement/usage.service";
+import {
+  useTokenUsage,
+  useUpdateUsageLimit,
+} from "@/services/query/sales-enablement/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 const pieChartConfig = {
   used: {
@@ -30,6 +34,27 @@ const pieChartConfig = {
 
 export function TokenUsage() {
   const { data: tokenUsage, isLoading: isTokenLoading } = useTokenUsage();
+  const updateLimit = useUpdateUsageLimit();
+
+  const handleIncreaseLimit = () => {
+    const currentLimit = tokenUsage?.limit || 1000;
+    const input = prompt(
+      `Enter new token usage budget limit in USD (current: $${currentLimit}):`,
+      String(currentLimit + 500),
+    );
+    if (input === null) return;
+    const newLimit = parseFloat(input);
+    if (isNaN(newLimit) || newLimit <= 0) {
+      toast.error("Please enter a valid positive number");
+      return;
+    }
+
+    toast.promise(updateLimit.mutateAsync(newLimit), {
+      loading: "Updating limit...",
+      success: "Usage limit updated successfully",
+      error: "Failed to update limit",
+    });
+  };
 
   const pieData = tokenUsage
     ? [
@@ -127,7 +152,11 @@ export function TokenUsage() {
             </div>
           </div>
         )}
-        <Button className="cursor-pointer" disabled={isTokenLoading}>
+        <Button
+          className="cursor-pointer"
+          disabled={isTokenLoading || updateLimit.isPending}
+          onClick={handleIncreaseLimit}
+        >
           Increase Limit
         </Button>
       </CardFooter>

@@ -1,33 +1,27 @@
 import { useState } from "react";
 import { FeedbackHeader } from "../components/feedback/feedback-header";
 import { FeedbackList } from "../components/feedback/feedback-list";
-
-const FEEDBACK_DATA = [
-  {
-    id: 1,
-    user: "AK",
-    question: "hi all",
-    answer:
-      "I'm here to assist with topics related to information security policies, access control, compliance standards, audit procedures, risk management, and CISO-level governance. Could you please ask something related to these areas? I'd be glad to help you with that.",
-    status: "Not Specified",
-    source: "",
-  },
-  {
-    id: 2,
-    user: "AK",
-    question: "hi",
-    answer: "Hello! How can I help you today?",
-    status: "Not Specified",
-    source: "",
-  },
-];
+import { useFeedbacks } from "@/services/query/sales-enablement/feedback.service";
+import { Loader2 } from "lucide-react";
 
 export function FeedbackView() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredFeedback = FEEDBACK_DATA.filter((item) =>
-    item.question.toLowerCase().includes(searchQuery.toLowerCase()),
+  const { data: feedbacks = [], isLoading } = useFeedbacks();
+
+  const filteredFeedback = feedbacks.filter(
+    (item) =>
+      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] w-full items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

@@ -3,16 +3,16 @@ import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type { MemberForm } from "@/lib/validations/members.schema";
-import type { Member } from "./types";
+import type { Member, SalesMember } from "./types";
 import { normalizeSalesMembers } from "@/pages/sales-enablement-tool/lib/sales-mappers";
 import { salesEnablementKeys } from "./keys";
 
 export const useMembers = () => {
-  return useQuery<Member[], AxiosError<ApiError>, Member[]>({
+  return useQuery<SalesMember[], AxiosError<ApiError>, Member[]>({
     queryKey: salesEnablementKeys.members.list(),
     queryFn: async () => {
-      const { data } = await salesApi.get("/members");
-      return data;
+      const { data } = await salesApi.get("/sales/member");
+      return data.result;
     },
     select: normalizeSalesMembers,
   });
@@ -22,7 +22,13 @@ export const useCreateMember = () => {
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
-      await salesApi.post("/members", member);
+      await salesApi.post("/sales/member", null, {
+        params: {
+          role: member.role,
+          email: member.email,
+          name: member.name,
+        },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -36,7 +42,12 @@ export const useUpdateMember = (id: string | number) => {
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError<ApiError>, MemberForm>({
     mutationFn: async (member: MemberForm) => {
-      await salesApi.post(`/members/${id}`, member);
+      await salesApi.patch(`/sales/member/${id}`, null, {
+        params: {
+          name: member.name,
+          role: member.role,
+        },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -50,7 +61,7 @@ export const useDeleteMember = () => {
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError<ApiError>, string | number>({
     mutationFn: async (id: string | number) => {
-      await salesApi.post(`/members/${id}/delete`, {});
+      await salesApi.delete(`/sales/member/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

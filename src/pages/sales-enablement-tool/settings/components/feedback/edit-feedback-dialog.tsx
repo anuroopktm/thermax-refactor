@@ -16,6 +16,9 @@ import { ReviewTab } from "./components/review-tab";
 import { EditFeedbackFooter } from "./components/edit-feedback-footer";
 import { useState } from "react";
 
+import { useUpdateFeedback } from "@/services/query/sales-enablement/feedback.service";
+import { toast } from "sonner";
+
 export interface Feedback {
   id: number;
   user: string;
@@ -37,6 +40,7 @@ export function EditFeedbackDialog({
   onOpenChange,
 }: EditFeedbackDialogProps) {
   const [activeTab, setActiveTab] = useState("feedback");
+  const updateFeedback = useUpdateFeedback();
 
   const form = useForm<FeedbackForm>({
     resolver: zodResolver(feedbackSchema),
@@ -49,9 +53,22 @@ export function EditFeedbackDialog({
   });
 
   const onSubmit = (data: FeedbackForm) => {
-    console.log("Saving feedback:", data);
-    // Here you would typically call an API to update the feedback
-    onOpenChange(false);
+    toast.promise(
+      updateFeedback.mutateAsync({
+        id: feedback.id,
+        question: data.question,
+        answer: data.answer,
+        status: data.status || feedback.status,
+      }),
+      {
+        loading: "Saving feedback...",
+        success: () => {
+          onOpenChange(false);
+          return "Feedback saved successfully";
+        },
+        error: "Failed to save feedback",
+      },
+    );
   };
 
   return (

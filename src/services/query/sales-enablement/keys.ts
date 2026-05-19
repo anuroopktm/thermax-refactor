@@ -1,5 +1,12 @@
 export const salesEnablementKeys = {
   all: ["sales-enablement"] as const,
+  chats: {
+    all: ["sales-enablement", "chats"] as const,
+    detail: (id: string | number) =>
+      ["sales-enablement", "chats", "detail", id] as const,
+    history: (id: string | number) =>
+      ["sales-enablement", "chats", "history", id] as const,
+  },
   members: {
     all: ["sales-enablement", "members"] as const,
     list: (params?: Record<string, unknown>) =>
@@ -43,5 +50,27 @@ export const salesEnablementKeys = {
         ] as const,
     },
     tokens: () => ["sales-enablement", "usage", "tokens"] as const,
+  },
+  feedback: {
+    all: ["sales-enablement", "feedback"] as const,
+    list: (params?: Record<string, unknown>) =>
+      [
+        "sales-enablement",
+        "feedback",
+        "list",
+        ...(params ? [params] : []),
+      ] as const,
+  },
+  products: {
+    all: ["sales-enablement", "products"] as const,
+    list: (params?: Record<string, unknown>) =>
+      [
+        "sales-enablement",
+        "products",
+        "list",
+        ...(params ? [params] : []),
+      ] as const,
+    documents: (productId: string | number) =>
+      ["sales-enablement", "products", productId, "documents"] as const,
   },
 };
