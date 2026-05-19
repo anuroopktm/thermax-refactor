@@ -14,7 +14,9 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
       <div
         ref={ref}
         className="scrollbar-thin scrollbar-thumb-muted-foreground/20 min-h-0 flex-1 overflow-y-auto px-5"
-        style={{ paddingBottom: bottomPadding }}
+        style={{
+          paddingBottom: messages.length > 0 ? bottomPadding : undefined,
+        }}
       >
         {messages.length === 0 ? (
           <ChatEmptyState />

@@ -37,8 +37,9 @@ export const useThermaxChat = (chatId?: string) => {
     message: string,
     modelId: string,
     isThinking: boolean,
+    files?: File[],
   ) => {
-    if (!message.trim()) return;
+    if (!message.trim() && (!files || files.length === 0)) return;
 
     try {
       setIsTyping(true);
@@ -47,7 +48,8 @@ export const useThermaxChat = (chatId?: string) => {
 
       if (!targetChatId) {
         const newChat = await createChatMutation.mutateAsync({
-          title: message.trim(),
+          title:
+            message.trim() || (files && files[0]?.name) || "Attached Files",
           type: "",
         });
 
@@ -66,6 +68,7 @@ export const useThermaxChat = (chatId?: string) => {
         human: message.trim(),
         model: modelId,
         thinking: isThinking,
+        files,
       });
 
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
