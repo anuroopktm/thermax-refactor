@@ -2,24 +2,44 @@ import { forwardRef } from "react";
 import { ChatEmptyState } from "../chat-empty-state";
 import type { NormalizedMessage } from "../types";
 import { ChatMessageItem } from "./message-item";
+import { cn } from "@/lib/utils";
 
 interface ChatMessagesProps {
   messages: NormalizedMessage[];
   bottomPadding: number;
+  emptyStateImage: string;
+  emptyStateTitle: string;
+  emptyStateDescription: string;
 }
 
 export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
-  ({ messages, bottomPadding }, ref) => {
+  (
+    {
+      messages,
+      bottomPadding,
+      emptyStateImage,
+      emptyStateTitle,
+      emptyStateDescription,
+    },
+    ref,
+  ) => {
     return (
       <div
         ref={ref}
-        className="scrollbar-thin scrollbar-thumb-muted-foreground/20 min-h-0 flex-1 overflow-y-auto px-5"
+        className={cn(
+          "scrollbar-thin scrollbar-thumb-muted-foreground/20 min-h-0 flex-1 overflow-y-auto px-5",
+          messages.length === 0 ? "flex flex-col" : "",
+        )}
         style={{
-          paddingBottom: messages.length > 0 ? bottomPadding : undefined,
+          paddingBottom: bottomPadding,
         }}
       >
         {messages.length === 0 ? (
-          <ChatEmptyState />
+          <ChatEmptyState
+            image={emptyStateImage}
+            title={emptyStateTitle}
+            description={emptyStateDescription}
+          />
         ) : (
           <MessagesList messages={messages} />
         )}

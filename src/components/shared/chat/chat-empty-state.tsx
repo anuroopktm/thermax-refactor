@@ -1,16 +1,39 @@
-import PlaceholderImg from "@/assets/illustrations/start-new-chat.png";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
-export function ChatEmptyState() {
+interface ChatEmptyStateProps {
+  image: string;
+  title: string;
+  description: string;
+}
+
+export function ChatEmptyState({
+  image,
+  title,
+  description,
+}: ChatEmptyStateProps) {
   return (
-    <div className="w-full text-center space-y-4 py-12">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <img
-          src={PlaceholderImg}
-          alt="Start New Chat"
-          className="aspect-square h-80 w-auto object-contain"
-        />
-        <h1 className="text-4xl font-semibold">Start New Chat</h1>
-      </div>
-    </div>
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia className="mb-6 rounded-2xl border border-border/80 bg-card p-1.5 shadow-md max-w-[280px] aspect-square flex items-center justify-center">
+          <img
+            src={image}
+            alt={title}
+            className="h-full w-full object-cover rounded-xl"
+          />
+        </EmptyMedia>
+        <EmptyTitle className="text-2xl font-bold tracking-tight text-foreground mb-2">
+          {title}
+        </EmptyTitle>
+        <EmptyDescription className="text-sm text-muted-foreground leading-relaxed">
+          {description}
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }

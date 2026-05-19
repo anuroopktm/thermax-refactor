@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useDrConbotChat } from "./hooks/use-dr-conbot-chat";
 import { ChatSidebar } from "@/components/shared/chat/sidebar/chat-sidebar";
 import { ChatActionsWrapper } from "@/components/shared/chat/actions/chat-actions-wrapper";
+import drConbotImg from "@/assets/ai-studio/dr-conbot.png";
 
 export default function DrConbotPage() {
   const navigate = useNavigate();
@@ -100,6 +101,9 @@ export default function DrConbotPage() {
           fileSupport={false}
           modelSupport={false}
           disclaimer="Dr. Conbot can make mistakes. Check important info."
+          emptyStateImage={drConbotImg}
+          emptyStateTitle="Dr. ConBot"
+          emptyStateDescription="Your cognitive technical companion for industrial troubleshooting and diagnostic workflows."
         />
       </div>
     </SidebarProvider>

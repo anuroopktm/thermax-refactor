@@ -21,6 +21,9 @@ interface ChatInterfaceProps {
   modelSupport?: boolean;
   onUpload?: (files: File[]) => void;
   disclaimer?: ReactNode;
+  emptyStateImage: string;
+  emptyStateTitle: string;
+  emptyStateDescription: string;
 }
 
 export function ChatInterface({
@@ -32,6 +35,9 @@ export function ChatInterface({
   modelSupport = true,
   onUpload,
   disclaimer,
+  emptyStateImage,
+  emptyStateTitle,
+  emptyStateDescription,
 }: ChatInterfaceProps) {
   const [bottomPadding, setBottomPadding] = useState<number>(120);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
@@ -82,6 +88,9 @@ export function ChatInterface({
         ref={scrollRef}
         messages={messages}
         bottomPadding={bottomPadding}
+        emptyStateImage={emptyStateImage}
+        emptyStateTitle={emptyStateTitle}
+        emptyStateDescription={emptyStateDescription}
       />
 
       {/* Input */}

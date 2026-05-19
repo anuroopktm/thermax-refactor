@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useThermaxChat } from "./hooks/use-thermax-chat";
 import { ChatSidebar } from "@/components/shared/chat/sidebar/chat-sidebar";
 import { ChatActionsWrapper } from "@/components/shared/chat/actions/chat-actions-wrapper";
+import thermaxGptImg from "@/assets/ai-studio/thermax-gpt.png";
 
 export default function ThermaxGptPage() {
   const navigate = useNavigate();
@@ -99,6 +100,9 @@ export default function ThermaxGptPage() {
           isTyping={isTyping}
           onSend={sendMessage}
           disclaimer="Thermax GPT can make mistakes. Check important info."
+          emptyStateImage={thermaxGptImg}
+          emptyStateTitle="Thermax GPT"
+          emptyStateDescription="Your advanced neural assistant for energy optimization, enterprise operations, and engineering intelligence."
         />
       </div>
     </SidebarProvider>
