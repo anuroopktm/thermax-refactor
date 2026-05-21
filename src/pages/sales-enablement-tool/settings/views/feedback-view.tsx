@@ -1,19 +1,32 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import debounce from "lodash.debounce";
+import { Loader2 } from "lucide-react";
+
+import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
+import { useFeedbacks } from "@/services/query/sales-enablement/feedback.service";
+
 import { FeedbackHeader } from "../components/feedback/feedback-header";
 import { FeedbackList } from "../components/feedback/feedback-list";
-import { useFeedbacks } from "@/services/query/sales-enablement/feedback.service";
-import { Loader2 } from "lucide-react";
 
 export function FeedbackView() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const { data: feedbacks = [], isLoading } = useFeedbacks();
+  const { data: feedbacks = [], isLoading } = useFeedbacks({
+    search_term: debouncedSearch || undefined,
+    skip: 0,
+    limit: 100,
+  });
 
-  const filteredFeedback = feedbacks.filter(
-    (item) =>
-      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchQuery.toLowerCase()),
+  const debouncedSetSearch = useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 500),
+    [],
   );
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    debouncedSetSearch(value);
+  };
 
   if (isLoading) {
     return (
@@ -24,14 +37,22 @@ export function FeedbackView() {
   }
 
   return (
-    <div className="space-y-6">
-      <FeedbackHeader
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        count={filteredFeedback.length}
-      />
-
-      <FeedbackList feedbackItems={filteredFeedback} />
-    </div>
+    <FeaturePageLayout
+      className="p-0!"
+      title="Feedback"
+      description={
+        isLoading
+          ? "Loading feedbacks..."
+          : `Showing ${feedbacks?.length ?? 0} feedbacks`
+      }
+      actions={
+        <FeedbackHeader
+          searchTerm={searchQuery}
+          onSearchChange={handleSearchChange}
+        />
+      }
+    >
+      <FeedbackList feedbackItems={feedbacks} />
+    </FeaturePageLayout>
   );
 }

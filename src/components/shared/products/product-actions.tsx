@@ -17,6 +17,7 @@ export function ProductActions({ onEdit, onDelete }: ProductActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        nativeButton={false}
         render={
           <CardAction>
             <Button variant="ghost" size="icon" className="cursor-pointer">

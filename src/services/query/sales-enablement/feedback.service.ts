@@ -1,22 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
+
+import {
+  mapFeedbacksList,
+  type MappedFeedback,
+} from "@/pages/sales-enablement-tool/lib/sales-mappers";
+import { salesApi } from "@/services/interceptor";
+
 import type { ApiError } from "../../api.types";
 import { salesEnablementKeys } from "./keys";
-import { mapFeedbacksList } from "@/pages/sales-enablement-tool/lib/sales-mappers";
-import type { ChatFeedbackResponse, ChatFeedbackStatus } from "./types";
+import type { ChatFeedbackResponse } from "./types";
 
-export const useFeedbacks = (status?: ChatFeedbackStatus) => {
-  return useQuery<ChatFeedbackResponse[], AxiosError<ApiError>, unknown[]>({
-    queryKey: salesEnablementKeys.feedback.list(
-      status ? { status } : undefined,
-    ),
+export const useFeedbacks = ({
+  skip = 0,
+  limit = 100,
+  search_term,
+}: {
+  skip?: number;
+  limit?: number;
+  search_term?: string;
+} = {}) => {
+  return useQuery<
+    ChatFeedbackResponse[],
+    AxiosError<ApiError>,
+    MappedFeedback[]
+  >({
+    queryKey: salesEnablementKeys.feedback.list({ skip, limit, search_term }),
     queryFn: async () => {
       const { data } = await salesApi.get("/sales/feedback", {
-        params: {
-          limit: 100,
-          ...(status ? { status } : {}),
-        },
+        params: { skip, limit, search_term },
       });
       return data.result;
     },
@@ -32,32 +44,13 @@ export const useUpdateFeedback = () => {
     { id: number; question: string; answer: string; status: string }
   >({
     mutationFn: async ({ id, question, answer, status }) => {
-      const mapStatusToApi = (s: string) => {
-        switch (s) {
-          case "Not Specified":
-            return "NOT_REVIEWED";
-          case "in-review":
-            return "IN_REVIEW";
-          case "approved":
-            return "APPROVED";
-          case "rejected":
-            return "REJECTED";
-          default:
-            return s;
-        }
-      };
-
-      await salesApi.patch(
-        `/sales/feedback/${id}`,
-        {},
-        {
-          params: {
-            updated_question: question,
-            updated_answer: answer,
-            status: mapStatusToApi(status),
-          },
+      await salesApi.patch(`/sales/feedback/${id}`, null, {
+        params: {
+          updated_question: question,
+          updated_answer: answer,
+          status: status,
         },
-      );
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

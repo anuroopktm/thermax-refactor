@@ -14,7 +14,7 @@ import {
 import { FeedbackTab } from "./components/feedback-tab";
 import { ReviewTab } from "./components/review-tab";
 import { EditFeedbackFooter } from "./components/edit-feedback-footer";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import { useUpdateFeedback } from "@/services/query/sales-enablement/feedback.service";
 import { toast } from "sonner";
@@ -40,6 +40,9 @@ export function EditFeedbackDialog({
   onOpenChange,
 }: EditFeedbackDialogProps) {
   const [activeTab, setActiveTab] = useState("feedback");
+
+  const id = useId();
+
   const updateFeedback = useUpdateFeedback();
 
   const form = useForm<FeedbackForm>({
@@ -73,7 +76,10 @@ export function EditFeedbackDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl" showCloseButton={false}>
+      <DialogContent
+        className="sm:max-w-7xl max-h-[95vh]"
+        showCloseButton={false}
+      >
         <DialogHeader>
           <DialogTitle>Edit Feedback</DialogTitle>
         </DialogHeader>
@@ -94,12 +100,13 @@ export function EditFeedbackDialog({
             </TabsTrigger>
           </TabsList>
 
-          <form id="edit-feedback-form" onSubmit={form.handleSubmit(onSubmit)}>
-            <FeedbackTab form={form} feedback={feedback} />
-            <ReviewTab form={form} feedback={feedback} />
+          <form id={id} onSubmit={form.handleSubmit(onSubmit)}>
+            <FeedbackTab form={form} />
+            <ReviewTab form={form} />
           </form>
         </Tabs>
         <EditFeedbackFooter
+          formId={id}
           activeTab={activeTab}
           onNext={() => setActiveTab("review")}
           onCancel={() => onOpenChange(false)}

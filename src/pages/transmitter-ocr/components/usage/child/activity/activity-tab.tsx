@@ -5,11 +5,12 @@ import {
 } from "@/services/query/transmitter-ocr/child-usage.service";
 import { ActivityChart } from "./activity-chart";
 import { UsageStatusCard } from "@/components/shared/usage/usage-status-card";
+import dayjs from "dayjs";
 
 export function ActivityTab() {
   const [searchParams] = useSearchParams();
-  const year = searchParams.get("year") || "2026";
-  const month = searchParams.get("month") || "April";
+  const year = searchParams.get("year") || dayjs().year().toString();
+  const month = searchParams.get("month") || dayjs().month().toString();
 
   const { data: topUsers, isLoading: isTopUsersLoading } = useChildTopUsers(
     year,

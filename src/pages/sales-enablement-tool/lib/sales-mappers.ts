@@ -1,15 +1,20 @@
 import {
-  type CostItemResponse,
+  type CostUsageResponse,
   type CostModel,
-  type ActivityItemResponse,
+  type ActivityUsageResponse,
   type ActivityModel,
   type Member as SalesMember,
-  type TopUserResponse,
   type TopUserModel,
+  type ActivityUsageTopUserResponse,
   type ChatResponse,
   type ChatHistoryResponse,
   type ChatFeedbackResponse,
   type ProductResponse,
+  type ProductModel,
+  type TokenUsageResponse,
+  type TokenUsageModel,
+  type ProductDocumentResponse,
+  type ProductDocumentModel,
 } from "@/services/query/sales-enablement/types";
 import { type Member } from "@/services/query/shared/types";
 import {
@@ -20,27 +25,27 @@ import {
 /**
  * Maps Cost usage data from API to UI model
  */
-export const mapCostData = (data: CostItemResponse[]): CostModel[] => {
-  return (
-    data?.map((item) => ({
-      label: String(item.label),
-      value: item.value,
-    })) || []
-  );
+export const mapCostData = (data: CostUsageResponse): CostModel[] => {
+  const days = data?.day || [];
+  const costs = data?.cost || [];
+  return days.map((dayNum: number, idx: number) => ({
+    label: String(dayNum),
+    value: costs[idx] || 0,
+  }));
 };
 
 /**
  * Maps Activity usage data from API to UI model
  */
 export const mapActivityData = (
-  data: ActivityItemResponse[],
+  data: ActivityUsageResponse,
 ): ActivityModel[] => {
-  return (
-    data?.map((item) => ({
-      label: String(item.label),
-      value: item.questions,
-    })) || []
-  );
+  const days = data?.day || [];
+  const questions = data?.question || [];
+  return days.map((dayNum: number, idx: number) => ({
+    label: String(dayNum),
+    value: questions[idx] || 0,
+  }));
 };
 
 /**
@@ -62,15 +67,16 @@ export function normalizeSalesMembers(members: SalesMember[]): Member[] {
 /**
  * Maps Top User data from API to UI model
  */
-export const mapTopUsersData = (data: TopUserResponse[]): TopUserModel[] => {
-  return (
-    data?.map((item) => ({
-      name: item.name,
-      email: item.email,
-      initial: item.initial,
-      value: item.value,
-    })) || []
-  );
+export const mapTopUsersData = (
+  data: ActivityUsageTopUserResponse,
+): TopUserModel[] => {
+  const users = data?.result || [];
+  return users.map((u) => ({
+    name: u.name,
+    email: u.email,
+    initial: u.name.substring(0, 2).toUpperCase(),
+    value: u.value || 0,
+  }));
 };
 
 /**
@@ -109,7 +115,7 @@ export const mapChatHistory = (
       role: "assistant",
       content: item.ai,
       historyItemId: item.id,
-      price: item.price,
+      price: item.price ?? undefined,
       source:
         item.source && item.source.sources
           ? {
@@ -128,7 +134,18 @@ export const mapChatHistory = (
 /**
  * Maps Chat Feedback from API to UI model
  */
-export const mapFeedback = (f: ChatFeedbackResponse) => {
+export interface MappedFeedback {
+  id: number;
+  user: string;
+  question: string;
+  answer: string;
+  status: string;
+  source: string;
+  dislikeReason?: string;
+  like?: boolean;
+}
+
+export const mapFeedback = (f: ChatFeedbackResponse): MappedFeedback => {
   const mapStatusToUi = (status: string) => {
     switch (status) {
       case "NOT_REVIEWED":
@@ -156,24 +173,54 @@ export const mapFeedback = (f: ChatFeedbackResponse) => {
   };
 };
 
-export const mapFeedbacksList = (data: ChatFeedbackResponse[]): unknown[] => {
+export const mapFeedbacksList = (
+  data: ChatFeedbackResponse[],
+): MappedFeedback[] => {
   return data?.map(mapFeedback) || [];
 };
 
 /**
  * Maps Product Response from API to UI model
  */
-export const mapProduct = (p: ProductResponse) => {
+export const mapProductsList = (data: ProductResponse[]): ProductModel[] => {
+  return (
+    data?.map((p) => ({
+      id: String(p.id),
+      name: p.title,
+      description: p.description,
+      models: p.models?.map((m) => m.title).join(", ") || "",
+      fileCount: p.total_document || 0,
+      files: [],
+    })) || []
+  );
+};
+
+/**
+ * Maps Token Usage response from API to UI model
+ */
+export const mapTokenUsage = (data: TokenUsageResponse): TokenUsageModel => {
   return {
-    id: String(p.id),
-    name: p.title,
-    description: p.description,
-    models: p.models?.map((m) => m.title).join(", ") || "",
-    fileCount: p.total_document || 0,
-    files: [],
+    used: data.used,
+    remaining: data.remaining,
+    totalSpent: data.totalSpent,
+    limit: data.limit,
   };
 };
 
-export const mapProductsList = (data: ProductResponse[]): unknown[] => {
-  return data?.map(mapProduct) || [];
+/**
+ * Maps Product Document response from API to UI model
+ */
+export const mapProductDocuments = (
+  data: ProductDocumentResponse[],
+): ProductDocumentModel[] => {
+  return (
+    data?.map((doc) => ({
+      id: String(doc.id),
+      name: doc.filename,
+      type: doc.filename.split(".").pop() || "pdf",
+      status: doc.status,
+      kind: doc.kind,
+      description: doc.description,
+    })) || []
+  );
 };

@@ -3,15 +3,34 @@ import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import { salesEnablementKeys } from "./keys";
-import { mapProductsList } from "@/pages/sales-enablement-tool/lib/sales-mappers";
-import type { ProductResponse, ProductDocumentResponse } from "./types";
+import {
+  mapProductsList,
+  mapProductDocuments,
+} from "@/pages/sales-enablement-tool/lib/sales-mappers";
+import type {
+  ProductResponse,
+  ProductDocumentResponse,
+  ProductDocumentModel,
+  ProductModel,
+} from "./types";
 import type { ProductForm } from "@/lib/validations/products.schema";
 
-export const useProducts = () => {
-  return useQuery<ProductResponse[], AxiosError<ApiError>, unknown[]>({
-    queryKey: salesEnablementKeys.products.all,
+export const useProducts = ({
+  skip = 0,
+  limit = 100,
+  search_term,
+}: {
+  skip?: number;
+  limit?: number;
+  search_term?: string;
+} = {}) => {
+  return useQuery<ProductResponse[], AxiosError<ApiError>, ProductModel[]>({
+    queryKey: salesEnablementKeys.products.list({ skip, limit, search_term }),
     queryFn: async () => {
-      const { data } = await salesApi.get("/sales/product");
+      const { data } = await salesApi.get("/sales/product", {
+        params: { skip, limit, search_term },
+      });
+
       return data.result;
     },
     select: mapProductsList,
@@ -73,16 +92,21 @@ export const useDeleteProduct = () => {
 };
 
 export const useProductDocuments = (productId: string | number) => {
-  return useQuery<ProductDocumentResponse[], AxiosError<ApiError>>({
+  return useQuery<
+    ProductDocumentResponse[],
+    AxiosError<ApiError>,
+    ProductDocumentModel[]
+  >({
     queryKey: salesEnablementKeys.products.documents(productId),
     queryFn: async () => {
-      if (!productId) return [];
       const { data } = await salesApi.get(
         `/sales/product/${productId}/document`,
       );
+
       return data.result;
     },
     enabled: !!productId,
+    select: mapProductDocuments,
   });
 };
 

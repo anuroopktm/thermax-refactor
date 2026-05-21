@@ -1,18 +1,12 @@
-import { MONTHS } from "@/components/shared/usage/usage-date-filter";
-import dayjs from "dayjs";
+import { getDateParams as getCentralDateParams } from "@/lib/usage-utils";
 import {
   type CostUsageModel,
   type UsageLimitModel,
 } from "@/services/query/dr-conbot/types";
 
 export function getDateParams(searchParams: URLSearchParams) {
-  const year = searchParams.get("year") ?? dayjs().year().toString();
-  const monthName = searchParams.get("month") ?? dayjs().month().toString();
-
-  const index = MONTHS.indexOf(monthName);
-  const monthIndex = index !== -1 ? index + 1 : dayjs().month();
-
-  return { year, monthName, monthIndex };
+  const { yearStr, monthName, monthIndex } = getCentralDateParams(searchParams);
+  return { year: yearStr, monthName, monthIndex };
 }
 
 export function getUsageStats(

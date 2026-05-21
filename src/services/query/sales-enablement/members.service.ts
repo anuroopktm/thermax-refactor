@@ -1,17 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
-import type { ApiError } from "../../api.types";
-import type { MemberForm } from "@/lib/validations/members.schema";
-import type { Member, SalesMember } from "./types";
+
+import { type MemberForm } from "@/lib/validations/members.schema";
 import { normalizeSalesMembers } from "@/pages/sales-enablement-tool/lib/sales-mappers";
+import { salesApi } from "@/services/interceptor";
+
+import type { ApiError } from "../../api.types";
 import { salesEnablementKeys } from "./keys";
+import { type Member } from "./types";
 
 export const useMembers = () => {
-  return useQuery<SalesMember[], AxiosError<ApiError>, Member[]>({
+  return useQuery<Member[], AxiosError<ApiError>, Member[]>({
     queryKey: salesEnablementKeys.members.list(),
     queryFn: async () => {
       const { data } = await salesApi.get("/sales/member");
+
       return data.result;
     },
     select: normalizeSalesMembers,

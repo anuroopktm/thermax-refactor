@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/empty";
 
 import { BarChart3 } from "lucide-react";
+import dayjs from "dayjs";
 
 interface ActivityRow {
   label: string | number;
@@ -49,8 +50,8 @@ const CONFIG = {
 export function ActivityChart({
   data,
   isLoading,
-  month = "April",
-  year = "2026",
+  month = dayjs().month().toString(),
+  year = dayjs().year().toString(),
 }: ActivityChartProps) {
   const hasData = !!data?.length;
 

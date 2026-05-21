@@ -1,20 +1,21 @@
 import { useState } from "react";
-import {
-  useMembers,
-  useCreateMember,
-  useUpdateMember,
-  useDeleteMember,
-} from "@/services/query/sales-enablement/members.service";
-import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
-import { MembersTable } from "@/components/shared/members/members-table";
-import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
-import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog";
-import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
-import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { type Member } from "@/services/query/shared/types";
 import { toast } from "sonner";
+
+import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
+import { AddMemberDialog } from "@/components/shared/members/add-member-dialog";
+import { DeleteMemberDialog } from "@/components/shared/members/delete-member-dialog";
+import { EditMemberDialog } from "@/components/shared/members/edit-member-dialog";
+import { MembersTable } from "@/components/shared/members/members-table";
+import { Button } from "@/components/ui/button";
 import { type MemberForm } from "@/lib/validations/members.schema";
+import {
+  useCreateMember,
+  useDeleteMember,
+  useMembers,
+  useUpdateMember,
+} from "@/services/query/sales-enablement/members.service";
+import { type Member } from "@/services/query/shared/types";
 
 export function MembersView() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -65,6 +66,7 @@ export function MembersView() {
 
   return (
     <FeaturePageLayout
+      className="p-0!"
       title="Members"
       description={
         isLoading

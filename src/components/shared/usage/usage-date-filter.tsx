@@ -22,7 +22,7 @@ export function UsageDateFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const year = parseInt(searchParams.get("year") || dayjs().year().toString());
-  const month = searchParams.get("month") || dayjs().month().toString();
+  const month = searchParams.get("month") || MONTHS[dayjs().month()];
   const monthIndex =
     MONTHS.indexOf(month) !== -1 ? MONTHS.indexOf(month) : dayjs().month();
 

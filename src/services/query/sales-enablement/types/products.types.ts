@@ -45,3 +45,21 @@ export interface ProductDocumentsListResponse {
 export interface ProductDocumentLinkResponse {
   link: string;
 }
+
+export interface ProductModel {
+  id: string;
+  name: string;
+  description: string;
+  models: string;
+  fileCount: number;
+  files: ProductDocumentModel[];
+}
+
+export interface ProductDocumentModel {
+  id: string;
+  name: string;
+  type: string;
+  status: DocumentStatus;
+  kind: DocumentKind;
+  description: string;
+}

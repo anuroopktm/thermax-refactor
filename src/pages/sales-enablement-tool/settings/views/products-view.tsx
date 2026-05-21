@@ -1,8 +1,11 @@
-import { useState, memo } from "react";
+import { useState, useMemo, memo } from "react";
+import debounce from "lodash.debounce";
+import { toast } from "sonner";
+
+import { FeaturePageLayout } from "@/components/layout/feature-page-layout";
 import { ProductsHeader } from "@/components/shared/products/products-header";
 import { ProductsList } from "@/components/shared/products/products-list";
 import { ProductFilesList } from "@/components/shared/products/product-files-list";
-import { AddProductDialog } from "../components/products/add-product-dialog";
 import {
   Dialog,
   DialogContent,
@@ -20,13 +23,107 @@ import {
   useDeleteProductDocument,
   fetchProductDocumentLink,
 } from "@/services/query/sales-enablement/products.service";
-import { toast } from "sonner";
 import {
   type ProductForm as ProductFormType,
   type AttachFileForm as AttachFileFormType,
 } from "@/lib/validations/products.schema";
 
-/* ---------------- Product Files List Wrapper ---------------- */
+import { AddProductDialog } from "../components/products/add-product-dialog";
+
+export function ProductsView() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<{
+    id: string;
+    name: string;
+    description: string;
+  } | null>(null);
+  const [attachingProductId, setAttachingProductId] = useState<string | null>(
+    null,
+  );
+
+  const debouncedSetSearch = useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 500),
+    [],
+  );
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    debouncedSetSearch(value);
+  };
+
+  const { data: products = [], isLoading } = useProducts({
+    search_term: debouncedSearch || undefined,
+    skip: 0,
+    limit: 100,
+  });
+
+  const deleteProduct = useDeleteProduct();
+
+  const handleDelete = async (product: { id: string; name: string }) => {
+    if (!product) return;
+
+    toast.promise(deleteProduct.mutateAsync(product.id), {
+      loading: "Deleting product...",
+      success: "Product deleted successfully",
+      error: (err) => err.response?.data?.detail || "Failed to delete product",
+    });
+  };
+
+  return (
+    <FeaturePageLayout
+      className="p-0!"
+      title="Products"
+      description="Manage your products and their metadata."
+      actions={
+        <ProductsHeader
+          onAdd={() => setIsAddDialogOpen(true)}
+          searchTerm={searchQuery}
+          onSearchChange={handleSearchChange}
+        />
+      }
+    >
+      <ProductsList
+        products={products}
+        isLoading={isLoading}
+        onEdit={(p) => setEditingProduct(p)}
+        onDelete={handleDelete}
+        onAttachFile={(p) => setAttachingProductId(p.id)}
+        renderFilesList={(productId) => (
+          <ProductFilesWrapper productId={productId} />
+        )}
+      />
+
+      <AddProductDialog
+        open={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+      />
+
+      {editingProduct && (
+        <EditProductDialog
+          product={editingProduct}
+          open={!!editingProduct}
+          onOpenChange={(open) => {
+            if (!open) setEditingProduct(null);
+          }}
+        />
+      )}
+
+      {attachingProductId && (
+        <AttachFileDialog
+          productId={attachingProductId}
+          open={!!attachingProductId}
+          onOpenChange={(open) => {
+            if (!open) setAttachingProductId(null);
+          }}
+        />
+      )}
+    </FeaturePageLayout>
+  );
+}
+
+/* ---------------- PRODUCT FILES LIST WRAPPER ---------------- */
 interface ProductFilesWrapperProps {
   productId: string;
 }
@@ -37,15 +134,6 @@ const ProductFilesWrapper = memo(({ productId }: ProductFilesWrapperProps) => {
   const [downloadingFileId, setDownloadingFileId] = useState<string | null>(
     null,
   );
-
-  const files = documents.map((doc) => ({
-    id: String(doc.id),
-    name: doc.filename,
-    type: doc.filename.split(".").pop() || "pdf",
-    status: doc.status,
-    kind: doc.kind,
-    description: doc.description,
-  }));
 
   const handleDownload = async (fileId: string) => {
     setDownloadingFileId(fileId);
@@ -73,7 +161,7 @@ const ProductFilesWrapper = memo(({ productId }: ProductFilesWrapperProps) => {
 
   return (
     <ProductFilesList
-      files={files}
+      files={documents}
       isLoading={isLoading}
       onRemove={handleRemove}
       onDownload={handleDownload}
@@ -84,7 +172,7 @@ const ProductFilesWrapper = memo(({ productId }: ProductFilesWrapperProps) => {
 
 ProductFilesWrapper.displayName = "ProductFilesWrapper";
 
-/* ---------------- Edit Product Dialog ---------------- */
+/* ---------------- EDIT PRODUCT DIALOG ---------------- */
 interface EditProductDialogProps {
   product: {
     id: string;
@@ -100,13 +188,14 @@ const EditProductDialog = memo(
     const updateProduct = useUpdateProduct(product?.id || "");
 
     const handleUpdate = async (data: ProductFormType) => {
-      await toast.promise(updateProduct.mutateAsync(data), {
+      toast.promise(updateProduct.mutateAsync(data), {
         loading: "Saving product details...",
         success: () => {
           onOpenChange(false);
           return "Product updated successfully";
         },
-        error: "Failed to update product",
+        error: (err) =>
+          err.response?.data?.detail || "Failed to update product",
       });
     };
 
@@ -136,7 +225,7 @@ const EditProductDialog = memo(
 
 EditProductDialog.displayName = "EditProductDialog";
 
-/* ---------------- Attach File Dialog ---------------- */
+/* ---------------- ATTACH FILE DIALOG ---------------- */
 interface AttachFileDialogProps {
   productId: string | number | null;
   open: boolean;
@@ -156,7 +245,7 @@ const AttachFileDialog = memo(
         return;
       }
 
-      await toast.promise(
+      toast.promise(
         uploadDocument.mutateAsync({
           file,
           description: data.description,
@@ -168,7 +257,8 @@ const AttachFileDialog = memo(
             onOpenChange(false);
             return "Document uploaded successfully";
           },
-          error: "Failed to upload document",
+          error: (err) =>
+            err.response?.data?.detail || "Failed to upload document",
         },
       );
     };
@@ -192,79 +282,3 @@ const AttachFileDialog = memo(
 );
 
 AttachFileDialog.displayName = "AttachFileDialog";
-
-/* ---------------- Main Products View ---------------- */
-export function ProductsView() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<{
-    id: string;
-    name: string;
-    description: string;
-  } | null>(null);
-  const [attachingProductId, setAttachingProductId] = useState<string | null>(
-    null,
-  );
-
-  const { data: products = [], isLoading } = useProducts();
-  const deleteProduct = useDeleteProduct();
-
-  const handleDelete = async (product: { id: string; name: string }) => {
-    const confirmed = confirm(
-      `Are you sure you want to delete the product "${product.name}"?`,
-    );
-    if (!confirmed) return;
-
-    await toast.promise(deleteProduct.mutateAsync(product.id), {
-      loading: "Deleting product...",
-      success: "Product deleted successfully",
-      error: "Failed to delete product",
-    });
-  };
-
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-
-  return (
-    <div className="space-y-6">
-      <ProductsHeader
-        onAdd={() => setIsAddDialogOpen(true)}
-        searchTerm={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
-
-      <ProductsList
-        products={filteredProducts}
-        isLoading={isLoading}
-        onEdit={(p) => setEditingProduct(p)}
-        onDelete={handleDelete}
-        onAttachFile={(p) => setAttachingProductId(p.id)}
-        renderFilesList={(productId) => (
-          <ProductFilesWrapper productId={productId} />
-        )}
-      />
-
-      <AddProductDialog
-        open={isAddDialogOpen}
-        onOpenChange={setIsAddDialogOpen}
-      />
-
-      <EditProductDialog
-        product={editingProduct}
-        open={!!editingProduct}
-        onOpenChange={(open) => {
-          if (!open) setEditingProduct(null);
-        }}
-      />
-
-      <AttachFileDialog
-        productId={attachingProductId}
-        open={!!attachingProductId}
-        onOpenChange={(open) => {
-          if (!open) setAttachingProductId(null);
-        }}
-      />
-    </div>
-  );
-}

@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 
 interface EditFeedbackFooterProps {
+  formId: string;
   activeTab: string;
   onNext: () => void;
   onCancel: () => void;
 }
 
 export function EditFeedbackFooter({
+  formId,
   activeTab,
   onNext,
   onCancel,
@@ -28,11 +30,7 @@ export function EditFeedbackFooter({
         </Button>
       )}
       {activeTab === "review" && (
-        <Button
-          type="submit"
-          form="edit-feedback-form"
-          className="cursor-pointer"
-        >
+        <Button type="submit" form={formId} className="cursor-pointer">
           Save changes
         </Button>
       )}

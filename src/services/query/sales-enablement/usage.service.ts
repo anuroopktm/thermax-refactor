@@ -3,87 +3,55 @@ import { salesApi } from "@/services/interceptor";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../api.types";
 import type {
-  CostItemResponse,
-  ActivityItemResponse,
-  TopUserResponse,
+  CostUsageResponse,
+  ActivityUsageResponse,
   CostModel,
   ActivityModel,
   TopUserModel,
   TokenUsageModel,
+  TokenUsageResponse,
+  ActivityUsageTopUserResponse,
 } from "./types";
 import { salesEnablementKeys } from "./keys";
 import {
   mapCostData,
   mapActivityData,
   mapTopUsersData,
+  mapTokenUsage,
 } from "@/pages/sales-enablement-tool/lib/sales-mappers";
-import { MONTHS } from "@/components/shared/usage/usage-date-filter";
 
-// Helper to map month string/index to 1-based integer
-const getMonthNumber = (monthStr: string): number => {
-  const index = MONTHS.indexOf(monthStr);
-  if (index !== -1) {
-    return index + 1;
-  }
-  const parsed = parseInt(monthStr);
-  if (!isNaN(parsed)) {
-    return parsed;
-  }
-  return new Date().getMonth() + 1;
-};
-
-export const useCostData = (month: string, year: string) => {
-  const monthNum = getMonthNumber(month);
-  const yearNum = parseInt(year) || new Date().getFullYear();
-
-  return useQuery<CostItemResponse[], AxiosError<ApiError>, CostModel[]>({
+export const useCostData = (month: number, year: number) => {
+  return useQuery<CostUsageResponse, AxiosError<ApiError>, CostModel[]>({
     queryKey: salesEnablementKeys.usage.cost.list({ month, year }),
     queryFn: async () => {
       const { data } = await salesApi.get("/sales/usage/cost", {
-        params: { month: monthNum, year: yearNum },
+        params: { month, year },
       });
-      // The API returns CostUsage: { day: number[], cost: number[], total: number }
-      // We map this into an array of CostItemResponse: { label: string, value: number }
-      const days = data?.day || [];
-      const costs = data?.cost || [];
-      return days.map((dayNum: number, idx: number) => ({
-        label: String(dayNum),
-        value: costs[idx] || 0,
-      }));
+
+      return data;
     },
     select: mapCostData,
   });
 };
 
-export const useActivityData = (month: string, year: string) => {
-  const monthNum = getMonthNumber(month);
-  const yearNum = parseInt(year) || new Date().getFullYear();
+export const useActivityData = (month: number, year: number) => {
+  return useQuery<ActivityUsageResponse, AxiosError<ApiError>, ActivityModel[]>(
+    {
+      queryKey: salesEnablementKeys.usage.activity.list({ month, year }),
+      queryFn: async () => {
+        const { data } = await salesApi.get("/sales/usage/activity", {
+          params: { month, year },
+        });
 
-  return useQuery<
-    ActivityItemResponse[],
-    AxiosError<ApiError>,
-    ActivityModel[]
-  >({
-    queryKey: salesEnablementKeys.usage.activity.list({ month, year }),
-    queryFn: async () => {
-      const { data } = await salesApi.get("/sales/usage/activity", {
-        params: { month: monthNum, year: yearNum },
-      });
-      // The API returns ActivityUsage: { day: number[], question: number[], total: number }
-      // We map this into an array of ActivityItemResponse: { label: string, questions: number }
-      const days = data?.day || [];
-      const questions = data?.question || [];
-      return days.map((dayNum: number, idx: number) => ({
-        label: String(dayNum),
-        questions: questions[idx] || 0,
-      }));
+        return data;
+      },
+      select: mapActivityData,
     },
-    select: mapActivityData,
-  });
+  );
 };
 
 export const useTokenUsage = () => {
-  return useQuery<TokenUsageModel, AxiosError<ApiError>, TokenUsageModel>({
+  return useQuery<TokenUsageResponse, AxiosError<ApiError>, TokenUsageModel>({
     queryKey: salesEnablementKeys.usage.tokens(),
     queryFn: async () => {
       const now = new Date();
@@ -110,28 +78,23 @@ export const useTokenUsage = () => {
         limit,
       };
     },
+    select: mapTokenUsage,
   });
 };
 
-export const useTopUsers = (month: string = "April", year: string = "2026") => {
-  const monthNum = getMonthNumber(month);
-  const yearNum = parseInt(year) || new Date().getFullYear();
-
-  return useQuery<TopUserResponse[], AxiosError<ApiError>, TopUserModel[]>({
+export const useTopUsers = (month: number, year: number) => {
+  return useQuery<
+    ActivityUsageTopUserResponse,
+    AxiosError<ApiError>,
+    TopUserModel[]
+  >({
     queryKey: salesEnablementKeys.usage.activity.top({ month, year }),
     queryFn: async () => {
       const { data } = await salesApi.get("/sales/usage/activity/top", {
-        params: { month: monthNum, year: yearNum, n: 10 },
+        params: { month, year, n: 10 },
       });
-      // The API returns ActivityUsageTopUser: { result: TopUser[] }
-      // where TopUser is { name, email, question }
-      const users = data?.result || [];
-      return users.map((u: TopUserResponse) => ({
-        name: u.name,
-        email: u.email,
-        initial: u.name.substring(0, 2).toUpperCase(),
-        value: u.question || 0,
-      }));
+
+      return data;
     },
     select: mapTopUsersData,
   });

@@ -5,14 +5,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useSearchParams } from "react-router-dom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { useTopUsers } from "@/services/query/sales-enablement/usage.service";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { TopUserModel } from "@/services/query/sales-enablement/types";
+import { getDateParams } from "@/lib/usage-utils";
 
 export function TopUsersList() {
-  const { data: topUsers = [], isLoading: isTopUsersLoading } = useTopUsers();
+  const [searchParams] = useSearchParams();
+  const { year, monthIndex } = getDateParams(searchParams);
+
+  const { data: topUsers = [], isLoading: isTopUsersLoading } = useTopUsers(
+    monthIndex,
+    year,
+  );
 
   return (
     <Card className="flex flex-col">

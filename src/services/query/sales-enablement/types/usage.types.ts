@@ -1,3 +1,25 @@
+export interface CostUsageResponse {
+  day: number[];
+  cost: number[];
+  total: number;
+}
+
+export interface ActivityUsageResponse {
+  day: number[];
+  question: number[];
+  total: number;
+}
+
+export interface RawTopUser {
+  name: string;
+  email: string;
+  value?: number;
+}
+
+export interface ActivityUsageTopUserResponse {
+  result: RawTopUser[];
+}
+
 export interface CostItemResponse {
   label: string | number;
   value: number;

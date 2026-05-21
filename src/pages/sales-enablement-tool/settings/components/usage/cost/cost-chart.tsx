@@ -1,20 +1,20 @@
 import { useSearchParams } from "react-router-dom";
 import { CostChart as SharedCostChart } from "@/components/shared/usage/cost-chart";
 import { useCostData } from "@/services/query/sales-enablement/usage.service";
+import { getDateParams } from "@/lib/usage-utils";
 
 export function CostChart() {
   const [searchParams] = useSearchParams();
-  const year = searchParams.get("year") || "2026";
-  const month = searchParams.get("month") || "April";
+  const { year, monthName, monthIndex } = getDateParams(searchParams);
 
-  const { data: dailyData, isLoading } = useCostData(month, year);
+  const { data: dailyData, isLoading } = useCostData(monthIndex, year);
 
   return (
     <SharedCostChart
       data={dailyData}
       isLoading={isLoading}
-      month={month}
-      year={year}
+      month={monthName}
+      year={year.toString()}
     />
   );
 }
