@@ -1,151 +1,120 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
-
-import "highlight.js/styles/github-dark.css";
+import { memo, type ReactElement } from "react";
+import { Copy, DollarSign } from "lucide-react";
+import { toast } from "sonner";
 
 import { ThinkingIndicator } from "./thinking-indicator";
+import { MarkdownContent } from "./markdown-content";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AssistantMessageProps {
   content: string;
   isThinking?: boolean;
+  price?: number;
 }
 
-export function AssistantMessage({
+export const AssistantMessage = memo(function AssistantMessage({
   content,
   isThinking,
+  price,
 }: AssistantMessageProps) {
   if (isThinking) {
     return <AssistantThinking />;
   }
 
   return (
-    <div className="max-w-[85%]">
+    <div className="max-w-full">
       <div className="overflow-hidden px-4 py-3">
         <MarkdownContent content={content} />
       </div>
+      <AssistantActions content={content} price={price} />
     </div>
   );
+});
+
+/* ---------------- ASSISTANT ACTIONS & STATS ---------------- */
+
+const AssistantActions = memo(function AssistantActions({
+  content,
+  price,
+}: {
+  content: string;
+  price?: number;
+}) {
+  const handleCopy = async () => {
+    toast.promise(navigator.clipboard.writeText(content), {
+      loading: "Copying...",
+      success: "Message copied to clipboard!",
+      error: "Failed to copy message to clipboard!",
+    });
+  };
+
+  return (
+    <TooltipProvider>
+      <div className="flex items-center gap-1.5 px-4">
+        <ActionTooltip content="Copy markdown">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+            onClick={handleCopy}
+          >
+            <Copy />
+          </Button>
+        </ActionTooltip>
+
+        {!!price && <Separator orientation="vertical" />}
+
+        {!!price && (
+          <ActionTooltip content={`Cost: ${formatPrice(price)}`}>
+            <Button variant="ghost" size="icon" className="cursor-pointer">
+              <DollarSign />
+            </Button>
+          </ActionTooltip>
+        )}
+      </div>
+    </TooltipProvider>
+  );
+});
+
+/* ---------------- TOOLTIP WRAPPER ---------------- */
+
+interface ActionTooltipProps {
+  content: string;
+  children: ReactElement;
 }
 
-/* ---------------- MARKDOWN RENDER VIEW ---------------- */
-
-function MarkdownContent({ content }: { content: string }) {
+const ActionTooltip = memo(function ActionTooltip({
+  content,
+  children,
+}: ActionTooltipProps) {
   return (
-    <div
-      className="
-        prose prose-neutral dark:prose-invert
-        max-w-none wrap-break-word
-
-        prose-p:my-3
-        prose-p:leading-7
-
-        prose-headings:mb-3
-        prose-headings:mt-6
-        prose-headings:font-semibold
-
-        prose-ul:my-3
-        prose-ol:my-3
-        prose-li:my-1
-
-        prose-blockquote:my-4
-        prose-blockquote:border-l-4
-        prose-blockquote:border-border
-        prose-blockquote:pl-4
-        prose-blockquote:italic
-        prose-blockquote:text-muted-foreground
-
-        prose-hr:my-6
-        prose-hr:border-border
-
-        prose-table:my-4
-
-        prose-pre:my-4
-        prose-pre:overflow-x-auto
-        prose-pre:rounded-xl
-        prose-pre:border
-        prose-pre:border-border
-        prose-pre:bg-muted/40
-        prose-pre:p-4
-
-        prose-code:rounded-md
-        prose-code:bg-muted
-        prose-code:px-1.5
-        prose-code:py-0.5
-        prose-code:text-[0.875em]
-        prose-code:before:content-none
-        prose-code:after:content-none
-
-        prose-a:text-primary
-        prose-a:underline
-        prose-a:underline-offset-4
-      "
-    >
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeHighlight]}
-        components={{
-          a: MarkdownLink,
-          code: MarkdownCode,
-          hr: MarkdownHr,
-          table: MarkdownTable,
-        }}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
+    <Tooltip>
+      <TooltipTrigger render={children} />
+      <TooltipContent side="top">
+        <span>{content}</span>
+      </TooltipContent>
+    </Tooltip>
   );
+});
+
+function formatPrice(val?: number) {
+  if (!val) return "0.00";
+  return `$${val.toFixed(2)}`;
 }
 
 /* ---------------- ASSISTANT THINKING STATE ---------------- */
 
-function AssistantThinking() {
+const AssistantThinking = memo(function AssistantThinking() {
   return (
     <div className="max-w-[85%]">
       <ThinkingIndicator />
     </div>
   );
-}
-
-/* ---------------- MARKDOWN LINK ---------------- */
-
-function MarkdownLink(props: React.ComponentProps<"a">) {
-  return <a {...props} target="_blank" rel="noopener noreferrer" />;
-}
-
-/* ---------------- MARKDOWN CODE ---------------- */
-
-function MarkdownCode({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"code">) {
-  const isInline = !className;
-
-  if (isInline) {
-    return <code {...props}>{children}</code>;
-  }
-
-  return (
-    <code className={className} {...props}>
-      {children}
-    </code>
-  );
-}
-
-/* ---------------- MARKDOWN HORIZONTAL RULE ---------------- */
-
-function MarkdownHr() {
-  return <hr className="my-6 border-border" />;
-}
-
-/* ---------------- MARKDOWN TABLE ---------------- */
-
-function MarkdownTable(props: React.ComponentProps<"table">) {
-  return (
-    <div className="overflow-x-auto">
-      <table {...props} />
-    </div>
-  );
-}
+});

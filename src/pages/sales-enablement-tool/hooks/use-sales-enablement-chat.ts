@@ -1,17 +1,18 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  useDrConbotChatMessages,
-  useDrConbotCreateChat,
-  useDrConbotSendAgentMessage,
-} from "@/services/query/dr-conbot/chat.service";
+  useChatHistory,
+  useCreateChat,
+  useSendChatMessage,
+  useSimilarQuestions,
+} from "@/services/query/sales-enablement/chat.service";
+import { salesEnablementKeys } from "@/services/query/sales-enablement/keys";
 import { PATHS } from "@/routes/constants/routes";
-import type { ChatHistoryResponse } from "@/services/query/dr-conbot/types";
-import { drConbotKeys } from "@/services/query/dr-conbot/keys";
 import type { NormalizedMessage } from "@/components/shared/chat/types";
+import type { ChatHistoryResponse } from "@/services/query/sales-enablement/types";
 
-export const useDrConbotChat = (chatId?: string) => {
+export const useSalesEnablementChat = (chatId?: string) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -19,16 +20,19 @@ export const useDrConbotChat = (chatId?: string) => {
   const [pendingUserMessage, setPendingUserMessage] =
     useState<NormalizedMessage | null>(null);
 
-  const { data: history = [], isLoading } = useDrConbotChatMessages(chatId);
-  const sendAgentMessageMutation = useDrConbotSendAgentMessage();
-  const createChatMutation = useDrConbotCreateChat();
+  const { data: history = [], isLoading } = useChatHistory(chatId);
+  const sendChatMessage = useSendChatMessage();
+  const createChat = useCreateChat();
+  const similarQuestionsMutation = useSimilarQuestions();
 
   const messages = useMemo(() => {
     const list = [...history];
 
     if (pendingUserMessage) {
       const isAlreadyInHistory = history.some(
-        (m) => m.id === pendingUserMessage.id,
+        (m) =>
+          m.id === pendingUserMessage.id ||
+          (m.role === "user" && m.content === pendingUserMessage.content),
       );
       if (!isAlreadyInHistory) {
         list.push(pendingUserMessage);
@@ -47,11 +51,7 @@ export const useDrConbotChat = (chatId?: string) => {
     return list;
   }, [history, pendingUserMessage, isTyping]);
 
-  const sendMessage = async (
-    message: string,
-    _modelId?: string,
-    _isThinking?: boolean,
-  ) => {
+  const sendMessage = async (message: string) => {
     if (!message.trim()) return;
 
     try {
@@ -60,19 +60,16 @@ export const useDrConbotChat = (chatId?: string) => {
       let targetChatId = chatId;
 
       if (!targetChatId) {
-        const newChat = await createChatMutation.mutateAsync({
-          title: message.trim(),
-          type: "",
-        });
+        const newChat = await createChat.mutateAsync(message.trim());
 
         targetChatId = String(newChat.id);
 
-        navigate(`${PATHS.DR_CONBOT.ROOT}/${targetChatId}`, {
+        navigate(`${PATHS.SALES_ENABLEMENT.ROOT}/${targetChatId}`, {
           replace: true,
         });
       }
 
-      const chatIdToUse = String(targetChatId);
+      const chatIdToUse = targetChatId;
 
       const tempId = `temp-${Date.now()}-human`;
       const tempUserMsg: NormalizedMessage = {
@@ -83,25 +80,24 @@ export const useDrConbotChat = (chatId?: string) => {
 
       setPendingUserMessage(tempUserMsg);
 
-      const agentResponse = await sendAgentMessageMutation.mutateAsync({
+      const agentResponse = await sendChatMessage.mutateAsync({
         chatId: chatIdToUse,
-        human: message.trim(),
+        messageText: message.trim(),
       });
 
+      // Fetch similar questions for the newly sent message
+      similarQuestionsMutation.mutate(message.trim());
+
       await queryClient.cancelQueries({
-        queryKey: drConbotKeys.chat.messages(chatIdToUse),
+        queryKey: salesEnablementKeys.chats.history(chatIdToUse),
         exact: false,
       });
 
-      queryClient.setQueryData<ChatHistoryResponse>(
-        drConbotKeys.chat.messages(chatIdToUse),
+      queryClient.setQueryData<ChatHistoryResponse[]>(
+        salesEnablementKeys.chats.history(chatIdToUse),
         (old) => {
-          const current = old ?? { total: 0, result: [] };
-          return {
-            ...current,
-            result: [...current.result, agentResponse],
-            total: current.total + 1,
-          };
+          const current = old ?? [];
+          return [...current, agentResponse];
         },
       );
     } finally {
@@ -115,7 +111,9 @@ export const useDrConbotChat = (chatId?: string) => {
     isLoading,
     isTyping,
     sendMessage,
-    isSending: sendAgentMessageMutation.isPending,
-    isCreating: createChatMutation.isPending,
+    isSending: sendChatMessage.isPending,
+    isCreating: createChat.isPending,
+    similarQuestions: similarQuestionsMutation.data ?? [],
+    isSimilarLoading: similarQuestionsMutation.isPending,
   };
 };

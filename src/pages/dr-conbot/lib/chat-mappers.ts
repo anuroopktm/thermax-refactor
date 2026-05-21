@@ -26,6 +26,7 @@ export function normalizeHistoryMessages(
               content: item.ai,
               historyItemId: item.id,
               source: item.source,
+              price: item.price,
             },
           ]
         : []),

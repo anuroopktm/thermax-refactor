@@ -10,7 +10,7 @@ export const salesEnablementRoutes = [
     },
     children: [
       {
-        index: true,
+        path: ":chatId?",
         element: <Pages.SalesEnablementPage />,
       },
       {

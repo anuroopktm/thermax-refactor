@@ -15,6 +15,7 @@ export interface NormalizedMessage {
   isThinking?: boolean;
   historyItemId?: number;
   source?: ChatSource;
+  price?: number;
 }
 
 export interface Chat {

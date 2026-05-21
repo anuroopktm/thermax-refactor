@@ -92,7 +92,9 @@ export const mapChatHistory = (
   data: ChatHistoryResponse[],
 ): NormalizedMessage[] => {
   const messages: NormalizedMessage[] = [];
-  data?.forEach((item) => {
+  const sortedData = data ? [...data].sort((a, b) => a.id - b.id) : [];
+
+  sortedData.forEach((item) => {
     // 1. Add user message
     messages.push({
       id: `u-${item.id}`,
@@ -107,6 +109,7 @@ export const mapChatHistory = (
       role: "assistant",
       content: item.ai,
       historyItemId: item.id,
+      price: item.price,
       source:
         item.source && item.source.sources
           ? {

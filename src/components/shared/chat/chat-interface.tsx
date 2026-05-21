@@ -24,6 +24,8 @@ interface ChatInterfaceProps {
   emptyStateImage: string;
   emptyStateTitle: string;
   emptyStateDescription: string;
+  suggestions?: string[];
+  isSuggestionsLoading?: boolean;
 }
 
 export function ChatInterface({
@@ -38,6 +40,8 @@ export function ChatInterface({
   emptyStateImage,
   emptyStateTitle,
   emptyStateDescription,
+  suggestions,
+  isSuggestionsLoading,
 }: ChatInterfaceProps) {
   const [bottomPadding, setBottomPadding] = useState<number>(120);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
@@ -47,12 +51,13 @@ export function ChatInterface({
 
   // Auto scroll to bottom
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }
+    const container = scrollRef.current;
+
+    if (!container) return;
+
+    requestAnimationFrame(() => {
+      container.scrollTop = container.scrollHeight;
+    });
   }, [messages, isTyping]);
 
   // Observe input height dynamically
@@ -113,6 +118,8 @@ export function ChatInterface({
             setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
           }}
           disclaimer={disclaimer}
+          suggestions={suggestions}
+          isSuggestionsLoading={isSuggestionsLoading}
         />
       </div>
     </div>

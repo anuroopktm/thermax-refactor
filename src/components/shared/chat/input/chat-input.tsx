@@ -19,6 +19,8 @@ interface ChatInputProps {
   attachedFiles?: File[];
   onRemoveFile?: (index: number) => void;
   disclaimer?: ReactNode;
+  suggestions?: string[];
+  isSuggestionsLoading?: boolean;
 }
 
 export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
@@ -32,6 +34,8 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
       attachedFiles = [],
       onRemoveFile,
       disclaimer = "Thermax AI Studio can make mistakes. Check important info.",
+      suggestions = [],
+      isSuggestionsLoading = false,
     },
     ref,
   ) => {
@@ -56,7 +60,22 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
         ref={ref}
         className="max-w-[calc(100%-5rem)] mx-auto w-full pointer-events-auto bg-background p-1 rounded-t-xl"
       >
-        <Field className="gap-4">
+        <Field>
+          <ChatSuggestions
+            suggestions={
+              suggestions && suggestions.length > 0
+                ? suggestions
+                : HARDCODED_SUGGESTIONS
+            }
+            isLoading={isSuggestionsLoading}
+            disabled={disabled}
+            onSelect={(suggestion) => {
+              const selectedModel =
+                MODELS.find((m) => m.id === model) || MODELS[0];
+              onSend(suggestion, model, selectedModel.thinking);
+            }}
+          />
+
           <InputGroup className="border-primary/30 hover:border-primary/50 has-disabled:opacity-100 overflow-hidden">
             {fileSupport && attachedFiles.length > 0 && (
               <InputGroupAddon
@@ -113,6 +132,53 @@ export const ChatInput = forwardRef<HTMLDivElement, ChatInputProps>(
 );
 
 ChatInput.displayName = "ChatInput";
+
+/* ---------------- Suggestions Sub-component ---------------- */
+
+const HARDCODED_SUGGESTIONS = [
+  "How can I optimize the efficiency of my Thermax boiler?",
+  "What is the recommended maintenance schedule for Vapor Absorption Chillers?",
+  "Can you explain the water treatment chemical options for scaling prevention?",
+];
+
+interface ChatSuggestionsProps {
+  suggestions: string[];
+  isLoading?: boolean;
+  disabled?: boolean;
+  onSelect: (suggestion: string) => void;
+}
+
+const ChatSuggestions = memo(
+  ({
+    suggestions,
+    isLoading = false,
+    disabled = false,
+    onSelect,
+  }: ChatSuggestionsProps) => {
+    if (isLoading || !suggestions || suggestions.length === 0) return null;
+
+    return (
+      <div className="flex gap-2 select-none items-center justify-start overflow-x-auto scrollbar-none w-full flex-nowrap">
+        {suggestions.map((suggestion, index) => (
+          <Badge
+            key={index}
+            variant="secondary"
+            className="h-6 rounded-sm cursor-pointer hover:bg-primary hover:text-primary-foreground border border-border/60 hover:border-transparent"
+            onClick={() => {
+              if (!disabled) {
+                onSelect(suggestion);
+              }
+            }}
+          >
+            {suggestion}
+          </Badge>
+        ))}
+      </div>
+    );
+  },
+);
+
+ChatSuggestions.displayName = "ChatSuggestions";
 
 /* ---------------- Attached File Chip Sub-component ---------------- */
 

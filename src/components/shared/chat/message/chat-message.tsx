@@ -30,9 +30,6 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
           "scrollbar-thin scrollbar-thumb-muted-foreground/20 min-h-0 flex-1 overflow-y-auto px-5",
           messages.length === 0 ? "flex flex-col" : "",
         )}
-        style={{
-          paddingBottom: bottomPadding,
-        }}
       >
         {messages.length === 0 ? (
           <ChatEmptyState
@@ -43,6 +40,9 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
         ) : (
           <MessagesList messages={messages} />
         )}
+
+        {/* Spacer instead of padding */}
+        <div aria-hidden style={{ height: bottomPadding, flexShrink: 0 }} />
       </div>
     );
   },

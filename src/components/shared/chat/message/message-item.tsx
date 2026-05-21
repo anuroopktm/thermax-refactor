@@ -23,6 +23,7 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
         <AssistantMessage
           content={message.content}
           isThinking={message.isThinking}
+          price={message.price}
         />
       )}
     </div>

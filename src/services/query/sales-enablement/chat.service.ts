@@ -97,11 +97,11 @@ export const useChatHistory = (chatId: string | number | undefined) => {
     },
     enabled: !!chatId,
     select: mapChatHistory,
+    staleTime: 60000, // 1 minute to prevent background overwrites during/after streaming
   });
 };
 
 export const useSendChatMessage = () => {
-  const queryClient = useQueryClient();
   return useMutation<
     ChatHistoryResponse,
     AxiosError<ApiError>,
@@ -113,14 +113,6 @@ export const useSendChatMessage = () => {
         { human: messageText },
       );
       return data;
-    },
-    onSuccess: (_, { chatId }) => {
-      queryClient.invalidateQueries({
-        queryKey: salesEnablementKeys.chats.history(chatId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: salesEnablementKeys.chats.all,
-      });
     },
   });
 };
@@ -139,17 +131,14 @@ export const useClearChats = () => {
   });
 };
 
-export const useSimilarQuestions = (question: string) => {
-  return useQuery<SimilarQuestionResponse[], AxiosError<ApiError>, string[]>({
-    queryKey: ["sales-enablement", "similar-questions", question],
-    queryFn: async () => {
+export const useSimilarQuestions = () => {
+  return useMutation<string[], AxiosError<ApiError>, string>({
+    mutationFn: async (question: string) => {
       if (!question) return [];
       const { data } = await salesApi.get("/sales/similar_question", {
         params: { question },
       });
-      return data.result;
+      return data.result.map((item: SimilarQuestionResponse) => item.question);
     },
-    enabled: !!question,
-    select: (data) => data.map((item) => item.question),
   });
 };

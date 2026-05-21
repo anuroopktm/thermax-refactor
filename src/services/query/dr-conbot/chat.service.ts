@@ -68,7 +68,7 @@ export const useDrConbotChatMessages = (
     },
     select: ({ result }) => normalizeHistoryMessages(result),
     enabled: !!chatId,
-    staleTime: 60000,
+    staleTime: 60000, // 1 minute to prevent background overwrites during/after streaming
   });
 };
 
