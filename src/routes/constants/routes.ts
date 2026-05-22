@@ -17,6 +17,17 @@ export const PATHS = {
     },
   },
 
+  // Edge Bot
+  EDGE_BOT: {
+    ROOT: "/edge-bot",
+    SETTINGS: {
+      ROOT: "/edge-bot/settings",
+      PRODUCTS: "products",
+      USAGE: "usage",
+      MEMBERS: "members",
+    },
+  },
+
   // Thermax GPT
   THERMAX_GPT: {
     ROOT: "/thermax-gpt",

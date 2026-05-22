@@ -14,7 +14,7 @@ import {
 
 interface ProductFormProps {
   defaultValues?: Partial<ProductFormType>;
-  onSubmit: (data: ProductFormType) => Promise<void>;
+  onSubmit: (data: ProductFormType) => void;
   onCancel: () => void;
   submitLabel?: string;
   isSaving?: boolean;

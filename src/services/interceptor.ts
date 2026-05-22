@@ -46,7 +46,7 @@ export const translatorApi = createApi(
   import.meta.env.VITE_BACKEND_SERVICE_DOCUMENT_TRANSLATOR_URL,
 );
 
-export const edgeApi = createApi(import.meta.env.VITE_BACKEND_EDGE_URL);
+export const edgeApi = createApi(import.meta.env.VITE_BACKEND_SERVICE_EDGE_URL);
 
 let isRedirecting = false;
 

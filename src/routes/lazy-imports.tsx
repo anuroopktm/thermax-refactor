@@ -17,6 +17,10 @@ export const DrConbotPage = lazy(() => import("@/pages/dr-conbot/page"));
 export const DrConbotSettingsPage = lazy(
   () => import("@/pages/dr-conbot/settings/page"),
 );
+export const EdgeBotPage = lazy(() => import("@/pages/edge-bot/page"));
+export const EdgeBotSettingsPage = lazy(
+  () => import("@/pages/edge-bot/settings/page"),
+);
 export const TransmitterOcrPage = lazy(
   () => import("@/pages/transmitter-ocr/page"),
 );
@@ -41,6 +45,23 @@ export const FeedbackView = lazy(() =>
   import("@/pages/sales-enablement-tool/settings/views/feedback-view").then(
     (m) => ({ default: m.FeedbackView }),
   ),
+);
+
+// Edge Bot settings views
+export const EdgeBotUsageView = lazy(() =>
+  import("@/pages/edge-bot/settings/views/usage-view").then((m) => ({
+    default: m.UsageView,
+  })),
+);
+export const EdgeBotMembersView = lazy(() =>
+  import("@/pages/edge-bot/settings/views/members-view").then((m) => ({
+    default: m.MembersView,
+  })),
+);
+export const EdgeBotProductsView = lazy(() =>
+  import("@/pages/edge-bot/settings/views/products-view").then((m) => ({
+    default: m.ProductsView,
+  })),
 );
 
 export const ThermaxGptUsageView = lazy(() =>
